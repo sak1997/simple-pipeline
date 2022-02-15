@@ -1,0 +1,22 @@
+- group:
+   description: "Essential development tools"
+   checks:
+     - version:
+         cmd: node --version
+         range: ^16.13.x
+     - version:
+         cmd: git --version
+         range: ^2.33.x
+- group:
+   description: "Git configuration"
+   checks:
+     - contains: 
+         comment: Checking email is set for git commits
+         string: "@"
+         file: ~/.gitconfig       
+     - command:     
+         exec: git config --global --get user.name
+         stdout: "[a-zA-Z0-9_]+"
+     - command:
+         exec: git config --global --get user.email
+         stdout: "[a-zA-Z0-9_@]+"
