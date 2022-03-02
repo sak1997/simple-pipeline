@@ -1,8 +1,6 @@
-# Pipeline Tool 
+# M1 Checkpoint Report - Team 20
 
-### A pipeline tool to automate builds.
-
-## Tasks and Progress
+## Progress
 
 | Task | Progress | Challenges
 | ------------- |:-------------:| ---- |
@@ -18,12 +16,6 @@ So far, we have completed most of the task to Automatically provision and config
 This first task was done in two separate branches for M1 and Windows, and then merged. This is mostly completed, apart from slight modifications later depending on any additions we deem necessary going forward.
 
 For the second task, which is Create a build job specification, this is currently in progress. We have also completed the checkpoint report for this milestone.
-
-## Experiences
-
-We had to understand how the same workflow to get a VM ready and deployed would be different in different OS architectures - M1 vs others, since we are using basicvm in M1 machines and Virtual Box otherwise. 
-
-Understanding how the skeleton code provided differentiated between system helpful, and we used that to write our own code.
 
 ## Challenges
 
