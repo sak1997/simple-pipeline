@@ -7,7 +7,7 @@
 | Task | Progress | Challenges
 | ------------- |:-------------:| ---- |
 | Automatically provision and configure a build server | Complete on M1 and Windows environments | Agreeing on parameters for the .env file  
-| Create a build job specification | In Progress | Understanding how to design, and how this will influence the next step.
+| Create a build job specification |  Not started | Understanding how to design, and how this will influence the next step.
 | Checkpoint Report | Done | None
 | Automatically configure a build environment for given build job specification | Not started
 | Milestone Report | Not started
@@ -17,7 +17,7 @@ So far, we have completed most of the task to Automatically provision and config
 
 This first task was done in two separate branches for M1 and Windows, and then merged. This is mostly completed, apart from slight modifications later depending on any additions we deem necessary going forward.
 
-For the second task, which is Create a build job specification, this is currently in progress. We have also completed the checkpoint report for this milestone.
+For the second task, which is Create a build job specification, this is currently not started. We have also completed the checkpoint report for this milestone.
 
 ## Experiences
 
