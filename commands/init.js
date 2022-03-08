@@ -2,6 +2,7 @@ const chalk = require('chalk');
 const path = require('path');
 const M1Helper = require('../lib/m1Helper');
 const WinHelper = require('../lib/winHelper');
+const YamlParser = require('../lib/yamlParser');
 
 exports.command = 'init';
 exports.desc = 'Prepare tool';
@@ -21,5 +22,6 @@ exports.handler = async argv => {
       helper = new WinHelper();
     }
 
-    await helper.init()
+    //await helper.init()
+    YamlParser.parse();
 };
