@@ -1,13 +1,11 @@
-# Pipeline Tool 
+# M1 Checkpoint Report - Team 20
 
-### A pipeline tool to automate builds.
-
-## Tasks and Progress
+## Progress
 
 | Task | Progress | Challenges
 | ------------- |:-------------:| ---- |
 | Automatically provision and configure a build server | Complete on M1 and Windows environments | Agreeing on parameters for the .env file  
-| Create a build job specification |  Not started | Understanding how design will influence the build environment configuration.
+| Create a build job specification | In Progress | Understanding how to design, and how this will influence the next step.
 | Checkpoint Report | Done | None
 | Automatically configure a build environment for given build job specification | Not started
 | Milestone Report | Not started
@@ -17,19 +15,13 @@ So far, we have completed most of the task to Automatically provision and config
 
 This first task was done in two separate branches for M1 and Windows, and then merged. This is mostly completed, apart from slight modifications later depending on any additions we deem necessary going forward.
 
-We have also completed the checkpoint report for this milestone.
-
-## Experiences
-
-We had to understand how the same workflow to get a VM ready and deployed would be different in different OS architectures - M1 vs others, since we are using basicvm in M1 machines and Virtual Box otherwise. 
-
-Understanding how the skeleton code provided differentiated between system helpful, and we used that to write our own code.
+For the second task, which is Create a build job specification, this is currently in progress. We have also completed the checkpoint report for this milestone.
 
 ## Challenges
 
 - Understanding how to work with the .env file, and what constraints to enforce - like IP, VM name etc
 
-- Understanding how YAML design will influence the build environment configuration.
+- Understanding how to design and work with YAML, and how this will influence the next step.
 
 ## Work Remaining
 
