@@ -3,3 +3,4 @@ node_modules/
 vmcreate.txt
 vminfo.txt
 package-lock.json
+*.log
