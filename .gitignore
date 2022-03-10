@@ -2,3 +2,5 @@ node_modules/
 .env
 vmcreate.txt
 vminfo.txt
+package-lock.json
+*.log
