@@ -1,6 +1,9 @@
 const chalk = require('chalk');
 const YamlParser = require('../lib/yamlParser');
 const execCmd = require('../lib/execCmd');
+const sshExec = require('../lib/ssh');
+const M1Helper = require('../lib/m1Helper');
+const WinHelper = require('../lib/winHelper');
 
 exports.command = 'build';
 exports.desc = 'Trigger a specified Build job';
@@ -11,7 +14,14 @@ exports.builder = yargs => {
 };
 
 exports.handler = async argv => {
-    const { jobName2, buildPath} = argv;
+    const { processor } = argv;
+
+    if (processor == 'Arm64') {
+      helper = new M1Helper();
+    } else {
+      helper = new WinHelper();
+    }
+
     let jobName = "build";
     //let jobName = "maven"
 
@@ -21,7 +31,7 @@ exports.handler = async argv => {
     const aptInstallCmd = 'sudo apt install -y ';
     const aptUpdateCmd = '"sudo apt update"';
     let data = YamlParser.parse('./build.yml');
-    
+
     let setupCmd;
     let runCmd;
     let isAptUpdate = false;
@@ -33,6 +43,7 @@ exports.handler = async argv => {
         if(task.hasOwnProperty("package")){
             if(!isAptUpdate){
                 console.log(sshCmd+" "+aptUpdateCmd);
+                await sshExec(aptUpdateCmd, helper.sshConfig);
                 //await execCmd(`${sshCmd} ${aptUpdateCmd}`);
                 isAptUpdate = true;
             }
@@ -41,6 +52,7 @@ exports.handler = async argv => {
           setupCmd = '"'+task+'"';
         }
         console.log(sshCmd +" "+setupCmd);
+        await sshExec(setupCmd, helper.sshConfig);
        //await execCmd(`${sshCmd} ${setupCmd}`);
     }
 
@@ -53,6 +65,7 @@ exports.handler = async argv => {
             for (const step of job.steps) {
                 runCmd = '"'+step.run+'"';
                 console.log(sshCmd+" "+runCmd);
+                await sshExec(runCmd, helper.sshConfig);
                 //await execCmd(`${sshCmd} ${runCmd}`);
             }
         }
