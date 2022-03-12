@@ -4,6 +4,8 @@ const execCmd = require('../lib/execCmd');
 const sshExec = require('../lib/ssh');
 const M1Helper = require('../lib/m1Helper');
 const WinHelper = require('../lib/winHelper');
+const fs = require('fs');
+const { help } = require('yargs');
 
 exports.command = 'build';
 exports.desc = 'Trigger a specified Build job';
@@ -24,9 +26,32 @@ exports.handler = async argv => {
     }
 
     let jobName = "build";
-    //let jobName = "maven"
 
     console.log(chalk.green("started running build job"));
+
+    let setupAlreadyDone = false;
+    await sshExec("cat status.txt | grep setupCompleted=True > status.txt", helper.sshConfig);
+    await sshExec("cat status.txt", helper.sshConfig).then(function(op) {
+      if(op === "setupCompleted=True") {
+        console.log("here");
+        setupAlreadyDone = true;
+      }
+    }); 
+
+    
+    fs.readFile('./status.txt', 'utf8' , (err, data) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+      if(data.includes('setupCompleted=True')) {
+        setupAlreadyDone = true;
+        console.log("here");
+      }
+    })
+
+    await execCmd(`rm -r status.txt`);
+
 
     let sshCmd = 'ssh -i "/Users/smayanapidugu/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=900 ubuntu@192.168.64.74';
     const aptInstallCmd = 'sudo apt-get install -y ';
@@ -43,30 +68,38 @@ exports.handler = async argv => {
     // await sshExec("touch setup.sh", helper.sshConfig);
     await execCmd(`echo > setup.sh`);
 
-    for (const task of data.setup) {
-        setupCmd = '';
-        if(task.hasOwnProperty("package")){
-            if(!isAptUpdate){
-                // console.log(sshCmd+" "+aptUpdateCmd);
-                // await sshExec("'echo " + aptUpdateCmd + " >> setup.sh'", helper.sshConfig);
-                await execCmd('echo "' + aptUpdateCmd + '" >> setup.sh');
-                //await execCmd(`${sshCmd} ${aptUpdateCmd}`);
-                isAptUpdate = true;
-            }
-          setupCmd = aptInstallCmd + task.package;
-        } else{
-          setupCmd = task;
-        }
-        // console.log(sshCmd +" "+setupCmd);
-        // await sshExec("'echo " + setupCmd + " >> setup.sh'", helper.sshConfig);
-        await execCmd('echo "' + setupCmd + '" >> setup.sh');
-       //await execCmd(`${sshCmd} ${setupCmd}`);
-    }
+    if(setupAlreadyDone == false) {
+      for (const task of data.setup) {
+          setupCmd = '';
+          if(task.hasOwnProperty("package")){
+              if(!isAptUpdate){
+                  // console.log(sshCmd+" "+aptUpdateCmd);
+                  // await sshExec("'echo " + aptUpdateCmd + " >> setup.sh'", helper.sshConfig);
+                  await execCmd('echo "' + aptUpdateCmd + '" >> setup.sh');
+                  //await execCmd(`${sshCmd} ${aptUpdateCmd}`);
+                  isAptUpdate = true;
+              }
+            setupCmd = aptInstallCmd + task.package;
+          } else{
+            setupCmd = task;
+          }
+          // console.log(sshCmd +" "+setupCmd);
+          // await sshExec("'echo " + setupCmd + " >> setup.sh'", helper.sshConfig);
+          await execCmd('echo "' + setupCmd + '" >> setup.sh');
+        //await execCmd(`${sshCmd} ${setupCmd}`);
+      }
 
-    // await sshExec("", helper.sshConfig);
-    await execCmd("sed -i 's/\"//g' setup.sh");
-    await sshExec("cp /bakerx/setup.sh ~/setup.sh", helper.sshConfig);
-    await sshExec("./setup.sh", helper.sshConfig);
+      await helper.moveToBuildEnv();
+
+      // await execCmd("sed -i 's/\"//g' setup.sh");
+      // await sshExec("cp /bakerx/setup.sh ~/setup.sh", helper.sshConfig);
+      // await sshExec("./setup.sh", helper.sshConfig);
+
+      console.log("=====================================================================")
+      await sshExec("touch status.txt", helper.sshConfig);
+      await sshExec("echo setupCompleted=True | tee status.txt", helper.sshConfig);
+      await sshExec("echo setupCompleted=True", helper.sshConfig);
+    }
 
     // job commands
     for (const job of data.jobs) {

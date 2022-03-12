@@ -7,7 +7,7 @@
 | Topic | Location | 
 | ------------- |:-------------:|
 |Tasks | Please see below [here](#tasks-and-progress) or [screencasts](#screencasts). |
-| Sample .env file | Please see below [here](#sample-env-file)
+|Sample .env file | Please see below [here](#sample-env-file)
 |Experiences | Please see below [here](#experiences)|
 |Challenges | Please see below [here](#challenges)|
 |Screencast | Please see below [here](#screencasts)|
@@ -18,9 +18,9 @@
 | Task | Progress | Challenges
 | ------------- |:-------------:| ---- |
 | Automatically provision and configure a build server | Complete on M1 and Windows environments | Agreeing on parameters for the .env file  
-| Create a build job specification |  Done| Understanding how design will influence the build environment configuration.
+| Create a build job specification |  Done | Understanding how design will influence the build environment configuration.
 | Checkpoint Report | Done | None
-| Automatically configure a build environment for given build job specification |In Progress
+| Automatically configure a build environment for given build job specification |In Progress | Multiple(Please see Issues below for more)
 | Milestone Report | In Progress
 | Screencast | In Progress
 
@@ -30,12 +30,12 @@ We have designed a build.yml file to cover the steps involved in the constructio
 
 Finally, we have also parsed, interpreted and run the commands from the build.yml file in the new VM to set up the environment and build iTrust. 
 
-<Add screenshots>
+<Add screenshots of project board>
 
 ## Sample env File
 
 ```
-IP=192.168.10.112
+IP=192.168.10.112 <Only for Windows, MAC does need IP specified>
 VM_NAME=pipeline-vm
 unityid=sbabu
 pat=<your personal access token>
@@ -67,7 +67,7 @@ We also had to understand how SSH would work inside the repository given that th
 
 ## Team Members
 
-| Task | Progress |
+| Name | Unity ID |
 | ------------- |:-------------:|
 |Ashok Kumar Selvam | aselvam |
 |Sri Athithya Kruth Babu | sbabu |
