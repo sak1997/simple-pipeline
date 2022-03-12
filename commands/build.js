@@ -109,6 +109,10 @@ exports.handler = async argv => {
             console.log(chalk.green("Executing build job : "+ jobName));
 
             for (const step of job.steps) {
+                let x = step.run.substring(0, 9);
+                if (x === 'git clone') {
+                  step.run = x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + step.run.substring(10);
+                }
                 runCmd = '"'+step.run+'"';
                 // console.log(sshCmd+" "+runCmd);
                 await sshExec(runCmd, helper.sshConfig);
