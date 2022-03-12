@@ -4,3 +4,6 @@ vmcreate.txt
 vminfo.txt
 package-lock.json
 *.log
+setup.sh
+status.txt
+temp.sh
