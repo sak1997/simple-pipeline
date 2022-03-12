@@ -20,7 +20,7 @@
 | Automatically provision and configure a build server | Complete on M1 and Windows environments | Agreeing on parameters for the .env file  
 | Create a build job specification |  Done | Understanding how design will influence the build environment configuration.
 | Checkpoint Report | Done | None
-| Automatically configure a build environment for given build job specification |In Progress | Multiple(Please see Issues below for more)
+| Automatically configure a build environment for given build job specification |Done | Multiple(Please see Issues below for more)
 | Milestone Report | Done
 | Screencast | Done
 
