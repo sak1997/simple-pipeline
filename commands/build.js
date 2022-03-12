@@ -22,8 +22,9 @@ exports.handler = async argv => {
       helper = new M1Helper();
     } else {
       helper = new WinHelper();
-      await helper.updateSSHConfig();
     }
+
+    await helper.updateSSHConfig();
 
     let jobName = "build";
 
@@ -39,7 +40,7 @@ exports.handler = async argv => {
     //   }
     // }); 
 
-    
+
     fs.readFile('./status.txt', 'utf8' , (err, data) => {
       if (err) {
         console.error(err)
@@ -111,6 +112,10 @@ exports.handler = async argv => {
             console.log(chalk.green("Executing build job : "+ jobName));
 
             for (const step of job.steps) {
+                let x = step.run.substring(0, 9);
+                if (x === 'git clone') {
+                  step.run = x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + step.run.substring(10);
+                }
                 runCmd = '"'+step.run+'"';
                 // console.log(sshCmd+" "+runCmd);
                 await sshExec(runCmd, helper.sshConfig);
