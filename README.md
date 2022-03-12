@@ -21,8 +21,8 @@
 | Create a build job specification |  Done | Understanding how design will influence the build environment configuration.
 | Checkpoint Report | Done | None
 | Automatically configure a build environment for given build job specification |In Progress | Multiple(Please see Issues below for more)
-| Milestone Report | In Progress
-| Screencast | In Progress
+| Milestone Report | Done
+| Screencast | Done
 
 The automatic provisioning and configuration of the build server has been done for both windows and M1 environments. 
 
