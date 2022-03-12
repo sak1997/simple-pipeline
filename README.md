@@ -30,8 +30,6 @@ We have designed a build.yml file to cover the steps involved in the constructio
 
 Finally, we have also parsed, interpreted and run the commands from the build.yml file in the new VM to set up the environment and build iTrust. 
 
-<Add screenshots of project board>
-
 ## Sample env File
 
 ```
