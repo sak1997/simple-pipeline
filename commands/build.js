@@ -22,8 +22,9 @@ exports.handler = async argv => {
       helper = new M1Helper();
     } else {
       helper = new WinHelper();
-      await helper.updateSSHConfig();
     }
+
+    await helper.updateSSHConfig();
 
     let jobName = "build";
 
@@ -36,9 +37,9 @@ exports.handler = async argv => {
         console.log("here");
         setupAlreadyDone = true;
       }
-    }); 
+    });
 
-    
+
     fs.readFile('./status.txt', 'utf8' , (err, data) => {
       if (err) {
         console.error(err)
