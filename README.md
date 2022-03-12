@@ -2,28 +2,52 @@
 
 ### A pipeline tool to automate builds.
 
+## Contents
+
+| Topic | Location | 
+| ------------- |:-------------:|
+|Tasks | Please see below [here](#tasks-and-progress) or [screencasts](#screencasts). |
+| Sample .env file | Please see below [here](#sample-env-file)
+|Experiences | Please see below [here](#experiences)|
+|Challenges | Please see below [here](#challenges)|
+|Screencast | Please see below [here](#screencasts)|
+
+
 ## Tasks and Progress
 
 | Task | Progress | Challenges
 | ------------- |:-------------:| ---- |
 | Automatically provision and configure a build server | Complete on M1 and Windows environments | Agreeing on parameters for the .env file  
-| Create a build job specification |  Not started | Understanding how design will influence the build environment configuration.
+| Create a build job specification |  Done| Understanding how design will influence the build environment configuration.
 | Checkpoint Report | Done | None
-| Automatically configure a build environment for given build job specification | Not started
-| Milestone Report | Not started
-| Screencast | Not started
+| Automatically configure a build environment for given build job specification |In Progress
+| Milestone Report | In Progress
+| Screencast | In Progress
 
-So far, we have completed most of the task to Automatically provision and configure a build server on both M1 and Windows environments. 
+The automatic provisioning and configuration of the build server has been done for both windows and M1 environments. 
 
-This first task was done in two separate branches for M1 and Windows, and then merged. This is mostly completed, apart from slight modifications later depending on any additions we deem necessary going forward.
+We have designed a build.yml file to cover the steps involved in the construction of the environment for iTrust. 
 
-We have also completed the checkpoint report for this milestone.
+Finally, we have also parsed, interpreted and run the commands from the build.yml file in the new VM to set up the environment and build iTrust. 
+
+<Add screenshots>
+
+## Sample env File
+
+```
+IP=192.168.10.112
+VM_NAME=pipeline-vm
+unityid=sbabu
+pat=<your personal access token>
+```
 
 ## Experiences
 
 We had to understand how the same workflow to get a VM ready and deployed would be different in different OS architectures - M1 vs others, since we are using basicvm in M1 machines and Virtual Box otherwise. 
 
-Understanding how the skeleton code provided differentiated between system helpful, and we used that to write our own code.
+Understanding how the skeleton code provided differentiated between system was helpful, and we used that to write our own code. 
+
+We also had to understand how SSH would work inside the repository given that the entire process had to happen without user intervention. Personal Access Tokens proved to be quite helpful in this case.
 
 ## Challenges
 
@@ -31,11 +55,15 @@ Understanding how the skeleton code provided differentiated between system helpf
 
 - Understanding how YAML design will influence the build environment configuration.
 
-## Work Remaining
+- Working with SSH on M1 and Windows environments
 
-We need to complete our work on the second task, which is the job specification before moving on the third and largest task, Automatically configure a build environment for given build job specification. 
+- Issues with CLRF and LF line endings on Windows and M1 Mac environments.
 
-After this, we still have to work on a screencast, write the milestone report and test our work.
+- Issues with single and double quotes when running Linux commands through SSH on the VM from the host.
+
+## Screencasts
+
+<insert screencasts here>
 
 ## Team Members
 

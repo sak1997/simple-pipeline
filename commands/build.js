@@ -20,6 +20,7 @@ exports.handler = async argv => {
       helper = new M1Helper();
     } else {
       helper = new WinHelper();
+      await helper.updateSSHConfig();
     }
 
     let jobName = "build";
@@ -28,8 +29,8 @@ exports.handler = async argv => {
     console.log(chalk.green("started running build job"));
 
     let sshCmd = 'ssh -i "/Users/smayanapidugu/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=900 ubuntu@192.168.64.74';
-    const aptInstallCmd = 'sudo apt install -y ';
-    const aptUpdateCmd = '"sudo apt update"';
+    const aptInstallCmd = 'sudo apt-get install -y ';
+    const aptUpdateCmd = 'sudo apt-get update';
     let data = YamlParser.parse('./build.yml');
 
     let setupCmd;
@@ -38,23 +39,34 @@ exports.handler = async argv => {
     // let a = '"'+'mvn -f /home/ubuntu/iTrust2-v10/iTrust2 clean test > /home/ubuntu/mvnOutput.txt'+'"';
     // await execCmd(`${sshCmd} ${a}`);
     //setup commands
+
+    // await sshExec("touch setup.sh", helper.sshConfig);
+    await execCmd(`echo > setup.sh`);
+
     for (const task of data.setup) {
         setupCmd = '';
         if(task.hasOwnProperty("package")){
             if(!isAptUpdate){
-                console.log(sshCmd+" "+aptUpdateCmd);
-                await sshExec(aptUpdateCmd, helper.sshConfig);
+                // console.log(sshCmd+" "+aptUpdateCmd);
+                // await sshExec("'echo " + aptUpdateCmd + " >> setup.sh'", helper.sshConfig);
+                await execCmd('echo "' + aptUpdateCmd + '" >> setup.sh');
                 //await execCmd(`${sshCmd} ${aptUpdateCmd}`);
                 isAptUpdate = true;
             }
           setupCmd = aptInstallCmd + task.package;
         } else{
-          setupCmd = '"'+task+'"';
+          setupCmd = task;
         }
-        console.log(sshCmd +" "+setupCmd);
-        await sshExec(setupCmd, helper.sshConfig);
+        // console.log(sshCmd +" "+setupCmd);
+        // await sshExec("'echo " + setupCmd + " >> setup.sh'", helper.sshConfig);
+        await execCmd('echo "' + setupCmd + '" >> setup.sh');
        //await execCmd(`${sshCmd} ${setupCmd}`);
     }
+
+    // await sshExec("", helper.sshConfig);
+    await execCmd("sed -i 's/\"//g' setup.sh");
+    await sshExec("cp /bakerx/setup.sh ~/setup.sh", helper.sshConfig);
+    await sshExec("./setup.sh", helper.sshConfig);
 
     // job commands
     for (const job of data.jobs) {
@@ -64,9 +76,9 @@ exports.handler = async argv => {
 
             for (const step of job.steps) {
                 runCmd = '"'+step.run+'"';
-                console.log(sshCmd+" "+runCmd);
+                // console.log(sshCmd+" "+runCmd);
                 await sshExec(runCmd, helper.sshConfig);
-                //await execCmd(`${sshCmd} ${runCmd}`);
+                // await execCmd(`${sshCmd} ${runCmd}`);
             }
         }
     }
