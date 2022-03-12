@@ -43,4 +43,4 @@ After this, we still have to work on a screencast, write the milestone report an
 | ------------- |:-------------:|
 |Ashok Kumar Selvam | aselvam |
 |Sri Athithya Kruth Babu | sbabu |
-|Smyana Pidugu | spidigu |
+|Smayana Pidugu | spidugu |
