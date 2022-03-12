@@ -31,12 +31,13 @@ exports.handler = async argv => {
 
     let setupAlreadyDone = false;
     await sshExec("cat status.txt | grep setupCompleted=True > status.txt", helper.sshConfig);
-    await sshExec("cat status.txt", helper.sshConfig).then(function(op) {
-      if(op === "setupCompleted=True") {
-        console.log("here");
-        setupAlreadyDone = true;
-      }
-    }); 
+
+    // await sshExec("cat status.txt", helper.sshConfig).then(function(op) {
+    //   if(op === "setupCompleted=True") {
+    //     console.log("here");
+    //     setupAlreadyDone = true;
+    //   }
+    // }); 
 
     
     fs.readFile('./status.txt', 'utf8' , (err, data) => {
@@ -48,9 +49,11 @@ exports.handler = async argv => {
         setupAlreadyDone = true;
         console.log("here");
       }
+      console.log(data);
+      console.log("here!");
     })
 
-    await execCmd(`rm -r status.txt`);
+    // await execCmd(`rm -r status.txt`);
 
 
     let sshCmd = 'ssh -i "/Users/smayanapidugu/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=900 ubuntu@192.168.64.74';
@@ -97,7 +100,7 @@ exports.handler = async argv => {
 
       console.log("=====================================================================")
       await sshExec("touch status.txt", helper.sshConfig);
-      await sshExec("echo setupCompleted=True | tee status.txt", helper.sshConfig);
+      await sshExec("'echo setupCompleted=True | tee status.txt'", helper.sshConfig);
       await sshExec("echo setupCompleted=True", helper.sshConfig);
     }
 
