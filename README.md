@@ -63,7 +63,8 @@ We also had to understand how SSH would work inside the repository given that th
 
 ## Screencasts
 
-<insert screencasts here>
+The screencast can be found at the below link:
+  https://drive.google.com/file/d/1k1-PyhGEiAVeXt9EPs7t8jzq7LYEA5Ma/view?usp=sharing
 
 ## Team Members
 
