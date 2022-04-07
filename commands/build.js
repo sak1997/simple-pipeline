@@ -59,7 +59,7 @@ exports.handler = async argv => {
     let isAptUpdate = false;
 
     await execCmd(`echo > setup.sh`);
-
+    await execCmd('echo "' + aptUpdateCmd + '" >> setup.sh');
     if(setupAlreadyDone == false) {
       for (const task of data.setup) {
           setupCmd = '';
@@ -89,7 +89,7 @@ exports.handler = async argv => {
             console.log(chalk.green("Executing build job : "+ jobName));
 
             if (job.mutation) {
-              await mutation(job.mutation);
+              await mutation(job.mutation, helper);
             }
 
             if (job.steps) {
@@ -106,9 +106,39 @@ exports.handler = async argv => {
     }
 };
 
-async function mutation(info) {
+async function mutation(info, helper) {
   console.log(info);
+
+  helper.moveTestingFilesToVM();
+
   let secrets = process.env.USER_NAME + ':' + process.env.TOKEN;
   let cloneCmd = 'git clone https://' + secrets + '@' + info.url.substring(8);
+  console.log(cloneCmd);
   await sshExec(cloneCmd, helper.sshConfig);
+
+  // await sshExec('sudo apt install nodejs npm -y', helper.sshConfig);
+  // await sshExec('npm init', helper.sshConfig);
+  // await sshExec('npm install esprima', helper.sshConfig);
+  // await sshExec('npm install escodegen', helper.sshConfig);
+  // await sshExec('npm install chalk@4.1.0', helper.sshConfig);
+  // await sshExec('npm install puppeteer', helper.sshConfig);
+  // await sshExec('npm install', helper.sshConfig);
+  // await sshExec('npm link');
+
+  await sshExec('cd testing; ./testingprep.sh', helper.sshConfig);
+
+  await sshExec('cd checkbox.io-micro-preview; npm install express', helper.sshConfig);
+
+  let iterations = Number(info.iterations);
+  console.log(iterations + " " + typeof(iterations));
+
+  let mutatecommand = "cd testing; node mutation.js " + iterations;
+  await sshExec("'" + mutatecommand + "'", helper.sshConfig);
+
+  let snaphshotcommand = "cd testing; ./takeSnapshot.sh " + iterations;
+  await sshExec("'" + snaphshotcommand + "'", helper.sshConfig);
+  
+  console.log("here now!");
+
+
 };

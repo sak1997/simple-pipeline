@@ -10,7 +10,7 @@ let operations = [ NegateConditionals, ConditionalBoundaryMutations,  Incrementa
 
 // Replace around line 24 the project dir location
 // Requires a folder in the same directory called mutations
-// How to run: node mutation.js
+// How to run: node mutation.js 1000
 
 // if unable to parse the number of iterations, it takes 10 by default
 let no = Number(args[0]);
@@ -22,8 +22,8 @@ console.log("Running " + no + " iterations...");
 // TO DO: File paths need to be changed
 // REQUIRED: directory called mutations to store mutated files
 for(let i = 1; i <= no; i++) {
-    let srcfile = "./checkbox.io-micro-preview/marqdown.js"; // target file to be mutated - project dir
-    let dstfile = "./mutations/marqdown_mutation" + i +".js" // dst file set to mutations directory in the same folder as this file
+    let srcfile = "../checkbox.io-micro-preview/marqdown.js"; // target file to be mutated - project dir
+    let dstfile = "./mutations/mutation" + i +".js" // dst file set to mutations directory in the same folder as this file
     rewrite(srcfile,dstfile);
 }
 
