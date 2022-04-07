@@ -38,7 +38,7 @@ exports.handler = async argv => {
     //     console.log("here");
     //     setupAlreadyDone = true;
     //   }
-    // }); 
+    // });
 
 
     fs.readFile('./status.txt', 'utf8' , (err, data) => {
@@ -92,7 +92,7 @@ exports.handler = async argv => {
           await execCmd('echo "' + setupCmd + '" >> setup.sh');
         //await execCmd(`${sshCmd} ${setupCmd}`);
       }
-
+      
       await helper.moveToBuildEnv();
 
       // await execCmd("sed -i 's/\"//g' setup.sh");
