@@ -57,7 +57,7 @@ exports.handler = async argv => {
     // await execCmd(`rm -r status.txt`);
 
 
-    let sshCmd = 'ssh -i "/Users/smayanapidugu/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=900 ubuntu@192.168.64.74';
+    //let sshCmd = 'ssh -i "/Users/smayanapidugu/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=900 ubuntu@192.168.64.74';
     const aptInstallCmd = 'sudo apt-get install -y ';
     const aptUpdateCmd = 'sudo apt-get update';
     let data = YamlParser.parse('./build.yml');
@@ -101,8 +101,8 @@ exports.handler = async argv => {
 
       console.log("=====================================================================")
       await sshExec("touch status.txt", helper.sshConfig);
-      await sshExec("'echo setupCompleted=True | tee status.txt'", helper.sshConfig);
-      await sshExec("echo setupCompleted=True", helper.sshConfig);
+      await sshExec("'echo setupCompleted=True > status.txt'", helper.sshConfig);
+      // await sshExec("echo setupCompleted=True", helper.sshConfig);
     }
 
     // job commands
@@ -114,7 +114,7 @@ exports.handler = async argv => {
             for (const step of job.steps) {
                 let x = step.run.substring(0, 9);
                 if (x === 'git clone') {
-                  step.run = x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + step.run.substring(10);
+                  step.run = x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + step.run.substring(10);
                 }
                 runCmd = '"'+step.run+'"';
                 // console.log(sshCmd+" "+runCmd);
