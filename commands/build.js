@@ -6,8 +6,9 @@ const M1Helper = require('../lib/m1Helper');
 const WinHelper = require('../lib/winHelper');
 const fs = require('fs');
 const { help } = require('yargs');
+const pathUtil = require("path");
 
-exports.command = 'build';
+exports.command = 'build <job_name> <build_file>';
 exports.desc = 'Trigger a specified Build job';
 
 exports.builder = yargs => {
@@ -16,7 +17,10 @@ exports.builder = yargs => {
 };
 
 exports.handler = async argv => {
-    const { processor } = argv;
+    const { processor, job_name, build_file} = argv;
+
+    let jobName = pathUtil.basename( job_name );
+    let buildFile = pathUtil.basename( build_file );
 
     if (processor == 'Arm64') {
       helper = new M1Helper();
@@ -26,7 +30,7 @@ exports.handler = async argv => {
 
     await helper.updateSSHConfig();
 
-    let jobName = "build";
+    // let jobName = "build";
 
     console.log(chalk.green("started running build job"));
 
@@ -60,7 +64,7 @@ exports.handler = async argv => {
     //let sshCmd = 'ssh -i "/Users/smayanapidugu/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=900 ubuntu@192.168.64.74';
     const aptInstallCmd = 'sudo apt-get install -y ';
     const aptUpdateCmd = 'sudo apt-get update';
-    let data = YamlParser.parse('./build.yml');
+    let data = YamlParser.parse('./' + buildFile);
 
     let setupCmd;
     let runCmd;
@@ -92,7 +96,7 @@ exports.handler = async argv => {
           await execCmd('echo "' + setupCmd + '" >> setup.sh');
         //await execCmd(`${sshCmd} ${setupCmd}`);
       }
-      
+
       await helper.moveToBuildEnv();
 
       // await execCmd("sed -i 's/\"//g' setup.sh");
