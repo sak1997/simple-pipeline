@@ -11,7 +11,7 @@
 | Milestone Report | Not started
 | Screencast | Not started
 
-So far, we have completed most of the task to Automatically provision and configure a build server on both M1 and Windows environments. 
+So far, we have completed most of the task to Automatically provision and configure a build server on both M1 and Windows environments.
 
 This first task was done in two separate branches for M1 and Windows, and then merged. This is mostly completed, apart from slight modifications later depending on any additions we deem necessary going forward.
 
@@ -25,7 +25,7 @@ For the second task, which is Create a build job specification, this is currentl
 
 ## Work Remaining
 
-We need to complete our work on the second task, which is the job specification before moving on the third and largest task, Automatically configure a build environment for given build job specification. 
+We need to complete our work on the second task, which is the job specification before moving on the third and largest task, Automatically configure a build environment for given build job specification.
 
 After this, we still have to work on a screencast, write the milestone report and test our work.
 

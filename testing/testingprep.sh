@@ -11,4 +11,3 @@ npm install chalk@4.1.0
 npm install puppeteer
 npm install
 npm link
-

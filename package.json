@@ -12,9 +12,12 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "dotenv": "^16.0.0",
+    "escodegen": "^2.0.0",
+    "esprima": "^4.0.1",
+    "express": "^4.17.3",
     "hasbin": "^1.2.3",
-    "yargs": "^17.3.1",
-    "yaml":"^1.10.2",
-    "js-yaml":"^4.1.0"
+    "js-yaml": "^4.1.0",
+    "yaml": "^1.10.2",
+    "yargs": "^17.3.1"
   }
 }

@@ -22,20 +22,20 @@ console.log("Running " + no + " iterations...");
 // TO DO: File paths need to be changed
 // REQUIRED: directory called mutations to store mutated files
 for(let i = 1; i <= no; i++) {
-    let srcfile = "../checkbox.io-micro-preview/marqdown.js"; // target file to be mutated - project dir
-    let dstfile = "./mutations/mutation" + i +".js" // dst file set to mutations directory in the same folder as this file
+    let srcfile = "checkbox.io-micro-preview/marqdown.js"; // target file to be mutated - project dir
+    let dstfile = "testing/mutations/mutation" + i +".js" // dst file set to mutations directory in the same folder as this file
     rewrite(srcfile,dstfile);
 }
 
 function rewrite( filepath, newPath ) {
 
     var buf = fs.readFileSync(filepath, "utf8");
-    var ast = esprima.parse(buf, options);    
+    var ast = esprima.parse(buf, options);
 
     let randnum = Math.floor(Math.random() * 7);
 
     let op = operations[randnum];
-    
+
     op(ast);
 
     let code = escodegen.generate(ast);
@@ -115,7 +115,7 @@ function IncrementalMutations(ast) {
     traverseWithParents(ast, (node) => {
         if( node.type === "UpdateExpression" && (node.operator === "++" || node.operator === '--') ) {
             candidates++;
-        } 
+        }
     })
 
     let mutateTarget = getRandomInt(candidates);
@@ -146,7 +146,7 @@ function ControlFlowMutations(ast) {
     traverseWithParents(ast, (node) => {
         if( node.type === "Keyword" && node.value === "else" ) {
             candidates++;
-        } 
+        }
     })
 
     let mutateTarget = getRandomInt(candidates);
@@ -157,7 +157,7 @@ function ControlFlowMutations(ast) {
                 if(node.value === "else" ) {
                     node.value = " ";
                     console.log( chalk.red(`Replacing else with nothing on line ${node.loc.start.line}` ));
-                } 
+                }
             }
             current++;
         }
@@ -174,7 +174,7 @@ function CloneReturnMutations(ast) {
     traverseWithParents(ast, (node) => {
         if( node.type === "String" && node.value === "" ) {
             candidates++;
-        } 
+        }
     })
 
     let mutateTarget = getRandomInt(candidates);
@@ -185,7 +185,7 @@ function CloneReturnMutations(ast) {
                 if(node.value === "" ) {
                     node.value = "<div>Testing, one, two, three...</div>";
                     console.log( chalk.red(`Replacing "" with a <div> with content on line ${node.loc.start.line}` ));
-                } 
+                }
             }
             current++;
         }
@@ -200,7 +200,7 @@ function NonEmptyStringMutationsFunction(ast) {
     traverseWithParents(ast, (node) => {
         if( node.type === "Literal" && node.value === "" ) {
             candidates++;
-        } 
+        }
     })
 
     let mutateTarget = getRandomInt(candidates);
@@ -211,7 +211,7 @@ function NonEmptyStringMutationsFunction(ast) {
                 if(node.value === "" ) {
                     node.value = "<div>Testing, one, two, three...</div>";
                     console.log( chalk.red(`Replacing "" with a <div> with content on line ${node.loc.start.line}` ));
-                } 
+                }
             }
             current++;
         }
@@ -228,7 +228,7 @@ function ConstantReplacementMutations(ast) {
     traverseWithParents(ast, (node) => {
         if( node.type === "Literal" && !isNaN(node.raw)) {
             candidates++;
-        } 
+        }
     })
 
     let mutateTarget = getRandomInt(candidates);
@@ -265,7 +265,7 @@ function traverseWithParents(object, visitor)
     for (key in object) {
         if (object.hasOwnProperty(key)) {
             child = object[key];
-            if (typeof child === 'object' && child !== null && key != 'parent') 
+            if (typeof child === 'object' && child !== null && key != 'parent')
             {
             	child.parent = object;
 					traverseWithParents(child, visitor);
@@ -279,17 +279,17 @@ function childrenLength(node)
 {
 	var key, child;
 	var count = 0;
-	for (key in node) 
+	for (key in node)
 	{
-		if (node.hasOwnProperty(key)) 
+		if (node.hasOwnProperty(key))
 		{
 			child = node[key];
-			if (typeof child === 'object' && child !== null && key != 'parent') 
+			if (typeof child === 'object' && child !== null && key != 'parent')
 			{
 				count++;
 			}
 		}
-	}	
+	}
 	return count;
 }
 

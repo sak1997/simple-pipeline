@@ -4,7 +4,7 @@
 
 ## Contents
 
-| Topic | Location | 
+| Topic | Location |
 | ------------- |:-------------:|
 |Tasks | Please see below [here](#tasks-and-progress) or [screencasts](#screencasts). |
 |Sample .env file | Please see below [here](#sample-env-file)
@@ -24,11 +24,11 @@
 | Milestone Report | Done
 | Screencast | Done
 
-The automatic provisioning and configuration of the build server has been done for both windows and M1 environments. 
+The automatic provisioning and configuration of the build server has been done for both windows and M1 environments.
 
-We have designed a build.yml file to cover the steps involved in the construction of the environment for iTrust. 
+We have designed a build.yml file to cover the steps involved in the construction of the environment for iTrust.
 
-Finally, we have also parsed, interpreted and run the commands from the build.yml file in the new VM to set up the environment and build iTrust. 
+Finally, we have also parsed, interpreted and run the commands from the build.yml file in the new VM to set up the environment and build iTrust.
 
 ## Sample env File
 
@@ -41,9 +41,9 @@ pat=<your personal access token>
 
 ## Experiences
 
-We had to understand how the same workflow to get a VM ready and deployed would be different in different OS architectures - M1 vs others, since we are using basicvm in M1 machines and Virtual Box otherwise. 
+We had to understand how the same workflow to get a VM ready and deployed would be different in different OS architectures - M1 vs others, since we are using basicvm in M1 machines and Virtual Box otherwise.
 
-Understanding how the skeleton code provided differentiated between system was helpful, and we used that to write our own code. 
+Understanding how the skeleton code provided differentiated between system was helpful, and we used that to write our own code.
 
 We also had to understand how SSH would work inside the repository given that the entire process had to happen without user intervention. Personal Access Tokens proved to be quite helpful in this case.
 

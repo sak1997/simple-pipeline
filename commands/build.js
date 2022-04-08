@@ -125,19 +125,21 @@ async function mutation(info, helper) {
   // await sshExec('npm install', helper.sshConfig);
   // await sshExec('npm link');
 
-  await sshExec('cd testing; ./testingprep.sh', helper.sshConfig);
+  await sshExec('bash testing/testingprep.sh', helper.sshConfig);
 
-  await sshExec('cd checkbox.io-micro-preview; npm install express', helper.sshConfig);
+  await sshExec('npm install express --prefix checkbox.io-micro-preview', helper.sshConfig);
+
+  await sshExec('mkdir testing/mutations', helper.sshConfig);
 
   let iterations = Number(info.iterations);
   console.log(iterations + " " + typeof(iterations));
 
-  let mutatecommand = "cd testing; node mutation.js " + iterations;
+  let mutatecommand = "node testing/mutation.js " + iterations;
   await sshExec("'" + mutatecommand + "'", helper.sshConfig);
 
-  let snaphshotcommand = "cd testing; ./takeSnapshot.sh " + iterations;
+  let snaphshotcommand = "bash testing/takeSnapshot.sh " + iterations;
   await sshExec("'" + snaphshotcommand + "'", helper.sshConfig);
-  
+
   console.log("here now!");
 
 
