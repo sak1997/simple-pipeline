@@ -137,7 +137,7 @@ async function mutation(info, helper) {
   let mutatecommand = "node testing/mutation.js " + iterations;
   await sshExec("'" + mutatecommand + "'", helper.sshConfig);
 
-  let snaphshotcommand = "bash testing/takeSnapshot.sh " + iterations;
+  let snaphshotcommand = "bash testing/takeSnapshot.sh " + iterations + " > snapshotlog.log";
   await sshExec("'" + snaphshotcommand + "'", helper.sshConfig);
 
   console.log("here now!");
