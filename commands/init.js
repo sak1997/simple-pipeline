@@ -22,4 +22,7 @@ exports.handler = async argv => {
     }
 
     await helper.init()
+    // shared dir in vm is not accessable if we dont wait (basicvm issue)
+    await new Promise(r => setTimeout(r, 10000));
+
 };

@@ -34,7 +34,7 @@ exports.handler = async argv => {
     console.log(chalk.green("started running build job"));
 
     let setupAlreadyDone = false;
-    await sshExec("cat status.txt | grep setupCompleted=True > status.txt", helper.sshConfig);
+    await sshExec("cat status.txt | grep setupCompleted=True > status.txt", helper.sshConfig, false);
 
 
     fs.readFile('./status.txt', 'utf8' , (err, data) => {
@@ -82,9 +82,8 @@ exports.handler = async argv => {
           }
           await execCmd('echo "' + setupCmd + '" >> setup.sh');
       }
-
+      // await new Promise(r => setTimeout(r, 10000));
       await helper.moveToBuildEnv();
-      await sshExec("ls", helper.sshConfig);
       await sshExec("bash setup.sh", helper.sshConfig).then(function () {
         console.log("=====================================================================")
         sshExec("touch status.txt", helper.sshConfig);
