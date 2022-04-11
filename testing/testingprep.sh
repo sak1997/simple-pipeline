@@ -9,5 +9,6 @@ npm install esprima
 npm install escodegen
 npm install chalk@4.1.0
 npm install puppeteer
+npm install html-differ
 npm install
 npm link

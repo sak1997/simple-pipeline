@@ -1,39 +1,23 @@
-# node mutation.js 10 // get 10 mutations
 
+mkdir -p image_snapshots html_snapshots
 cp ../checkbox.io-micro-preview/marqdown.js marqdown.js
 
-cd ../checkbox.io-micro-preview
-forever start index.js
-sleep 5s
+#baseline screeshot
+pm2 start checkbox.io-micro-preview/index.js 
+node testing/screenshot.js $1 "orig_$2"
+pm2 stop checkbox.io-micro-preview/index.js 
 
-cd ../testing
-node screenshot.js http://localhost:3000/survey/upload.md snapshot_orig
+#fuzzing
+node mutation.js $3
 
-cd ../checkbox.io-micro-preview
-forever stop index.js
+#screenshot
+for ((i = 1 ; i <= $3 ; i++)) do
 
-# TO DO: add all URLS in the checkpoint app here to test
-# for item in [LIST]
-# do
-#   [COMMANDS]
-# done
-
-for ((i = 1 ; i <= $1 ; i++)) do
-
-cd ../testing
 cp mutations/mutation$i.js ../checkbox.io-micro-preview/marqdown.js
 
-cd ../checkbox.io-micro-preview
-forever start index.js
-sleep 5s
-
-cd ../testing
-node screenshot.js http://localhost:3000/survey/upload.md snapshot_$i
-
-cd ../checkbox.io-micro-preview
-forever stop index.js
+pm2 start checkbox.io-micro-preview/index.js 
+node testing/screenshot.js $1 "snap_$2$i"
+pm2 stop checkbox.io-micro-preview/index.js
 
 done
-
-cd ../testing
 cp marqdown.js ../checkbox.io-micro-preview/marqdown.js
