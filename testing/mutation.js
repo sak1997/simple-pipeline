@@ -147,31 +147,47 @@ function IncrementalMutations(ast) {
     })
 }
 
-// TO DO: currently not working, need to fix. Replacement is not happening and the 'else' remains in the output
 function ControlFlowMutations(ast) {
 
     console.log("Running ControlFlowMutations...")
-
     let candidates = 0;
     traverseWithParents(ast, (node) => {
-        if( node.type === "Keyword" && node.value === "else" ) {
+        if( node.type === "IfStatement" ) {
             candidates++;
         }
     })
-
-    let mutateTarget = getRandomInt(candidates);
+    let mutateTargetFrom = getRandomInt(candidates);
+    let mutateTargetTo = getRandomInt(candidates);
+    while (mutateTargetTo === mutateTargetFrom) {
+      mutateTargetTo = getRandomInt(candidates);
+    }
+    let src = null;
+    let dest = null;
     let current = 0;
     traverseWithParents(ast, (node) => {
-        if( node.type === "Keyword" && node.value === "else") {
-            if( current === mutateTarget ) {
-                if(node.value === "else" ) {
-                    node.value = " ";
-                    console.log( chalk.red(`Replacing else with nothing on line ${node.loc.start.line}` ));
-                }
+        if( node.type === "IfStatement" ) {
+            if (current == mutateTargetFrom) {
+              src = node.consequent;
+            }
+            if (current == mutateTargetTo) {
+              dest = node.consequent;
             }
             current++;
         }
     })
+    current = 0;
+    traverseWithParents(ast, (node) => {
+      if( node.type === "IfStatement" ) {
+        if (current == mutateTargetFrom) {
+          node.consequent = dest;
+        }
+        if (current == mutateTargetTo) {
+          node.consequent = src;
+        }
+        current++;
+      }
+    })
+    console.log( chalk.red(`Swapped expressions in if-else block in line ${src.loc.start.line} and line ${dest.loc.start.line}` ));
 
 }
 
