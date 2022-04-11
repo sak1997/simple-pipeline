@@ -7,7 +7,7 @@ setup:
   # - sudo mkdir -p /etc/mysql/conf.d && sudo apt-key adv --keyserver pgp.mit.edu --recv-keys 5072E1F5
   # - echo "deb http://repo.mysql.com/apt/ubuntu/ trusty mysql-8.0" | sudo tee -a /etc/apt/sources.list.d/mysql.list
   # - sudo apt-get install -y mysql-server
-  - sudo apt-get update
+  - ls
 jobs:
   - name: build
     steps:
