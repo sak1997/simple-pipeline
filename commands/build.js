@@ -34,7 +34,7 @@ exports.handler = async argv => {
     console.log(chalk.green("started running build job"));
 
     let setupAlreadyDone = false;
-    await sshExec("cat status.txt | grep setupCompleted=True > status.txt", helper.sshConfig);
+    await sshExec("cat status.txt | grep setupCompleted=True > status.txt", helper.sshConfig, false);
 
 
     fs.readFile('./status.txt', 'utf8' , (err, data) => {
@@ -51,14 +51,23 @@ exports.handler = async argv => {
     })
 
     const aptInstallCmd = 'sudo apt-get install -y ';
-    const aptUpdateCmd = 'sudo apt-get update';
+    const aptUpdateCmd = 'sudo apt-get update --fix-missing';
     let data = YamlParser.parse('./' + buildFile);
 
     let setupCmd;
     let runCmd;
     let isAptUpdate = false;
 
-    await execCmd(`echo > setup.sh`);
+    await execCmd(`rm setup.sh`);
+    await execCmd(`touch setup.sh`);
+
+    // // Remove if pkg is fixed
+    // const rmDamagedPkg1 = 'sudo apt remove flash-kernel -y';
+    // const rmDamagedPkg2 = 'sudo apt remove u-boot-rpi:arm64 -y'
+    // await execCmd('echo "' + rmDamagedPkg1 + '" >> setup.sh');
+    // await execCmd('echo "' + rmDamagedPkg2 + '" >> setup.sh');
+
+    await execCmd('echo "' + aptInstallCmd + '" >> setup.sh');
     await execCmd('echo "' + aptUpdateCmd + '" >> setup.sh');
     if(setupAlreadyDone == false) {
       for (const task of data.setup) {
@@ -74,12 +83,14 @@ exports.handler = async argv => {
           }
           await execCmd('echo "' + setupCmd + '" >> setup.sh');
       }
-
+      // await new Promise(r => setTimeout(r, 10000));
       await helper.moveToBuildEnv();
+      await sshExec("bash setup.sh | tee setup.log", helper.sshConfig).then(function () {
+        console.log("=====================================================================")
+        sshExec("touch status.txt", helper.sshConfig);
+        sshExec("'echo setupCompleted=True > status.txt'", helper.sshConfig);
+      });
 
-      console.log("=====================================================================")
-      await sshExec("touch status.txt", helper.sshConfig);
-      await sshExec("'echo setupCompleted=True > status.txt'", helper.sshConfig);
     }
 
     // job commands
@@ -109,27 +120,21 @@ exports.handler = async argv => {
 async function mutation(info, helper) {
   console.log(info);
 
-  helper.moveTestingFilesToVM();
+  await helper.moveTestingFilesToVM();
+
+  urlContent = info.url.split("/");
+  let repoDir = urlContent[urlContent.length - 1];
+
+  await sshExec('rm -rf ' + repoDir, helper.sshConfig);
 
   let secrets = process.env.USER_NAME + ':' + process.env.TOKEN;
   let cloneCmd = 'git clone https://' + secrets + '@' + info.url.substring(8);
   console.log(cloneCmd);
   await sshExec(cloneCmd, helper.sshConfig);
 
-  // await sshExec('sudo apt install nodejs npm -y', helper.sshConfig);
-  // await sshExec('npm init', helper.sshConfig);
-  // await sshExec('npm install esprima', helper.sshConfig);
-  // await sshExec('npm install escodegen', helper.sshConfig);
-  // await sshExec('npm install chalk@4.1.0', helper.sshConfig);
-  // await sshExec('npm install puppeteer', helper.sshConfig);
-  // await sshExec('npm install', helper.sshConfig);
-  // await sshExec('npm link');
+  await sshExec('bash testing/testingSetup.sh | tee testingSetup.log', helper.sshConfig);
 
-  await sshExec('bash testing/testingprep.sh', helper.sshConfig);
-
-  await sshExec('npm install express --prefix checkbox.io-micro-preview', helper.sshConfig);
-
-  await sshExec('mkdir testing/mutations', helper.sshConfig);
+  await sshExec('npm install express --prefix ' + repoDir, helper.sshConfig);
 
   let iterations = Number(info.iterations);
   console.log(iterations + " " + typeof(iterations));
@@ -137,8 +142,15 @@ async function mutation(info, helper) {
   let mutatecommand = "node testing/mutation.js " + iterations;
   await sshExec("'" + mutatecommand + "'", helper.sshConfig);
 
-  let snaphshotcommand = "bash testing/takeSnapshot.sh " + iterations;
-  await sshExec("'" + snaphshotcommand + "'", helper.sshConfig);
+
+  for (let i = 0; i < info.snapshots.length; i++) {
+    await sshExec("bash testing/prepareForSnapshot.sh " + repoDir + " " + info.snapshots[i] + " " + i, helper.sshConfig);
+
+    let snapshotCommand = "bash testing/takeSnapshot.sh " + iterations  + " " + info.snapshots[i] + " " + repoDir + " " + i + " >> snapshot.log";
+    await sshExec("'" + snapshotCommand + "'", helper.sshConfig);
+  }
+
+  await sshExec("cp marqdown.js " + repoDir + "/marqdown.js", helper.sshConfig);
 
   console.log("here now!");
 

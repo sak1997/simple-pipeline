@@ -1,12 +1,13 @@
 setup:
-  - {package: maven, version: 3.6.3}
-  - {package: openjdk-11-jdk, version: 11.0.14}
-  - export DEBIAN_FRONTEND="noninteractive"
-  - sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password rootpw'
-  - sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password rootpw'
-  - sudo mkdir -p /etc/mysql/conf.d && sudo apt-key adv --keyserver pgp.mit.edu --recv-keys 5072E1F5
-  - echo "deb http://repo.mysql.com/apt/ubuntu/ trusty mysql-8.0" | sudo tee -a /etc/apt/sources.list.d/mysql.list
-  - sudo apt-get install -y mysql-server
+  # - {package: maven, version: 3.6.3}
+  # - {package: openjdk-11-jdk, version: 11.0.14}
+  # - export DEBIAN_FRONTEND="noninteractive"
+  # - sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password rootpw'
+  # - sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password rootpw'
+  # - sudo mkdir -p /etc/mysql/conf.d && sudo apt-key adv --keyserver pgp.mit.edu --recv-keys 5072E1F5
+  # - echo "deb http://repo.mysql.com/apt/ubuntu/ trusty mysql-8.0" | sudo tee -a /etc/apt/sources.list.d/mysql.list
+  # - sudo apt-get install -y mysql-server
+  - ls
 jobs:
   - name: build
     steps:
