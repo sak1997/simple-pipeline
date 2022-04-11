@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+# set -e
 
 cp checkbox.io-micro-preview/marqdown.js marqdown.js
 

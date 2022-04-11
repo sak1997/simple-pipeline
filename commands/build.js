@@ -145,7 +145,7 @@ async function mutation(info, helper) {
   await sshExec("bash testing/prepareForSnapshot.sh", helper.sshConfig);
 
   for (let i = 0; i < info.snapshots.length; i++) {
-    let snapshotCommand = "bash testing/takeSnapshot.sh " + iterations  + " " + info.snapshots[i] + " " + repoDir + " > snapshotlog.log";
+    let snapshotCommand = "bash testing/takeSnapshot.sh " + iterations  + " " + info.snapshots[i] + " " + repoDir + " " + i + " >> snapshotlog.log";
     await sshExec("'" + snapshotCommand + "'", helper.sshConfig);
   }
 

@@ -13,8 +13,9 @@ forever start index.js
 sleep 5s
 
 cd ../testing
-node screenshot.js $2 snapshot_$2_$1
+node screenshot.js $2 snapshot_$4_$i
 echo "taking snapshot for mutation"
+
 
 echo "stopping forever for mutation"
 cd ../$3
