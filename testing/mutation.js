@@ -106,11 +106,9 @@ function ConditionalBoundaryMutations(ast) {
 
 }
 
-// TO DO: need to check how to change i++ to ++i - current code is supposed to only change i++ to i-- and vice-versa
 function IncrementalMutations(ast) {
 
     console.log("Running IncrementalMutations...")
-
     let candidates = 0;
     traverseWithParents(ast, (node) => {
         if( node.type === "UpdateExpression" && (node.operator === "++" || node.operator === '--') ) {
@@ -123,18 +121,30 @@ function IncrementalMutations(ast) {
     traverseWithParents(ast, (node) => {
         if( node.type === "UpdateExpression" && (node.operator === "++" || node.operator === '--')) {
             if( current === mutateTarget ) {
-                if(node.operator == "++" ) {
-                    node.operator = "--"
-                    console.log( chalk.red(`Replacing ++ with -- on line ${node.loc.start.line}` ));
-                } else if(node.operator == "--") {
-                    node.operator = "++"
-                    console.log( chalk.red(`Replacing -- with ++ on line ${node.loc.start.line}` ));
+                var choice = Math.random() < 0.5;
+                if (choice) {
+                  node.prefix = !node.prefix;
+                  if (node.prefix) {
+                    var x = 'sufix';
+                    var y = 'prefix';
+                  } else {
+                    var y = 'sufix';
+                    var x = 'prefix';
+                  }
+                  console.log( chalk.red(`Replacing ` + node.operator + ` from ` + x + ` to ` + y + ` on line ${node.loc.start.line}` ));
+                } else {
+                  if(node.operator == "++" ) {
+                      node.operator = "--"
+                      console.log( chalk.red(`Replacing ++ with -- on line ${node.loc.start.line}` ));
+                  } else if(node.operator == "--") {
+                      node.operator = "++"
+                      console.log( chalk.red(`Replacing -- with ++ on line ${node.loc.start.line}` ));
+                  }
                 }
             }
             current++;
         }
     })
-
 }
 
 // TO DO: currently not working, need to fix. Replacement is not happening and the 'else' remains in the output
