@@ -15,11 +15,7 @@
     "escodegen": "^2.0.0",
     "esprima": "^4.0.1",
     "express": "^4.17.3",
-    "forever": "^4.0.3",
-    "fs": "^0.0.1-security",
     "hasbin": "^1.2.3",
-    "html-differ": "^1.4.0",
-    "puppeteer":"^13.5.2",
     "js-yaml": "^4.1.0",
     "yaml": "^1.10.2",
     "yargs": "^17.3.1"
