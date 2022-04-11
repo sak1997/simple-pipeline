@@ -122,8 +122,8 @@ async function mutation(info, helper) {
 
   await helper.moveTestingFilesToVM();
 
-  //TODO: fetch from yml
-  let repoDir = 'checkbox.io-micro-preview'
+  urlContent = info.url.split("/");
+  let repoDir = urlContent[urlContent.length - 1];
 
   await sshExec('rm -rf ' + repoDir, helper.sshConfig);
 
@@ -132,7 +132,7 @@ async function mutation(info, helper) {
   console.log(cloneCmd);
   await sshExec(cloneCmd, helper.sshConfig);
 
-  await sshExec('bash testing/testingprep.sh | tee testingSetup.log', helper.sshConfig);
+  await sshExec('bash testing/testingSetup.sh | tee testingSetup.log', helper.sshConfig);
 
   await sshExec('npm install express --prefix ' + repoDir, helper.sshConfig);
 
@@ -142,10 +142,11 @@ async function mutation(info, helper) {
   let mutatecommand = "node testing/mutation.js " + iterations;
   await sshExec("'" + mutatecommand + "'", helper.sshConfig);
 
-  await sshExec("bash testing/prepareForSnapshot.sh", helper.sshConfig);
 
   for (let i = 0; i < info.snapshots.length; i++) {
-    let snapshotCommand = "bash testing/takeSnapshot.sh " + iterations  + " " + info.snapshots[i] + " " + repoDir + " " + i + " >> snapshotlog.log";
+    await sshExec("bash testing/prepareForSnapshot.sh " + repoDir + " " + info.snapshots[i] + " " + i, helper.sshConfig);
+
+    let snapshotCommand = "bash testing/takeSnapshot.sh " + iterations  + " " + info.snapshots[i] + " " + repoDir + " " + i + " >> snapshot.log";
     await sshExec("'" + snapshotCommand + "'", helper.sshConfig);
   }
 
