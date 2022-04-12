@@ -150,45 +150,74 @@ function IncrementalMutations(ast) {
 function ControlFlowMutations(ast) {
 
     console.log("Running ControlFlowMutations...")
-    let candidates = 0;
+    let parentCandidates = 0;
     traverseWithParents(ast, (node) => {
-        if( node.type === "IfStatement" ) {
-            candidates++;
+        if( node.type === "IfStatement" && node.parent.type !== "IfStatement" && node.alternate !== null && node.alternate.type == "IfStatement") {
+            parentCandidates++;
         }
     })
-    let mutateTargetFrom = getRandomInt(candidates);
-    let mutateTargetTo = getRandomInt(candidates);
-    while (mutateTargetTo === mutateTargetFrom) {
-      mutateTargetTo = getRandomInt(candidates);
-    }
-    let src = null;
-    let dest = null;
-    let current = 0;
+    let mutateTargetParent = getRandomInt(parentCandidates);
+    let currentParent = 0;
     traverseWithParents(ast, (node) => {
-        if( node.type === "IfStatement" ) {
-            if (current == mutateTargetFrom) {
-              src = node.consequent;
-            }
-            if (current == mutateTargetTo) {
-              dest = node.consequent;
-            }
-            current++;
-        }
-    })
-    current = 0;
-    traverseWithParents(ast, (node) => {
-      if( node.type === "IfStatement" ) {
-        if (current == mutateTargetFrom) {
-          node.consequent = dest;
-        }
-        if (current == mutateTargetTo) {
-          node.consequent = src;
-        }
-        current++;
-      }
-    })
-    console.log( chalk.red(`Swapped expressions in if-else block in line ${src.loc.start.line} and line ${dest.loc.start.line}` ));
+      if( node.type === "IfStatement" && node.parent.type !== "IfStatement" && node.alternate !== null && node.alternate.type == "IfStatement") {
+            if (currentParent === mutateTargetParent) {
+              let candidates = 0;
+              let childNode = node;
+              while (childNode !== null && childNode.type === "IfStatement") {
+                if( childNode.type === "IfStatement" ) {
+                  candidates++;
+                }
+                childNode = childNode.alternate;
+              }
+              let mutateTargetFrom = getRandomInt(candidates);
+              let mutateTargetTo = getRandomInt(candidates);
+              while (mutateTargetTo === mutateTargetFrom) {
+                mutateTargetTo = getRandomInt(candidates);
+              }
 
+              let srcTest = null;
+              let destTest = null;
+              let srcConc = null;
+              let destConc = null;
+
+              let current = 0;
+              childNode = node;
+              while (childNode !== null && childNode.type === "IfStatement") {
+                  if( childNode.type === "IfStatement" ) {
+                      if (current == mutateTargetFrom) {
+                        srcTest = childNode.test;
+                        srcConc = childNode.consequent;
+                      }
+                      if (current == mutateTargetTo) {
+                        destTest = childNode.test;
+                        destConc = childNode.consequent;
+                      }
+                      current++;
+                  }
+                  childNode = childNode.alternate;
+              }
+              current = 0;
+              childNode = node;
+              while (childNode !== null && childNode.type === "IfStatement") {
+                if( childNode.type === "IfStatement" ) {
+                  if (current == mutateTargetFrom) {
+                    childNode.test = destTest;
+                    childNode.consequent = destConc;
+                  }
+                  if (current == mutateTargetTo) {
+                    childNode.test = srcTest;
+                    childNode.consequent = srcConc;
+                  }
+                  current++;
+                }
+                childNode = childNode.alternate;
+              }
+              console.log( chalk.red(`Swapped expressions in if-else block in line ${srcTest.loc.start.line} and line ${destTest.loc.start.line}` ));
+
+            }
+            currentParent++;
+        }
+    })
 }
 
 // TODO: CloneReturnMutations
