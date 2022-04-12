@@ -143,14 +143,26 @@ async function mutation(info, helper) {
   await sshExec("'" + mutatecommand + "'", helper.sshConfig);
 
 
-  for (let i = 0; i < info.snapshots.length; i++) {
+  for(let i = 0; i < info.snapshots.length; i++) {
     await sshExec("bash testing/prepareForSnapshot.sh " + repoDir + " " + info.snapshots[i] + " " + i, helper.sshConfig);
+  }
 
-    let snapshotCommand = "bash testing/takeSnapshot.sh " + iterations  + " " + info.snapshots[i] + " " + repoDir + " " + i + " >> snapshot.log";
-    await sshExec("'" + snapshotCommand + "'", helper.sshConfig);
+  // for (let i = 0; i < info.snapshots.length; i++) {
+  //   let snapshotCommand = "bash testing/takeSnapshot.sh " + iterations  + " " + info.snapshots[i] + " " + repoDir + " " + i + " >> snapshot.log";
+  //   await sshExec("'" + snapshotCommand + "'", helper.sshConfig);
+  // }
+
+  for(let i = 1; i <= iterations; i++) {
+    await sshExec("bash testing/startapp.sh " + i + " " + repoDir, helper.sshConfig);
+    for(let j = 0; j < info.snapshots.length; j++) {
+      await sshExec("bash testing/takeMySnapshot.sh " + info.snapshots[j] + " " + j + " " + i, helper.sshConfig);
+    }
+    await sshExec("bash testing/stopapp.sh " + repoDir, helper.sshConfig);
   }
 
   await sshExec("cp marqdown.js " + repoDir + "/marqdown.js", helper.sshConfig);
+
+  await sshExec("node testing/snapshotCompare.js " + info.iterations + " " + info.snapshots.length, helper.sshConfig);
 
   console.log("here now!");
 

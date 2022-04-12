@@ -16,9 +16,16 @@ const [, , ...args] = process.argv;
     args: ['--no-sandbox']
   });
   const page = await browser.newPage();
-  await page.goto(url, {
-    waitUntil: 'networkidle0'
-  });
+  try {
+    await page.goto(url, {
+      waitUntil: 'networkidle0'
+    })
+  } catch(error) {
+    console.log("found a case where there's a compilation error - page not loading at all!");
+    await page.close();
+    await browser.close();
+  }
+
   await page.screenshot({
     path: filename,
     fullPage: true

@@ -35,7 +35,7 @@ function rewrite( filepath, newPath ) {
     let randnum = Math.floor(Math.random() * 7);
 
     let op = operations[randnum];
-
+    op = operations[0];
     op(ast);
 
     let code = escodegen.generate(ast);
@@ -48,17 +48,15 @@ function NegateConditionals(ast) {
 
     let candidates = 0;
     traverseWithParents(ast, (node) => {
-        if( node.type === "BinaryExpression" && node.operator === ">" ) {
+        if( node.type === "BinaryExpression" && (node.operator === ">" || node.operator === "<" || node.operator === "==" || node.operator === "!=")) {
             candidates++;
-        } else if ( node.type === "BinaryExpression" && node.operator === "==" ) {
-            candidates++;
-        }
+        } 
     })
 
     let mutateTarget = getRandomInt(candidates);
     let current = 0;
     traverseWithParents(ast, (node) => {
-        if( node.type === "BinaryExpression" && node.operator === ">" ) {
+        if( node.type === "BinaryExpression" && (node.operator === ">" || node.operator === "<" || node.operator === "==" || node.operator === "!=") ) {
             if( current === mutateTarget ) {
                 if(node.operator == ">" ) {
                     node.operator = "<"
@@ -66,6 +64,12 @@ function NegateConditionals(ast) {
                 } else if(node.operator == "==") {
                     node.operator = "!="
                     console.log( chalk.red(`Replacing == with != on line ${node.loc.start.line}` ));
+                } else if(node.operator == "<") {
+                    node.operator = ">"
+                    console.log( chalk.red(`Replacing < with > on line ${node.loc.start.line}` ));
+                } else if (node.operator == "!=") {
+                    node.operator = "=="
+                    console.log( chalk.red(`Replacing != with == on line ${node.loc.start.line}` ));
                 }
             }
             current++;
@@ -111,7 +115,7 @@ function IncrementalMutations(ast) {
     console.log("Running IncrementalMutations...")
     let candidates = 0;
     traverseWithParents(ast, (node) => {
-        if( node.type === "UpdateExpression" && (node.operator === "++" || node.operator === '--') ) {
+        if( node.type === "UpdateExpression" && (node.operator === "++" || node.operator === '--') && node.parent.type !== 'MemberExpression') {
             candidates++;
         }
     })
@@ -119,20 +123,23 @@ function IncrementalMutations(ast) {
     let mutateTarget = getRandomInt(candidates);
     let current = 0;
     traverseWithParents(ast, (node) => {
-        if( node.type === "UpdateExpression" && (node.operator === "++" || node.operator === '--')) {
+        if( node.type === "UpdateExpression" && (node.operator === "++" || node.operator === '--') && node.parent.type !== 'MemberExpression') {
             if( current === mutateTarget ) {
                 var choice = Math.random() < 0.5;
+                choice = true;
                 if (choice) {
                   node.prefix = !node.prefix;
                   if (node.prefix) {
                     var x = 'sufix';
                     var y = 'prefix';
-                  } else {
+                  } 
+                  else {
                     var y = 'sufix';
                     var x = 'prefix';
                   }
                   console.log( chalk.red(`Replacing ` + node.operator + ` from ` + x + ` to ` + y + ` on line ${node.loc.start.line}` ));
-                } else {
+                }
+                else {
                   if(node.operator == "++" ) {
                       node.operator = "--"
                       console.log( chalk.red(`Replacing ++ with -- on line ${node.loc.start.line}` ));
@@ -281,7 +288,7 @@ function ConstantReplacementMutations(ast) {
 
     let candidates = 0;
     traverseWithParents(ast, (node) => {
-        if( node.type === "Literal" && !isNaN(node.raw)) {
+        if( node.type === "Literal" && !isNaN(node.raw) && node.value != 0) {
             candidates++;
         }
     })
@@ -289,11 +296,12 @@ function ConstantReplacementMutations(ast) {
     let mutateTarget = getRandomInt(candidates);
     let current = 0;
     traverseWithParents(ast, (node) => {
-        if( node.type === "Literal"  && !isNaN(node.raw)) {
+        if( node.type === "Literal"  && !isNaN(node.raw) && node.value != 0) {
             if( current === mutateTarget ) {
                 let oldval = node.value;
-                let randnum = Math.floor(Math.random() * 1000);
+                let randnum = 2 + Math.floor(Math.random() * oldval);
                 node.value = randnum;
+
                 // console.log(node.value + " is node new value");
                 console.log( chalk.red(`Replacing ${oldval} with a ${randnum} with content on line ${node.loc.start.line}` ));
             }
