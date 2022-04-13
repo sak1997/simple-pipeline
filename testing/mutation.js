@@ -35,7 +35,7 @@ function rewrite( filepath, newPath ) {
     let randnum = Math.floor(Math.random() * 7);
 
     let op = operations[randnum];
-    op = operations[0];
+    // op = operations[0];
     op(ast);
 
     let code = escodegen.generate(ast);
@@ -50,7 +50,7 @@ function NegateConditionals(ast) {
     traverseWithParents(ast, (node) => {
         if( node.type === "BinaryExpression" && (node.operator === ">" || node.operator === "<" || node.operator === "==" || node.operator === "!=")) {
             candidates++;
-        } 
+        }
     })
 
     let mutateTarget = getRandomInt(candidates);
@@ -132,7 +132,7 @@ function IncrementalMutations(ast) {
                   if (node.prefix) {
                     var x = 'sufix';
                     var y = 'prefix';
-                  } 
+                  }
                   else {
                     var y = 'sufix';
                     var x = 'prefix';
@@ -227,32 +227,132 @@ function ControlFlowMutations(ast) {
     })
 }
 
-// TODO: CloneReturnMutations
 function CloneReturnMutations(ast) {
 
     console.log("Running CloneReturnMutations...")
 
-    let candidates = 0;
+    // Get total candidate functions
+    let candidateFunctions = 0;
     traverseWithParents(ast, (node) => {
-        if( node.type === "String" && node.value === "" ) {
-            candidates++;
+        if( node.type === "FunctionDeclaration" ) {
+            let flag = false;
+            node.body.body.forEach((item, i) => {
+              if (item.type === "ReturnStatement" && item.argument.type === "Identifier") {
+                flag = true;
+              }
+            });
+            if (flag) {
+              candidateFunctions++;
+            }
         }
     })
 
-    let mutateTarget = getRandomInt(candidates);
-    let current = 0;
+    // Get total return statements in the function
+    let mutateTargetFunction = getRandomInt(candidateFunctions);
+    let currentFunction = 0;
+    let candidateSrc = 0;
     traverseWithParents(ast, (node) => {
-        if( node.type === "String" && node.value === "") {
-            if( current === mutateTarget ) {
-                if(node.value === "" ) {
-                    node.value = "<div>Testing, one, two, three...</div>";
-                    console.log( chalk.red(`Replacing "" with a <div> with content on line ${node.loc.start.line}` ));
-                }
+        if( node.type === "FunctionDeclaration" ) {
+          let flag = false;
+            node.body.body.forEach((item, i) => {
+              if (item.type === "ReturnStatement" && item.argument.type === "Identifier") {
+                flag = true;
+              }
+            });
+            if (flag) {
+              if (currentFunction === mutateTargetFunction) {
+                node.body.body.forEach((item, i) => {
+                  if (item.type === "ReturnStatement" && item.argument.type === "Identifier") {
+                    candidateSrc++;
+                  }
+                });
+              }
+              currentFunction++;
             }
-            current++;
+        }
+    })
+
+    // Get pos and var used in the return statement
+    let mutateTargetSrc = getRandomInt(candidateSrc);
+    currentFunction = 0;
+    let currentSrc = 0;
+    let srcPos = null;
+    let usedVar = null;
+    traverseWithParents(ast, (node) => {
+        if( node.type === "FunctionDeclaration" ) {
+            let flag = false;
+            node.body.body.forEach((item, i) => {
+              if (item.type === "ReturnStatement" && item.argument.type === "Identifier") {
+                flag = true;
+              }
+            });
+            if (flag) {
+              if (currentFunction === mutateTargetFunction) {
+                node.body.body.forEach((item, i) => {
+                  if (item.type === "ReturnStatement" && item.argument.type === "Identifier") {
+                    if (currentSrc === mutateTargetSrc) {
+                      srcPos = i;
+                      usedVar = item.argument.name;
+                    }
+                    currentSrc++;
+                  }
+                });
+              }
+              currentFunction++;
+            }
+        }
+    })
+
+    // Get the pos of var used in the return statement
+    currentFunction = 0;
+    varPos = null;
+    traverseWithParents(ast, (node) => {
+        if( node.type === "FunctionDeclaration" ) {
+            let flag = false;
+            node.body.body.forEach((item, i) => {
+              if (item.type === "ReturnStatement" && item.argument.type === "Identifier") {
+                flag = true;
+              }
+            });
+            if (flag) {
+              if (currentFunction === mutateTargetFunction) {
+                node.body.body.forEach((item, i) => {
+                  if (item.type === "ExpressionStatement" && item.expression.type === "AssignmentExpression" && item.expression.left.name === usedVar) {
+                    varPos = i;
+                  }
+                });
+              }
+              currentFunction++;
+            }
+        }
+    })
+
+    // clone return statement inbetween var declaration and return statement
+    currentFunction = 0;
+    traverseWithParents(ast, (node) => {
+        if( node.type === "FunctionDeclaration" ) {
+            let flag = false;
+            node.body.body.forEach((item, i) => {
+              if (item.type === "ReturnStatement" && item.argument.type === "Identifier") {
+                flag = true;
+              }
+            });
+            if (flag) {
+              if (currentFunction === mutateTargetFunction) {
+                let min = varPos + 1;
+                let max = srcPos - 1;
+                let mutateTarget = Math.floor(Math.random() * (max - min)) + min;
+                destLoc = node.body.body[mutateTarget].loc.start.line
+                srcLoc = node.body.body[srcPos].loc.start.line
+                node.body.body[mutateTarget] = node.body.body[srcPos];
+                console.log("Return statement is cloned from " + srcLoc + " to " + destLoc);
+              }
+              currentFunction++;
+            }
         }
     })
 }
+
 
 function NonEmptyStringMutationsFunction(ast) {
 
