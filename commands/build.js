@@ -27,6 +27,7 @@ exports.handler = async argv => {
     } else {
       helper = new WinHelper();
     }
+    const logPrefix = helper.getLogPrefix();
 
     await helper.updateSSHConfig();
 
@@ -35,6 +36,9 @@ exports.handler = async argv => {
 
     let setupAlreadyDone = false;
     let testingSetupCompleted = false;
+
+    await execCmd(`mkdir logs`);
+    await execCmd(`mkdir ` + logPrefix);
 
     await sshExec("touch .status", helper.sshConfig, false);
     await sshExec("cat .status > .status", helper.sshConfig, false);
@@ -54,24 +58,26 @@ exports.handler = async argv => {
     })
 
     const aptInstallCmd = 'sudo apt-get install -y ';
-    const aptUpdateCmd = 'sudo apt-get update --fix-missing';
+    const aptUpdateCmd = 'sudo apt-get update';
     let data = YamlParser.parse('./' + buildFile);
 
     let setupCmd;
     let runCmd;
     let isAptUpdate = false;
 
-    await execCmd(`rm setup.sh`);
-    await execCmd(`touch setup.sh`);
+    // await execCmd(`rm setup.sh`);
+
+    await execCmd(`echo '#!/bin/bash' > setup.sh`);
+    await execCmd(`echo 'set -e' >> setup.sh`);
+    await execCmd(`echo 'set -x' >> setup.sh`);
 
     // // Remove if pkg is fixed
     // const rmDamagedPkg1 = 'sudo apt remove flash-kernel -y';
-    // const rmDamagedPkg2 = 'sudo apt remove u-boot-rpi:arm64 -y'
+    // // const rmDamagedPkg2 = 'sudo apt remove u-boot-rpi:arm64 -y'
     // await execCmd('echo "' + rmDamagedPkg1 + '" >> setup.sh');
-    // await execCmd('echo "' + rmDamagedPkg2 + '" >> setup.sh');
+    // // await execCmd('echo "' + rmDamagedPkg2 + '" >> setup.sh');
 
-    await execCmd('echo "' + aptInstallCmd + '" >> setup.sh');
-    await execCmd('echo "' + aptUpdateCmd + '" >> setup.sh');
+    // await execCmd('echo "' + aptInstallCmd + '" >> setup.sh');
     if(setupAlreadyDone == false) {
       for (const task of data.setup) {
           setupCmd = '';
@@ -88,7 +94,7 @@ exports.handler = async argv => {
       }
       // await new Promise(r => setTimeout(r, 10000));
       await helper.moveToBuildEnv();
-      await sshExec("bash setup.sh | tee setup.log", helper.sshConfig).then(function () {
+      await sshExec("bash setup.sh | tee " + logPrefix + "setup.log", helper.sshConfig).then(function () {
         console.log("=====================================================================")
         sshExec("'echo setupCompleted=True >> .status'", helper.sshConfig);
       });
@@ -102,7 +108,7 @@ exports.handler = async argv => {
             console.log(chalk.green("Executing build job : "+ jobName));
 
             if (job.mutation) {
-              await mutation(job.mutation, helper, testingSetupCompleted);
+              await mutation(job.mutation, helper, testingSetupCompleted, logPrefix);
             }
 
             if (job.steps) {
@@ -119,7 +125,7 @@ exports.handler = async argv => {
     }
 };
 
-async function mutation(info, helper, testingSetupCompleted) {
+async function mutation(info, helper, testingSetupCompleted, logPrefix) {
   console.log(info);
 
   await helper.moveTestingFilesToVM();
@@ -135,19 +141,19 @@ async function mutation(info, helper, testingSetupCompleted) {
   await sshExec(cloneCmd, helper.sshConfig);
 
   if (!testingSetupCompleted) {
-    await sshExec('bash testing/testingSetup.sh | tee testingSetup.log', helper.sshConfig).then(function () {
+    await sshExec('bash testing/testingSetup.sh | tee ' + logPrefix + 'testingSetup.log', helper.sshConfig).then(function () {
       sshExec("'echo testingSetupCompleted=True >> .status'", helper.sshConfig);
     });
   }
 
- await sshExec('bash testing/testingPrep.sh | tee testingPrep.log', helper.sshConfig)
+ await sshExec('bash testing/testingPrep.sh | tee ' + logPrefix + 'testingPrep.log', helper.sshConfig)
   await sshExec('npm install express --prefix ' + repoDir, helper.sshConfig);
 
   let iterations = Number(info.iterations);
   console.log(iterations + " " + typeof(iterations));
 
   // let mutatecommand = "node testing/mutation.js " + iterations;
-  await sshExec('node testing/mutation.js ' + iterations + ' | tee mutation.log', helper.sshConfig);
+  await sshExec('node testing/mutation.js ' + iterations + ' | tee ' + logPrefix + 'mutation.log', helper.sshConfig);
 
 
   for(let i = 0; i < info.snapshots.length; i++) {
@@ -169,6 +175,6 @@ async function mutation(info, helper, testingSetupCompleted) {
 
   await sshExec("cp marqdown.js " + repoDir + "/marqdown.js", helper.sshConfig);
 
-  await sshExec("node testing/snapshotCompare.js " + info.iterations + " " + info.snapshots.length + " | tee results.log", helper.sshConfig);
+  await sshExec("node testing/snapshotCompare.js " + info.iterations + " " + info.snapshots.length + " | tee " + logPrefix + "results.log", helper.sshConfig);
 
 };

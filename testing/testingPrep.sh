@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-
+set -x
 rm -rf testing/mutations
 rm -rf testing/image_snapshots
 rm -rf testing/html_snapshots
