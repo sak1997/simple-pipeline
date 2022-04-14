@@ -65,11 +65,10 @@ exports.handler = async argv => {
     let runCmd;
     let isAptUpdate = false;
 
-    // await execCmd(`rm setup.sh`);
 
-    await execCmd(`echo '#!/bin/bash' > setup.sh`);
-    await execCmd(`echo 'set -e' >> setup.sh`);
-    await execCmd(`echo 'set -x' >> setup.sh`);
+    await execCmd("echo '#!/bin/bash' > setup.sh");
+    await execCmd("echo 'set -e' >> setup.sh");
+    await execCmd("echo 'set -x' >> setup.sh");
 
     // // Remove if pkg is fixed
     // const rmDamagedPkg1 = 'sudo apt remove flash-kernel -y';
