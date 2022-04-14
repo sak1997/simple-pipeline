@@ -27,7 +27,7 @@ exports.handler = async argv => {
     } else {
       helper = new WinHelper();
     }
-    const logPrefix = helper.getLogPrefix();
+    const logPrefix = await helper.getLogPrefix();
 
     await helper.updateSSHConfig();
 
