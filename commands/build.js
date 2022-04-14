@@ -37,8 +37,8 @@ exports.handler = async argv => {
     let setupAlreadyDone = false;
     let testingSetupCompleted = false;
 
-    await execCmd(`mkdir logs`);
-    await execCmd(`mkdir ` + logPrefix);
+    await execCmd('mkdir logs');
+    await execCmd('mkdir ' + logPrefix);
 
     await sshExec("touch .status", helper.sshConfig, false);
     await sshExec("cat .status > .status", helper.sshConfig, false);
@@ -57,8 +57,8 @@ exports.handler = async argv => {
       console.log(data);
     })
 
-    const aptInstallCmd = 'sudo apt-get install -y ';
-    const aptUpdateCmd = 'sudo apt-get update';
+    const aptInstallCmd = 'sudo apt install -y ';
+    const aptUpdateCmd = 'sudo apt update';
     let data = YamlParser.parse('./' + buildFile);
 
     let setupCmd;
