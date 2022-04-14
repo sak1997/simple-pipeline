@@ -10,8 +10,8 @@ const [, , ...args] = process.argv;
 
 (async () => {
   const url = args[0];
-  const filename = `./image_snapshots/${args[1]}.png`;
-  console.log(filename);
+  // const filename = `./image_snapshots/${args[1]}.png`;
+  // console.log(filename);
   const browser = await puppeteer.launch({
     args: ['--no-sandbox']
   });
@@ -26,10 +26,10 @@ const [, , ...args] = process.argv;
     await browser.close();
   }
 
-  await page.screenshot({
-    path: filename,
-    fullPage: true
-  });
+  // await page.screenshot({
+  //   path: filename,
+  //   fullPage: true
+  // });
 
   let html = await page.content();
   fs.writeFileSync( `./html_snapshots/${args[1]}.html`, html);

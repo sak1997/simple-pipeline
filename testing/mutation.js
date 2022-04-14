@@ -22,6 +22,7 @@ console.log("Running " + no + " iterations...");
 // TO DO: File paths need to be changed
 // REQUIRED: directory called mutations to store mutated files
 for(let i = 1; i <= no; i++) {
+    console.log("\nIteration " + i + ":");
     let srcfile = "checkbox.io-micro-preview/marqdown.js"; // target file to be mutated - project dir
     let dstfile = "testing/mutations/mutation" + i +".js" // dst file set to mutations directory in the same folder as this file
     rewrite(srcfile,dstfile);

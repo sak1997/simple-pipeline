@@ -139,8 +139,8 @@ async function mutation(info, helper) {
   let iterations = Number(info.iterations);
   console.log(iterations + " " + typeof(iterations));
 
-  let mutatecommand = "node testing/mutation.js " + iterations;
-  await sshExec("'" + mutatecommand + "'", helper.sshConfig);
+  // let mutatecommand = "node testing/mutation.js " + iterations;
+  await sshExec('node testing/mutation.js ' + iterations + ' | tee mutation.log', helper.sshConfig);
 
 
   for(let i = 0; i < info.snapshots.length; i++) {
@@ -162,9 +162,6 @@ async function mutation(info, helper) {
 
   await sshExec("cp marqdown.js " + repoDir + "/marqdown.js", helper.sshConfig);
 
-  await sshExec("node testing/snapshotCompare.js " + info.iterations + " " + info.snapshots.length, helper.sshConfig);
-
-  console.log("here now!");
-
+  await sshExec("node testing/snapshotCompare.js " + info.iterations + " " + info.snapshots.length + " | tee results.log", helper.sshConfig);
 
 };

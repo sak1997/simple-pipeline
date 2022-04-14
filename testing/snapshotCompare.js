@@ -1,41 +1,32 @@
 const { CONNREFUSED } = require('dns');
 const fs = require('fs');
-const HtmlDiffer = require('html-differ').HtmlDiffer;
-var logger = require('html-differ/lib/logger');
+const htmlCompare = require('html-compare');
+const chalk = require('chalk');
 
 const [, , ...args] = process.argv;
-const options = {
-  ignoreAttributes: [],
-  compareAttributesAsJSON: [],
-  ignoreWhitespaces: true,
-  ignoreComments: true,
-  ignoreEndTags: false
-};
 
-const htmlDiffer = new HtmlDiffer(options);
+
 let count = 0;
-let totalIterations = args[0];
-
+let totalIterationsWithoutError = args[0];
+let total = args[0];
 tempfun(args[0], args[1]);
 
-console.log("Mutation coverage: ");
-console.log(count + " / " + totalIterations);
-console.log("Number of compilation errors = " + (args[0] - totalIterations));
+console.log(("\n\nMutation coverage: "));
+console.log(("Total: " + total ));
+console.log(("Passed: " + count + "(" + count*100/total + "%)"));
+console.log(("Failed: " + (totalIterationsWithoutError - count) + "(" + (totalIterationsWithoutError - count)*100/total + "%)"));
+console.log(("errors: " + (total - totalIterationsWithoutError) + "(" + (total - totalIterationsWithoutError)*100/total + "%)"));
 
 function run(arg1, arg2) {
 
   const html1 = fs.readFileSync(arg1, 'utf-8');
   if(!fs.existsSync(arg2)) {
-    console.log("file " + arg2 + "not found - compilcation error! This case will NOT be considered in coverage");
-    totalIterations--;
+    console.log("file " + arg2 + " not found - compilcation error! This case will NOT be considered in coverage");
+    totalIterationsWithoutError--;
     return false;
   } else {
     const html2 = fs.readFileSync(arg2, 'utf-8');
-    const diff = htmlDiffer.diffHtml(html2, html1);
-    const isEqual = htmlDiffer.isEqual(html1, html2);
-    const res = logger.getDiffText(diff, { charsAroundDiff: 40 });
-    logger.logDiffText(diff, { charsAroundDiff: 40 });
-    // console.log(isEqual);
+    const isEqual = !htmlCompare.compare(html1, html2).different;
     return isEqual;
   }
 
@@ -56,5 +47,3 @@ function tempfun(iterations, numFiles) {
   }
 
 }
-//          match = match && run("html_snapshots/snapshot" + (j + 1) + "_1.html", "html_snapshots/snapshot" + (j + 1) + "_" + i + ".html");
-//       match = match && run("testing/html_snapshots/snapshot_orig_" + j + ".html", "testing/html_snapshots/snapshot_" + j + "_" + i + ".html");

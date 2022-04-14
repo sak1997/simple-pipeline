@@ -39,7 +39,7 @@ sudo apt install npm -y
 sudo npm install forever -g
 # npm init --yes --prefix testing
 
-sudo npm install pm2@latest -g
+# sudo npm install pm2@latest -g
 
 npm install --prefix testing
 
