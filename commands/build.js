@@ -7,7 +7,6 @@ const WinHelper = require('../lib/winHelper');
 const fs = require('fs');
 const { help } = require('yargs');
 const pathUtil = require("path");
-const logPrefix = "logs/" + Date.now() + "/";
 
 exports.command = 'build <job_name> <build_file>';
 exports.desc = 'Trigger a specified Build job';
@@ -28,6 +27,7 @@ exports.handler = async argv => {
     } else {
       helper = new WinHelper();
     }
+    const logPrefix = helper.getLogPrefix();
 
     await helper.updateSSHConfig();
 
@@ -37,8 +37,8 @@ exports.handler = async argv => {
     let setupAlreadyDone = false;
     let testingSetupCompleted = false;
 
-    await execCmd('mkdir logs');
-    await execCmd('mkdir ' + logPrefix);
+    await execCmd(`mkdir logs`);
+    await execCmd(`mkdir ` + logPrefix);
 
     await sshExec("touch .status", helper.sshConfig, false);
     await sshExec("cat .status > .status", helper.sshConfig, false);
@@ -57,18 +57,19 @@ exports.handler = async argv => {
       console.log(data);
     })
 
-    const aptInstallCmd = 'sudo apt install -y ';
-    const aptUpdateCmd = 'sudo apt update';
+    const aptInstallCmd = 'sudo apt-get install -y ';
+    const aptUpdateCmd = 'sudo apt-get update';
     let data = YamlParser.parse('./' + buildFile);
 
     let setupCmd;
     let runCmd;
     let isAptUpdate = false;
 
+    // await execCmd(`rm setup.sh`);
 
-    await execCmd("echo '#!/bin/bash' > setup.sh");
-    await execCmd("echo 'set -e' >> setup.sh");
-    await execCmd("echo 'set -x' >> setup.sh");
+    await execCmd(`echo '#!/bin/bash' > setup.sh`);
+    await execCmd(`echo 'set -e' >> setup.sh`);
+    await execCmd(`echo 'set -x' >> setup.sh`);
 
     // // Remove if pkg is fixed
     // const rmDamagedPkg1 = 'sudo apt remove flash-kernel -y';
