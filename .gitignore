@@ -11,3 +11,6 @@ snapshotlog.log'
 snapshotlog.log
 status.txt'
 status.txt
+.status
+.DS_Store
+logs/

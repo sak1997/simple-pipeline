@@ -34,20 +34,23 @@ exports.handler = async argv => {
     console.log(chalk.green("started running build job"));
 
     let setupAlreadyDone = false;
-    await sshExec("cat status.txt | grep setupCompleted=True > status.txt", helper.sshConfig, false);
+    let testingSetupCompleted = false;
 
+    await sshExec("touch .status", helper.sshConfig, false);
+    await sshExec("cat .status > .status", helper.sshConfig, false);
 
-    fs.readFile('./status.txt', 'utf8' , (err, data) => {
+    fs.readFile('./.status', 'utf8' , (err, data) => {
       if (err) {
         console.error(err)
         return
       }
       if(data.includes('setupCompleted=True')) {
         setupAlreadyDone = true;
-        console.log("here");
+      }
+      if(data.includes('testingSetupCompleted=True')) {
+        testingSetupCompleted = true;
       }
       console.log(data);
-      console.log("here!");
     })
 
     const aptInstallCmd = 'sudo apt-get install -y ';
@@ -87,8 +90,7 @@ exports.handler = async argv => {
       await helper.moveToBuildEnv();
       await sshExec("bash setup.sh | tee setup.log", helper.sshConfig).then(function () {
         console.log("=====================================================================")
-        sshExec("touch status.txt", helper.sshConfig);
-        sshExec("'echo setupCompleted=True > status.txt'", helper.sshConfig);
+        sshExec("'echo setupCompleted=True >> .status'", helper.sshConfig);
       });
 
     }
@@ -100,7 +102,7 @@ exports.handler = async argv => {
             console.log(chalk.green("Executing build job : "+ jobName));
 
             if (job.mutation) {
-              await mutation(job.mutation, helper);
+              await mutation(job.mutation, helper, testingSetupCompleted);
             }
 
             if (job.steps) {
@@ -117,7 +119,7 @@ exports.handler = async argv => {
     }
 };
 
-async function mutation(info, helper) {
+async function mutation(info, helper, testingSetupCompleted) {
   console.log(info);
 
   await helper.moveTestingFilesToVM();
@@ -132,8 +134,13 @@ async function mutation(info, helper) {
   console.log(cloneCmd);
   await sshExec(cloneCmd, helper.sshConfig);
 
-  await sshExec('bash testing/testingSetup.sh | tee testingSetup.log', helper.sshConfig);
+  if (!testingSetupCompleted) {
+    await sshExec('bash testing/testingSetup.sh | tee testingSetup.log', helper.sshConfig).then(function () {
+      sshExec("'echo testingSetupCompleted=True >> .status'", helper.sshConfig);
+    });
+  }
 
+ await sshExec('bash testing/testingPrep.sh | tee testingPrep.log', helper.sshConfig)
   await sshExec('npm install express --prefix ' + repoDir, helper.sshConfig);
 
   let iterations = Number(info.iterations);
