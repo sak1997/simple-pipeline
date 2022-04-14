@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 # wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 # sudo dpkg -i google-chrome-stable_current_amd64.deb
 
@@ -7,7 +8,7 @@ set -e
 # sudo apt --fix-broken install -y
 
 
-sudo apt remove flash-kernel -y
+# sudo apt remove flash-kernel -y
 # sudo apt remove u-boot-rpi:arm64 -y
 
 sudo apt install chromium-browser -y

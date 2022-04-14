@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 for ((i = 1 ; i <= $1 ; i++)) do
 
