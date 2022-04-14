@@ -27,7 +27,7 @@ exports.handler = async argv => {
     } else {
       helper = new WinHelper();
     }
-    const logPrefix = await helper.getLogPrefix();
+    const logPrefix = helper.getLogPrefix();
 
     await helper.updateSSHConfig();
 
@@ -108,7 +108,7 @@ exports.handler = async argv => {
             console.log(chalk.green("Executing build job : "+ jobName));
 
             if (job.mutation) {
-              await mutation(job.mutation, helper, testingSetupCompleted);
+              await mutation(job.mutation, helper, testingSetupCompleted, logPrefix);
             }
 
             if (job.steps) {
@@ -125,7 +125,7 @@ exports.handler = async argv => {
     }
 };
 
-async function mutation(info, helper, testingSetupCompleted) {
+async function mutation(info, helper, testingSetupCompleted, logPrefix) {
   console.log(info);
 
   await helper.moveTestingFilesToVM();
