@@ -1,13 +1,14 @@
 # Pipeline Tool 
 
 ### A pipeline tool to automate builds.
+### Milestone 2 - Testing and Analysis
 
 ## Contents
 
 | Topic | Location |
 | ------------- |:-------------:|
 |Tasks | Please see below [here](#tasks-and-progress) or [screencasts](#screencasts). |
-|Sample .env file | Please see below [here](#sample-env-file)
+|Sample .env | Please see below [here](#sample-env-file)
 |Experiences | Please see below [here](#experiences)|
 |Challenges | Please see below [here](#challenges)|
 |Screencast | Please see below [here](#screencasts)|
@@ -17,12 +18,12 @@
 
 | Task | Progress | Challenges
 | ------------- |:-------------:| ---- |
-| Automatically provision and configure a build server | Complete on M1 and Windows environments | Agreeing on parameters for the .env file  
-| Create a build job specification |  Done | Understanding how design will influence the build environment configuration.
-| Checkpoint Report | Done | None
-| Automatically configure a build environment for given build job specification |Done | Multiple(Please see Issues below for more)
-| Milestone Report | Done
-| Screencast | Done
+| Generate snapshots | Completed - see testing/snapshot.js for HTML snapshot code | Compare and contrast between HTML and image snapshots
+| Mutation operators |  Done - please see testing/mutation.js for the implementation | Understanding the structure of ASTs for various operators
+| Test harness | Done - please see commands/build.js for implementation |
+| Mutation coverage | Done |Ignoring whitespace and comments in HTML snapshots | Handling compliation failures
+| Build specification | Done - available in the build.yml in this repo
+| Screencast and Milestone Report | Please see below for the screencast
 
 The automatic provisioning and configuration of the build server has been done for both windows and M1 environments.
 
@@ -32,28 +33,47 @@ Finally, we have also parsed, interpreted and run the commands from the build.ym
 
 ## Sample env File
 
+### Windows
+
 ```
-IP=192.168.10.112 <Only for Windows, MAC does need IP specified>
+IP=192.168.10.112
 VM_NAME=pipeline-vm
-unityid=sbabu
-pat=<your personal access token>
+USER_NAME=<your username for the Personal access token>
+TOKEN=<your personal access token>
 ```
+
+### M1
+
+```
+VM_NAME='vm1'
+USER_NAME=<your username for the Personal access token>
+TOKEN=<your personal access token>
+```
+
+### Notes
+
+- Mutations are saved inside the VM in the testing/mutations directory on the VM
+- Snapshots are saved in the testing/HTML_snapshots directory on the VM
 
 ## Experiences
 
-We had to understand how the same workflow to get a VM ready and deployed would be different in different OS architectures - M1 vs others, since we are using basicvm in M1 machines and Virtual Box otherwise.
 
-Understanding how the skeleton code provided differentiated between system was helpful, and we used that to write our own code.
+We discussed how to build on top of the already-existing code in an efficient fashion, and also considered different possible formats in the .yml file. Additionally, a few setup operations for the testing were different on Windows and M1, so we created different functions to accommodate that. 
 
-We also had to understand how SSH would work inside the repository given that the entire process had to happen without user intervention. Personal Access Tokens proved to be quite helpful in this case.
+We had to consider various trade-offs over the course of this milestone such as HTML vs image for snapshots - which ones would be easier to process, would differences be captured correctly etc and arrived at the choice to use HTML snapshots.   
+
+Building a test harness to put everything together was a very interesting exercise, and we experienced quite a bit of confusion between operating systems there, and after some iterations of work, made it system-agnostic. We also had to work around any compilation errors in the mutated code that would make it impossible to take a snapshot and factor that into the mutation coverage calculations. 
+
 
 ## Challenges
 
-- Understanding how to work with the .env file, and what constraints to enforce - like IP, VM name etc
+- Working with HTML vs Image-based snapshots, and the question of which would better capture the differences caused by the mutations.
 
-- Understanding how YAML design will influence the build environment configuration.
+- Understanding the structure and method to alter the AST in escodegen for some operators was harder than others - control flow and clone return operators in particular were quite challenging due to the complexity of the AST.
 
-- Working with SSH on M1 and Windows environments
+- Getting the app running each time to take snapshots - we achieved this through the forever npm module
+
+- Snapshot differencing - finding an effective way to ignore useless parts of the HTML snapshots like unneeded whitespace, comments etc which do not contribute to mutation coverage
 
 - Issues with CLRF and LF line endings on Windows and M1 Mac environments.
 
@@ -62,7 +82,7 @@ We also had to understand how SSH would work inside the repository given that th
 ## Screencasts
 
 The screencast can be found at the below link:
-  https://drive.google.com/file/d/1k1-PyhGEiAVeXt9EPs7t8jzq7LYEA5Ma/view?usp=sharing
+
 
 ## Team Members
 
