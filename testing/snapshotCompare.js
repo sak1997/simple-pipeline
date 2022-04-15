@@ -15,7 +15,7 @@ console.log(("\n\nMutation coverage: "));
 console.log(("Total: " + total ));
 console.log(("Passed: " + count + "(" + count*100/total + "%)"));
 console.log(("Failed: " + (totalIterationsWithoutError - count) + "(" + (totalIterationsWithoutError - count)*100/total + "%)"));
-console.log(("errors: " + (total - totalIterationsWithoutError) + "(" + (total - totalIterationsWithoutError)*100/total + "%)"));
+console.log(("Exceptions(killed mutant): " + (total - totalIterationsWithoutError) + "(" + (total - totalIterationsWithoutError)*100/total + "%)"));
 
 function run(arg1, arg2) {
 
