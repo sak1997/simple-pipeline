@@ -7,6 +7,7 @@ const WinHelper = require('../lib/winHelper');
 const fs = require('fs');
 const { help } = require('yargs');
 const pathUtil = require("path");
+const oneTimeSetup = true;
 
 exports.command = 'build <job_name> <build_file>';
 exports.desc = 'Trigger a specified Build job';
@@ -78,7 +79,7 @@ exports.handler = async argv => {
     // // await execCmd('echo "' + rmDamagedPkg2 + '" >> setup.sh');
 
     // await execCmd('echo "' + aptInstallCmd + '" >> setup.sh');
-    if(setupAlreadyDone == false) {
+    if(oneTimeSetup && (!setupAlreadyDone)) {
       for (const task of data.setup) {
           setupCmd = '';
           if(task.hasOwnProperty("package")){
@@ -140,7 +141,7 @@ async function mutation(info, helper, testingSetupCompleted, logPrefix) {
   console.log(cloneCmd);
   await sshExec(cloneCmd, helper.sshConfig);
 
-  if (!testingSetupCompleted) {
+  if (oneTimeSetup && (!testingSetupCompleted)) {
     await sshExec('bash testing/testingSetup.sh | tee ' + logPrefix + 'testingSetup.log', helper.sshConfig).then(function () {
       sshExec("'echo testingSetupCompleted=True >> .status'", helper.sshConfig);
     });
