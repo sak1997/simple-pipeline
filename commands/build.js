@@ -127,12 +127,14 @@ exports.handler = async argv => {
 };
 
 async function mutation(info, helper, testingSetupCompleted, logPrefix) {
-  console.log(info);
 
   await helper.moveTestingFilesToVM();
 
   urlContent = info.url.split("/");
   let mutateFile = info.mutationfile;
+  if (mutateFile === undefined) {
+    mutateFile = "marqdown.js";
+  }
   let repoDir = urlContent[urlContent.length - 1];
 
   await sshExec('rm -rf ' + repoDir, helper.sshConfig);
@@ -175,7 +177,7 @@ async function mutation(info, helper, testingSetupCompleted, logPrefix) {
     await sshExec("bash testing/stopapp.sh " + repoDir, helper.sshConfig);
   }
 
-  await sshExec("cp marqdown.js " + repoDir + "/marqdown.js", helper.sshConfig);
+  await sshExec("cp " + mutateFile + " " + repoDir + "/" + mutateFile, helper.sshConfig);
 
   await sshExec("node testing/snapshotCompare.js " + info.iterations + " " + info.snapshots.length + " | tee " + logPrefix + "results.log", helper.sshConfig);
 
