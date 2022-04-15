@@ -3,7 +3,7 @@ set -e
 set -x
 
 cd testing
-cp mutations/mutation$1.js ../$2/marqdown.js
+cp mutations/mutation$1.js ../$2/$3.js
 
 echo "starting forever for mutation"
 cd ../$2

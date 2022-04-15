@@ -22,7 +22,7 @@ jobs:
     mutation:
       url: https://github.com/chrisparnin/checkbox.io-micro-preview
       iterations: 10
-      mutationFile: marqdown.js
+      mutationfile: marqdown.js
       snapshots:
       - http://localhost:3000/survey/long.md
       - http://localhost:3000/survey/upload.md

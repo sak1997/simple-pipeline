@@ -132,6 +132,7 @@ async function mutation(info, helper, testingSetupCompleted, logPrefix) {
   await helper.moveTestingFilesToVM();
 
   urlContent = info.url.split("/");
+  let mutateFile = info.mutationfile;
   let repoDir = urlContent[urlContent.length - 1];
 
   await sshExec('rm -rf ' + repoDir, helper.sshConfig);
@@ -154,7 +155,7 @@ async function mutation(info, helper, testingSetupCompleted, logPrefix) {
   console.log(iterations + " " + typeof(iterations));
 
   // let mutatecommand = "node testing/mutation.js " + iterations;
-  await sshExec('node testing/mutation.js ' + iterations + ' | tee ' + logPrefix + 'mutation.log', helper.sshConfig);
+  await sshExec('node testing/mutation.js ' + iterations + ' ' + repoDir + '/' + mutateFile + ' | tee ' + logPrefix + 'mutation.log', helper.sshConfig);
 
 
   for(let i = 0; i < info.snapshots.length; i++) {
@@ -167,7 +168,7 @@ async function mutation(info, helper, testingSetupCompleted, logPrefix) {
   // }
 
   for(let i = 1; i <= iterations; i++) {
-    await sshExec("bash testing/startapp.sh " + i + " " + repoDir, helper.sshConfig);
+    await sshExec("bash testing/startapp.sh " + i + " " + repoDir + " " + mutateFile, helper.sshConfig);
     for(let j = 0; j < info.snapshots.length; j++) {
       await sshExec("bash testing/takeMySnapshot.sh " + info.snapshots[j] + " " + j + " " + i, helper.sshConfig);
     }
