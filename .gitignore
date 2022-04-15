@@ -4,13 +4,10 @@ vmcreate.txt
 vminfo.txt
 package-lock.json
 *.log
+*.log'
 setup.sh
 status.txt
 temp.sh
-snapshotlog.log'
-snapshotlog.log
-status.txt'
-status.txt
 .status
 .status'
 .DS_Store
