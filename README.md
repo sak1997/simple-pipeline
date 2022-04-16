@@ -69,9 +69,7 @@ TOKEN=<your personal access token>
    <summary>Output</summary>
    <p>
   
-   ```
-    TODO: Output       
-   ```
+   [build output for 10 iterations](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-20/blob/M2/Results/M1/build10Iterations)
   </p>
 </details>
 
@@ -186,9 +184,7 @@ Exceptions(killed mutant): 3(30%)
    <summary>Output</summary>
    <p>
   
-   ```
-    TODO: Output       
-   ```
+   [build output for 1000 iterations](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-20/blob/M2/Results/M1/build1000Iterations)
   </p>
 </details>
       
@@ -6367,63 +6363,21 @@ Exceptions(killed mutant): 127(12.7%)
 <details>
    <summary>Output</summary>
    <p>
-  
-   ```
-Iteration 1:
-Running NegateConditionals...
-Replacing != with == on line 321
-
-Iteration 2:
-Running NegateConditionals...
-Replacing < with > on line 104
-
-Iteration 3:
-Running ConditionalBoundaryMutations...
-Replacing >= with <= on line 183
-
-Iteration 4:
-Running ControlFlowMutations...
-Swapped expressions in if-else block in line 289 and line 294
-
-Iteration 5:
-Running CloneReturnMutations...
-Return statement is cloned from 117 to 103
-
-Iteration 6:
-Running NegateConditionals...
-Replacing == with != on line 217
-
-Iteration 7:
-Running CloneReturnMutations...
-Return statement is cloned from 117 to 103
-
-Iteration 8:
-Running ControlFlowMutations...
-Swapped expressions in if-else block in line 289 and line 294
-
-Iteration 9:
-Running NonEmptyStringMutations...
-Replacing "" with a <div> with content on line 288
-
-Iteration 10:
-Running CloneReturnMutations...
-Return statement is cloned from 117 to 103
-
-Mutation coverage:
-Total: 10
-Passed: 3(30%)
-Failed: 6(60%)
-Exceptions(killed mutant): 1(10%)
-
-   ```
+      
+   [build output for 10 iterations](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-20/blob/M2/Results/Windows/build10Iterations)
   </p>
 </details>
+      
 <details>
    <summary>Result</summary>
    <p>
   
    ```
-    TODO: Output       
+Mutation coverage:
+Total: 10
+Passed: 3(30%)
+Failed: 6(60%)
+Exceptions(killed mutant): 1(10%)
    ```
   </p>
 </details>
@@ -6482,6 +6436,46 @@ Return statement is cloned from 117 to 103
    <p>
   
    ```
+Iteration 1:
+Running NegateConditionals...
+Replacing != with == on line 321
+
+Iteration 2:
+Running NegateConditionals...
+Replacing < with > on line 104
+
+Iteration 3:
+Running ConditionalBoundaryMutations...
+Replacing >= with <= on line 183
+
+Iteration 4:
+Running ControlFlowMutations...
+Swapped expressions in if-else block in line 289 and line 294
+
+Iteration 5:
+Running CloneReturnMutations...
+Return statement is cloned from 117 to 103
+
+Iteration 6:
+Running NegateConditionals...
+Replacing == with != on line 217
+
+Iteration 7:
+Running CloneReturnMutations...
+Return statement is cloned from 117 to 103
+
+Iteration 8:
+Running ControlFlowMutations...
+Swapped expressions in if-else block in line 289 and line 294
+
+Iteration 9:
+Running NonEmptyStringMutations...
+Replacing "" with a <div> with content on line 288
+
+Iteration 10:
+Running CloneReturnMutations...
+Return statement is cloned from 117 to 103
+
 Mutation coverage:
 Total: 10
 Passed: 3(30%)
@@ -6499,9 +6493,7 @@ Exceptions(killed mutant): 1(10%)
    <summary>Output</summary>
    <p>
   
-   ```
-    TODO: Output       
-   ```
+   [build output for 1000 iterations](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-20/blob/M2/Results/Windows/build1000Iterations)
   </p>
 </details>
 <details>
