@@ -6,18 +6,20 @@
 ## Contents
 
 | Topic | Location |
-| ------------- |:-------------:|
-|Tasks | Please see below [here](#tasks-and-progress) or [screencasts](#screencasts). |
-|Sample .env | Please see below [here](#sample-env-file)
-|Experiences | Please see below [here](#experiences)|
-|Challenges | Please see below [here](#challenges)|
-|Screencast | Please see below [here](#screencasts)|
+|-|-|
+|Tasks | [click here](#tasks-and-progress) |
+|Instructions| [click here](#instructions)|
+<!-- |Sample .env | [click here](#sample-env-file)| -->
+|Results| [click here](#results)|
+|Experiences | [click here](#experiences)|
+|Challenges | [click here](#challenges)|
+|Screencast | [click here](#screencasts)|
 
 
 ## Tasks and Progress
 
 | Task | Progress | Challenges
-| ------------- |:-------------:| ---- |
+|-|-|-|
 | Generate snapshots | Completed - see testing/snapshot.js for HTML snapshot code | Compare and contrast between HTML and image snapshots
 | Mutation operators |  Done - please see testing/mutation.js for the implementation | Understanding the structure of ASTs for various operators
 | Test harness | Done - please see commands/build.js for implementation |
@@ -31,7 +33,10 @@ We have designed a build.yml file to cover the steps involved in the constructio
 
 Finally, we have also parsed, interpreted and run the commands from the build.yml file in the new VM to set up the environment and build iTrust.
 
-## Sample env File
+## Instructions
+
+
+### Sample env File
 
 ### Windows
 
@@ -42,7 +47,7 @@ USER_NAME=<your username for the Personal access token>
 TOKEN=<your personal access token>
 ```
 
-### M1
+#### M1 Mac
 
 ```
 VM_NAME='vm1'
@@ -50,10 +55,149 @@ USER_NAME=<your username for the Personal access token>
 TOKEN=<your personal access token>
 ```
 
-### Notes
+#### Notes
 
 - Mutations are saved inside the VM in the testing/mutations directory on the VM
 - Snapshots are saved in the testing/HTML_snapshots directory on the VM
+
+## Results
+
+### M1 Mac
+
+#### Build for 10 Iterations
+<details>
+   <summary>Output</summary>
+   <p>
+  
+   ```
+    TODO: Output       
+   ```
+  </p>
+</details>
+
+<details>
+   <summary>Mutation Logs</summary>
+   <p>
+  
+   ```
+    TODO: Mutation Logs       
+     
+   ```
+  </p>
+</details>
+
+<details>
+   <summary>Results Logs</summary>
+   <p>
+  
+   ```
+    TODO: Results Logs      
+   ```
+  </p>
+</details>
+
+
+#### Build for 1000 Iterations
+
+<details>
+   <summary>Output</summary>
+   <p>
+  
+   ```
+    TODO: Output       
+   ```
+  </p>
+</details>
+
+<details>
+   <summary>Mutation Logs</summary>
+   <p>
+  
+   ```
+    TODO: Mutation Logs       
+     
+   ```
+  </p>
+</details>
+
+<details>
+   <summary>Results Logs</summary>
+   <p>
+  
+   ```
+    TODO: Results Logs      
+   ```
+  </p>
+</details>
+
+
+### Windows
+
+#### Build for 10 Iterations
+<details>
+   <summary>Output</summary>
+   <p>
+  
+   ```
+    TODO: Output       
+   ```
+  </p>
+</details>
+
+<details>
+   <summary>Mutation Logs</summary>
+   <p>
+  
+   ```
+    TODO: Mutation Logs       
+     
+   ```
+  </p>
+</details>
+
+<details>
+   <summary>Results Logs</summary>
+   <p>
+  
+   ```
+    TODO: Results Logs      
+   ```
+  </p>
+</details>
+
+
+#### Build for 1000 Iterations
+
+<details>
+   <summary>Output</summary>
+   <p>
+  
+   ```
+    TODO: Output       
+   ```
+  </p>
+</details>
+
+<details>
+   <summary>Mutation Logs</summary>
+   <p>
+  
+   ```
+    TODO: Mutation Logs       
+     
+   ```
+  </p>
+</details>
+
+<details>
+   <summary>Results Logs</summary>
+   <p>
+  
+   ```
+    TODO: Results Logs      
+   ```
+  </p>
+</details>
 
 ## Experiences
 
