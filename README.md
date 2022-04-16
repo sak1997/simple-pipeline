@@ -9,7 +9,6 @@
 |-|-|
 |Tasks | [click here](#tasks-and-progress) |
 |Instructions| [click here](#instructions)|
-<!-- |Sample .env | [click here](#sample-env-file)| -->
 |Results| [click here](#results)|
 |Experiences | [click here](#experiences)|
 |Challenges | [click here](#challenges)|
