@@ -1,0 +1,1467 @@
+Mac M1 detected
+cat vminfo.txt | grep ip
+
+ip=192.168.64.4
+
+started running build job
+mkdir logs
+
+
+mkdir logs/1650126320182/
+
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 touch .status
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 cat .status > .status
+
+echo '#!/bin/bash' > setup.sh
+
+
+
+echo 'set -e' >> setup.sh
+
+
+echo 'set -x' >> setup.sh
+
+
+echo "sudo apt-get update" >> setup.sh
+
+
+echo "sudo apt-get install -y maven" >> setup.sh
+
+
+echo "sudo apt-get install -y openjdk-11-jdk" >> setup.sh
+
+
+echo "export DEBIAN_FRONTEND="noninteractive"" >> setup.sh
+
+
+echo "sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password rootpw'" >> setup.sh
+
+
+echo "sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password rootpw'" >> setup.sh
+
+
+echo "sudo mkdir -p /etc/mysql/conf.d && sudo apt-key adv --keyserver pgp.mit.edu --recv-keys 5072E1F5" >> setup.sh
+
+
+echo "echo "deb http://repo.mysql.com/apt/ubuntu/ trusty mysql-8.0" | sudo tee -a /etc/apt/sources.list.d/mysql.list" >> setup.sh
+
+
+echo "sudo apt-get install -y mysql-server" >> setup.sh
+
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 cp /home/ubuntu/shared/cwd/setup.sh /home/ubuntu/setup.sh
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash setup.sh | tee logs/1650126320182/setup.log
+Hit:1 http://ports.ubuntu.com/ubuntu-ports focal InRelease
+Hit:2 http://ports.ubuntu.com/ubuntu-ports focal-updates InRelease
+Hit:3 http://ports.ubuntu.com/ubuntu-ports focal-backports InRelease
+Hit:4 http://ports.ubuntu.com/ubuntu-ports focal-security InRelease
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  ca-certificates-java default-jre-headless fontconfig-config
+  fonts-dejavu-core java-common libaopalliance-java libapache-pom-java
+  libatinject-jsr330-api-java libavahi-client3 libavahi-common-data
+  libavahi-common3 libcdi-api-java libcommons-cli-java libcommons-io-java
+  libcommons-lang3-java libcommons-parent-java libcups2 libfontconfig1
+  libfreetype6 libgeronimo-annotation-1.3-spec-java
+  libgeronimo-interceptor-3.0-spec-java libgraphite2-3 libguava-java
+  libguice-java libharfbuzz0b libhawtjni-runtime-java libjansi-java
+  libjansi-native-java libjpeg-turbo8 libjpeg8 libjsr305-java liblcms2-2
+  libmaven-parent-java libmaven-resolver-java libmaven-shared-utils-java
+  libmaven3-core-java libpcsclite1 libplexus-cipher-java
+  libplexus-classworlds-java libplexus-component-annotations-java
+  libplexus-interpolation-java libplexus-sec-dispatcher-java
+  libplexus-utils2-java libsisu-inject-java libsisu-plexus-java libslf4j-java
+  libwagon-file-java libwagon-http-shaded-java libwagon-provider-api-java
+  openjdk-11-jre-headless
+Suggested packages:
+  default-jre libaopalliance-java-doc libatinject-jsr330-api-java-doc
+  libservlet3.1-java libcommons-io-java-doc libcommons-lang3-java-doc
+  cups-common libasm-java libcglib-java libjsr305-java-doc liblcms2-utils
+  libmaven-shared-utils-java-doc liblogback-java pcscd
+  libplexus-cipher-java-doc libplexus-classworlds-java-doc
+  libplexus-sec-dispatcher-java-doc libplexus-utils2-java-doc junit4 testng
+  libcommons-logging-java liblog4j1.2-java libnss-mdns fonts-dejavu-extra
+  fonts-ipafont-gothic fonts-ipafont-mincho fonts-wqy-microhei
+  | fonts-wqy-zenhei fonts-indic
+The following NEW packages will be installed:
+  ca-certificates-java default-jre-headless fontconfig-config
+  fonts-dejavu-core java-common libaopalliance-java libapache-pom-java
+  libatinject-jsr330-api-java libavahi-client3 libavahi-common-data
+  libavahi-common3 libcdi-api-java libcommons-cli-java libcommons-io-java
+  libcommons-lang3-java libcommons-parent-java libcups2 libfontconfig1
+  libfreetype6 libgeronimo-annotation-1.3-spec-java
+  libgeronimo-interceptor-3.0-spec-java libgraphite2-3 libguava-java
+  libguice-java libharfbuzz0b libhawtjni-runtime-java libjansi-java
+  libjansi-native-java libjpeg-turbo8 libjpeg8 libjsr305-java liblcms2-2
+  libmaven-parent-java libmaven-resolver-java libmaven-shared-utils-java
+  libmaven3-core-java libpcsclite1 libplexus-cipher-java
+  libplexus-classworlds-java libplexus-component-annotations-java
+  libplexus-interpolation-java libplexus-sec-dispatcher-java
+  libplexus-utils2-java libsisu-inject-java libsisu-plexus-java libslf4j-java
+  libwagon-file-java libwagon-http-shaded-java libwagon-provider-api-java
+  maven openjdk-11-jre-headless
+0 upgraded, 51 newly installed, 0 to remove and 11 not upgraded.
+Need to get 48.1 MB of archives.
+After this operation, 188 MB of additional disk space will be used.
+Get:1 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 java-common all 0.72 [6816 B]
+Get:2 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libavahi-common-data arm64 0.7-4ubuntu7.1 [21.4 kB]
+Get:3 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libavahi-common3 arm64 0.7-4ubuntu7.1 [20.4 kB]
+Get:4 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libavahi-client3 arm64 0.7-4ubuntu7.1 [24.1 kB]
+Get:5 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libcups2 arm64 2.3.1-9ubuntu1.1 [218 kB]
+Get:6 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 liblcms2-2 arm64 2.9-4 [131 kB]
+Get:7 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libjpeg-turbo8 arm64 2.0.3-0ubuntu1.20.04.1 [101 kB]
+Get:8 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libjpeg8 arm64 8c-2ubuntu8 [2198 B]
+Get:9 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libfreetype6 arm64 2.10.1-2ubuntu0.1 [316 kB]
+Get:10 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 fonts-dejavu-core all 2.37-1 [1041 kB]
+Get:11 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 fontconfig-config all 2.13.1-2ubuntu3 [28.8 kB]
+Get:12 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libfontconfig1 arm64 2.13.1-2ubuntu3 [111 kB]
+Get:13 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libgraphite2-3 arm64 1.3.13-11build1 [67.7 kB]
+Get:14 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libharfbuzz0b arm64 2.6.4-1ubuntu4 [353 kB]
+Get:15 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libpcsclite1 arm64 1.8.26-3 [21.5 kB]
+Get:16 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 openjdk-11-jre-headless arm64 11.0.14.1+1-0ubuntu1~20.04 [36.4 MB]
+Get:17 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 default-jre-headless arm64 2:1.11-72 [3192 B]
+Get:18 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 ca-certificates-java all 20190405ubuntu1 [12.2 kB]
+Get:19 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libapache-pom-java all 18-1 [4720 B]
+Get:20 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libatinject-jsr330-api-java all 1.0+ds1-5 [5348 B]
+Get:21 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libgeronimo-interceptor-3.0-spec-java all 1.0.1-4fakesync [8616 B]
+Get:22 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libcdi-api-java all 1.2-2 [54.5 kB]
+Get:23 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libcommons-cli-java all 1.4-1 [53.8 kB]
+Get:24 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libcommons-parent-java all 43-1 [10.8 kB]
+Get:25 http://ports.ubuntu.com/ubuntu-ports focal-updates/universe arm64 libcommons-io-java all 2.6-2ubuntu0.20.04.1 [198 kB]
+Get:26 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libcommons-lang3-java all 3.8-2 [458 kB]
+Get:27 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libgeronimo-annotation-1.3-spec-java all 1.0-1 [10.7 kB]
+Get:28 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libjsr305-java all 0.1~+svn49-11 [27.0 kB]
+Get:29 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libguava-java all 19.0-1 [2028 kB]
+Get:30 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libaopalliance-java all 20070526-6 [9084 B]
+Get:31 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libguice-java all 4.2.1-1 [962 kB]
+Get:32 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libhawtjni-runtime-java all 1.17-1 [28.8 kB]
+Get:33 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libjansi-native-java all 1.8-1 [23.8 kB]
+Get:34 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libjansi-java all 1.18-1 [56.8 kB]
+Get:35 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libmaven-parent-java all 31-2 [5140 B]
+Get:36 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libplexus-utils2-java all 3.3.0-1 [250 kB]
+Get:37 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libwagon-provider-api-java all 3.3.4-1 [48.5 kB]
+Get:38 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libmaven-resolver-java all 1.4.1-1 [555 kB]
+Get:39 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libmaven-shared-utils-java all 3.3.0-1 [149 kB]
+Get:40 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libplexus-cipher-java all 1.7-3 [15.1 kB]
+Get:41 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libplexus-classworlds-java all 2.6.0-1 [49.4 kB]
+Get:42 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libplexus-component-annotations-java all 2.1.0-1 [6564 B]
+Get:43 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libplexus-interpolation-java all 1.26-1 [76.8 kB]
+Get:44 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libplexus-sec-dispatcher-java all 1.4-4 [28.1 kB]
+Get:45 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libslf4j-java all 1.7.25-3 [141 kB]
+Get:46 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libsisu-inject-java all 0.3.3-1 [347 kB]
+Get:47 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libsisu-plexus-java all 0.3.3-3 [182 kB]
+Get:48 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libmaven3-core-java all 3.6.3-1 [1535 kB]
+Get:49 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libwagon-file-java all 3.3.4-1 [7928 B]
+Get:50 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 libwagon-http-shaded-java all 3.3.4-1 [1855 kB]
+Get:51 http://ports.ubuntu.com/ubuntu-ports focal/universe arm64 maven all 3.6.3-1 [17.8 kB]
+Fetched 48.1 MB in 5s (10.4 MB/s)
+Selecting previously unselected package java-common.
+(Reading database ...
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 64158 files and directories currently installed.)
+Preparing to unpack .../00-java-common_0.72_all.deb ...
+Unpacking java-common (0.72) ...
+Selecting previously unselected package libavahi-common-data:arm64.
+Preparing to unpack .../01-libavahi-common-data_0.7-4ubuntu7.1_arm64.deb ...
+Unpacking libavahi-common-data:arm64 (0.7-4ubuntu7.1) ...
+Selecting previously unselected package libavahi-common3:arm64.
+Preparing to unpack .../02-libavahi-common3_0.7-4ubuntu7.1_arm64.deb ...
+Unpacking libavahi-common3:arm64 (0.7-4ubuntu7.1) ...
+Selecting previously unselected package libavahi-client3:arm64.
+Preparing to unpack .../03-libavahi-client3_0.7-4ubuntu7.1_arm64.deb ...
+Unpacking libavahi-client3:arm64 (0.7-4ubuntu7.1) ...
+Selecting previously unselected package libcups2:arm64.
+Preparing to unpack .../04-libcups2_2.3.1-9ubuntu1.1_arm64.deb ...
+Unpacking libcups2:arm64 (2.3.1-9ubuntu1.1) ...
+Selecting previously unselected package liblcms2-2:arm64.
+Preparing to unpack .../05-liblcms2-2_2.9-4_arm64.deb ...
+Unpacking liblcms2-2:arm64 (2.9-4) ...
+Selecting previously unselected package libjpeg-turbo8:arm64.
+Preparing to unpack .../06-libjpeg-turbo8_2.0.3-0ubuntu1.20.04.1_arm64.deb ...
+Unpacking libjpeg-turbo8:arm64 (2.0.3-0ubuntu1.20.04.1) ...
+Selecting previously unselected package libjpeg8:arm64.
+Preparing to unpack .../07-libjpeg8_8c-2ubuntu8_arm64.deb ...
+Unpacking libjpeg8:arm64 (8c-2ubuntu8) ...
+Selecting previously unselected package libfreetype6:arm64.
+Preparing to unpack .../08-libfreetype6_2.10.1-2ubuntu0.1_arm64.deb ...
+Unpacking libfreetype6:arm64 (2.10.1-2ubuntu0.1) ...
+Selecting previously unselected package fonts-dejavu-core.
+Preparing to unpack .../09-fonts-dejavu-core_2.37-1_all.deb ...
+Unpacking fonts-dejavu-core (2.37-1) ...
+Selecting previously unselected package fontconfig-config.
+Preparing to unpack .../10-fontconfig-config_2.13.1-2ubuntu3_all.deb ...
+Unpacking fontconfig-config (2.13.1-2ubuntu3) ...
+Selecting previously unselected package libfontconfig1:arm64.
+Preparing to unpack .../11-libfontconfig1_2.13.1-2ubuntu3_arm64.deb ...
+Unpacking libfontconfig1:arm64 (2.13.1-2ubuntu3) ...
+Selecting previously unselected package libgraphite2-3:arm64.
+Preparing to unpack .../12-libgraphite2-3_1.3.13-11build1_arm64.deb ...
+Unpacking libgraphite2-3:arm64 (1.3.13-11build1) ...
+Selecting previously unselected package libharfbuzz0b:arm64.
+Preparing to unpack .../13-libharfbuzz0b_2.6.4-1ubuntu4_arm64.deb ...
+Unpacking libharfbuzz0b:arm64 (2.6.4-1ubuntu4) ...
+Selecting previously unselected package libpcsclite1:arm64.
+Preparing to unpack .../14-libpcsclite1_1.8.26-3_arm64.deb ...
+Unpacking libpcsclite1:arm64 (1.8.26-3) ...
+Selecting previously unselected package openjdk-11-jre-headless:arm64.
+Preparing to unpack .../15-openjdk-11-jre-headless_11.0.14.1+1-0ubuntu1~20.04_arm64.deb ...
+Unpacking openjdk-11-jre-headless:arm64 (11.0.14.1+1-0ubuntu1~20.04) ...
+Selecting previously unselected package default-jre-headless.
+Preparing to unpack .../16-default-jre-headless_2%3a1.11-72_arm64.deb ...
+Unpacking default-jre-headless (2:1.11-72) ...
+Selecting previously unselected package ca-certificates-java.
+Preparing to unpack .../17-ca-certificates-java_20190405ubuntu1_all.deb ...
+Unpacking ca-certificates-java (20190405ubuntu1) ...
+Selecting previously unselected package libapache-pom-java.
+Preparing to unpack .../18-libapache-pom-java_18-1_all.deb ...
+Unpacking libapache-pom-java (18-1) ...
+Selecting previously unselected package libatinject-jsr330-api-java.
+Preparing to unpack .../19-libatinject-jsr330-api-java_1.0+ds1-5_all.deb ...
+Unpacking libatinject-jsr330-api-java (1.0+ds1-5) ...
+Selecting previously unselected package libgeronimo-interceptor-3.0-spec-java.
+Preparing to unpack .../20-libgeronimo-interceptor-3.0-spec-java_1.0.1-4fakesync_all.deb ...
+Unpacking libgeronimo-interceptor-3.0-spec-java (1.0.1-4fakesync) ...
+Selecting previously unselected package libcdi-api-java.
+Preparing to unpack .../21-libcdi-api-java_1.2-2_all.deb ...
+Unpacking libcdi-api-java (1.2-2) ...
+Selecting previously unselected package libcommons-cli-java.
+Preparing to unpack .../22-libcommons-cli-java_1.4-1_all.deb ...
+Unpacking libcommons-cli-java (1.4-1) ...
+Selecting previously unselected package libcommons-parent-java.
+Preparing to unpack .../23-libcommons-parent-java_43-1_all.deb ...
+Unpacking libcommons-parent-java (43-1) ...
+Selecting previously unselected package libcommons-io-java.
+Preparing to unpack .../24-libcommons-io-java_2.6-2ubuntu0.20.04.1_all.deb ...
+Unpacking libcommons-io-java (2.6-2ubuntu0.20.04.1) ...
+Selecting previously unselected package libcommons-lang3-java.
+Preparing to unpack .../25-libcommons-lang3-java_3.8-2_all.deb ...
+Unpacking libcommons-lang3-java (3.8-2) ...
+Selecting previously unselected package libgeronimo-annotation-1.3-spec-java.
+Preparing to unpack .../26-libgeronimo-annotation-1.3-spec-java_1.0-1_all.deb ...
+Unpacking libgeronimo-annotation-1.3-spec-java (1.0-1) ...
+Selecting previously unselected package libjsr305-java.
+Preparing to unpack .../27-libjsr305-java_0.1~+svn49-11_all.deb ...
+Unpacking libjsr305-java (0.1~+svn49-11) ...
+Selecting previously unselected package libguava-java.
+Preparing to unpack .../28-libguava-java_19.0-1_all.deb ...
+Unpacking libguava-java (19.0-1) ...
+Selecting previously unselected package libaopalliance-java.
+Preparing to unpack .../29-libaopalliance-java_20070526-6_all.deb ...
+Unpacking libaopalliance-java (20070526-6) ...
+Selecting previously unselected package libguice-java.
+Preparing to unpack .../30-libguice-java_4.2.1-1_all.deb ...
+Unpacking libguice-java (4.2.1-1) ...
+Selecting previously unselected package libhawtjni-runtime-java.
+Preparing to unpack .../31-libhawtjni-runtime-java_1.17-1_all.deb ...
+Unpacking libhawtjni-runtime-java (1.17-1) ...
+Selecting previously unselected package libjansi-native-java.
+Preparing to unpack .../32-libjansi-native-java_1.8-1_all.deb ...
+Unpacking libjansi-native-java (1.8-1) ...
+Selecting previously unselected package libjansi-java.
+Preparing to unpack .../33-libjansi-java_1.18-1_all.deb ...
+Unpacking libjansi-java (1.18-1) ...
+Selecting previously unselected package libmaven-parent-java.
+Preparing to unpack .../34-libmaven-parent-java_31-2_all.deb ...
+Unpacking libmaven-parent-java (31-2) ...
+Selecting previously unselected package libplexus-utils2-java.
+Preparing to unpack .../35-libplexus-utils2-java_3.3.0-1_all.deb ...
+Unpacking libplexus-utils2-java (3.3.0-1) ...
+Selecting previously unselected package libwagon-provider-api-java.
+Preparing to unpack .../36-libwagon-provider-api-java_3.3.4-1_all.deb ...
+Unpacking libwagon-provider-api-java (3.3.4-1) ...
+Selecting previously unselected package libmaven-resolver-java.
+Preparing to unpack .../37-libmaven-resolver-java_1.4.1-1_all.deb ...
+Unpacking libmaven-resolver-java (1.4.1-1) ...
+Selecting previously unselected package libmaven-shared-utils-java.
+Preparing to unpack .../38-libmaven-shared-utils-java_3.3.0-1_all.deb ...
+Unpacking libmaven-shared-utils-java (3.3.0-1) ...
+Selecting previously unselected package libplexus-cipher-java.
+Preparing to unpack .../39-libplexus-cipher-java_1.7-3_all.deb ...
+Unpacking libplexus-cipher-java (1.7-3) ...
+Selecting previously unselected package libplexus-classworlds-java.
+Preparing to unpack .../40-libplexus-classworlds-java_2.6.0-1_all.deb ...
+Unpacking libplexus-classworlds-java (2.6.0-1) ...
+Selecting previously unselected package libplexus-component-annotations-java.
+Preparing to unpack .../41-libplexus-component-annotations-java_2.1.0-1_all.deb ...
+Unpacking libplexus-component-annotations-java (2.1.0-1) ...
+Selecting previously unselected package libplexus-interpolation-java.
+Preparing to unpack .../42-libplexus-interpolation-java_1.26-1_all.deb ...
+Unpacking libplexus-interpolation-java (1.26-1) ...
+Selecting previously unselected package libplexus-sec-dispatcher-java.
+Preparing to unpack .../43-libplexus-sec-dispatcher-java_1.4-4_all.deb ...
+Unpacking libplexus-sec-dispatcher-java (1.4-4) ...
+Selecting previously unselected package libslf4j-java.
+Preparing to unpack .../44-libslf4j-java_1.7.25-3_all.deb ...
+Unpacking libslf4j-java (1.7.25-3) ...
+Selecting previously unselected package libsisu-inject-java.
+Preparing to unpack .../45-libsisu-inject-java_0.3.3-1_all.deb ...
+Unpacking libsisu-inject-java (0.3.3-1) ...
+Selecting previously unselected package libsisu-plexus-java.
+Preparing to unpack .../46-libsisu-plexus-java_0.3.3-3_all.deb ...
+Unpacking libsisu-plexus-java (0.3.3-3) ...
+Selecting previously unselected package libmaven3-core-java.
+Preparing to unpack .../47-libmaven3-core-java_3.6.3-1_all.deb ...
+Unpacking libmaven3-core-java (3.6.3-1) ...
+Selecting previously unselected package libwagon-file-java.
+Preparing to unpack .../48-libwagon-file-java_3.3.4-1_all.deb ...
+Unpacking libwagon-file-java (3.3.4-1) ...
+Selecting previously unselected package libwagon-http-shaded-java.
+Preparing to unpack .../49-libwagon-http-shaded-java_3.3.4-1_all.deb ...
+Unpacking libwagon-http-shaded-java (3.3.4-1) ...
+Selecting previously unselected package maven.
+Preparing to unpack .../50-maven_3.6.3-1_all.deb ...
+Unpacking maven (3.6.3-1) ...
+Setting up libgraphite2-3:arm64 (1.3.13-11build1) ...
+Setting up liblcms2-2:arm64 (2.9-4) ...
+Setting up libslf4j-java (1.7.25-3) ...
+Setting up libplexus-utils2-java (3.3.0-1) ...
+Setting up libplexus-classworlds-java (2.6.0-1) ...
+Setting up libjsr305-java (0.1~+svn49-11) ...
+Setting up java-common (0.72) ...
+Setting up libaopalliance-java (20070526-6) ...
+Setting up libcommons-cli-java (1.4-1) ...
+Setting up libplexus-component-annotations-java (2.1.0-1) ...
+Setting up libplexus-cipher-java (1.7-3) ...
+Setting up libgeronimo-annotation-1.3-spec-java (1.0-1) ...
+Setting up libgeronimo-interceptor-3.0-spec-java (1.0.1-4fakesync) ...
+Setting up libfreetype6:arm64 (2.10.1-2ubuntu0.1) ...
+Setting up libapache-pom-java (18-1) ...
+Setting up libavahi-common-data:arm64 (0.7-4ubuntu7.1) ...
+Setting up libatinject-jsr330-api-java (1.0+ds1-5) ...
+Setting up libplexus-interpolation-java (1.26-1) ...
+Setting up fonts-dejavu-core (2.37-1) ...
+Setting up libpcsclite1:arm64 (1.8.26-3) ...
+Setting up libjpeg-turbo8:arm64 (2.0.3-0ubuntu1.20.04.1) ...
+Setting up libplexus-sec-dispatcher-java (1.4-4) ...
+Setting up libharfbuzz0b:arm64 (2.6.4-1ubuntu4) ...
+Setting up libwagon-http-shaded-java (3.3.4-1) ...
+Setting up libcdi-api-java (1.2-2) ...
+Setting up libhawtjni-runtime-java (1.17-1) ...
+Setting up libjpeg8:arm64 (8c-2ubuntu8) ...
+Setting up libwagon-provider-api-java (3.3.4-1) ...
+Setting up fontconfig-config (2.13.1-2ubuntu3) ...
+Setting up libmaven-parent-java (31-2) ...
+Setting up libcommons-parent-java (43-1) ...
+Setting up libavahi-common3:arm64 (0.7-4ubuntu7.1) ...
+Setting up libmaven-resolver-java (1.4.1-1) ...
+Setting up libguava-java (19.0-1) ...
+Setting up libcommons-lang3-java (3.8-2) ...
+Setting up libjansi-native-java (1.8-1) ...
+Setting up libfontconfig1:arm64 (2.13.1-2ubuntu3) ...
+Setting up libwagon-file-java (3.3.4-1) ...
+Setting up libavahi-client3:arm64 (0.7-4ubuntu7.1) ...
+Setting up libcommons-io-java (2.6-2ubuntu0.20.04.1) ...
+Setting up libguice-java (4.2.1-1) ...
+Setting up libjansi-java (1.18-1) ...
+Setting up libcups2:arm64 (2.3.1-9ubuntu1.1) ...
+Setting up libmaven-shared-utils-java (3.3.0-1) ...
+Setting up libsisu-inject-java (0.3.3-1) ...
+Setting up libsisu-plexus-java (0.3.3-3) ...
+Setting up libmaven3-core-java (3.6.3-1) ...
+Setting up default-jre-headless (2:1.11-72) ...
+Setting up openjdk-11-jre-headless:arm64 (11.0.14.1+1-0ubuntu1~20.04) ...
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/java to provide /usr/bin/java (java) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jjs to provide /usr/bin/jjs (jjs) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/keytool to provide /usr/bin/keytool (keytool) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/rmid to provide /usr/bin/rmid (rmid) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/rmiregistry to provide /usr/bin/rmiregistry (rmiregistry) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/pack200 to provide /usr/bin/pack200 (pack200) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/unpack200 to provide /usr/bin/unpack200 (unpack200) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/lib/jexec to provide /usr/bin/jexec (jexec) in auto mode
+Setting up maven (3.6.3-1) ...
+update-alternatives: using /usr/share/maven/bin/mvn to provide /usr/bin/mvn (mvn) in auto mode
+Setting up ca-certificates-java (20190405ubuntu1) ...
+head: cannot open '/etc/ssl/certs/java/cacerts' for reading: No such file or directory
+Adding debian:AC_RAIZ_FNMT-RCM.pem
+Adding debian:ACCVRAIZ1.pem
+Adding debian:Entrust_Root_Certification_Authority_-_G4.pem
+Adding debian:e-Szigno_Root_CA_2017.pem
+Adding debian:Certigna.pem
+Adding debian:TrustCor_ECA-1.pem
+Adding debian:Certigna_Root_CA.pem
+Adding debian:Amazon_Root_CA_3.pem
+Adding debian:Hellenic_Academic_and_Research_Institutions_RootCA_2015.pem
+Adding debian:SSL.com_EV_Root_Certification_Authority_ECC.pem
+Adding debian:emSign_ECC_Root_CA_-_G3.pem
+Adding debian:QuoVadis_Root_CA_2.pem
+Adding debian:T-TeleSec_GlobalRoot_Class_3.pem
+Adding debian:VeriSign_Universal_Root_Certification_Authority.pem
+Adding debian:SSL.com_Root_Certification_Authority_ECC.pem
+Adding debian:Buypass_Class_3_Root_CA.pem
+Adding debian:GlobalSign_ECC_Root_CA_-_R4.pem
+Adding debian:TrustCor_RootCert_CA-1.pem
+Adding debian:emSign_Root_CA_-_G1.pem
+Adding debian:QuoVadis_Root_CA_3.pem
+Adding debian:DigiCert_Global_Root_G2.pem
+Adding debian:Staat_der_Nederlanden_Root_CA_-_G3.pem
+Adding debian:GlobalSign_Root_CA_-_R2.pem
+Adding debian:SSL.com_Root_Certification_Authority_RSA.pem
+Adding debian:TeliaSonera_Root_CA_v1.pem
+Adding debian:COMODO_ECC_Certification_Authority.pem
+Adding debian:Trustwave_Global_ECC_P256_Certification_Authority.pem
+Adding debian:certSIGN_ROOT_CA.pem
+Adding debian:D-TRUST_Root_Class_3_CA_2_2009.pem
+Adding debian:GlobalSign_Root_CA_-_R3.pem
+Adding debian:Hellenic_Academic_and_Research_Institutions_ECC_RootCA_2015.pem
+Adding debian:Comodo_AAA_Services_root.pem
+Adding debian:CA_Disig_Root_R2.pem
+Adding debian:TUBITAK_Kamu_SM_SSL_Kok_Sertifikasi_-_Surum_1.pem
+Adding debian:Global_Chambersign_Root_-_2008.pem
+Adding debian:Go_Daddy_Class_2_CA.pem
+Adding debian:SSL.com_EV_Root_Certification_Authority_RSA_R2.pem
+Adding debian:UCA_Extended_Validation_Root.pem
+Adding debian:DigiCert_Assured_ID_Root_G2.pem
+Adding debian:Entrust_Root_Certification_Authority.pem
+Adding debian:TrustCor_RootCert_CA-2.pem
+Adding debian:Starfield_Root_Certificate_Authority_-_G2.pem
+Adding debian:Entrust.net_Premium_2048_Secure_Server_CA.pem
+Adding debian:Buypass_Class_2_Root_CA.pem
+Adding debian:emSign_ECC_Root_CA_-_C3.pem
+Adding debian:IdenTrust_Commercial_Root_CA_1.pem
+Adding debian:XRamp_Global_CA_Root.pem
+Adding debian:emSign_Root_CA_-_C1.pem
+Adding debian:Microsoft_RSA_Root_Certificate_Authority_2017.pem
+Adding debian:USERTrust_RSA_Certification_Authority.pem
+Adding debian:GlobalSign_ECC_Root_CA_-_R5.pem
+Adding debian:ePKI_Root_Certification_Authority.pem
+Adding debian:E-Tugra_Certification_Authority.pem
+Adding debian:GTS_Root_R1.pem
+Adding debian:Amazon_Root_CA_4.pem
+Adding debian:Security_Communication_Root_CA.pem
+Adding debian:Hongkong_Post_Root_CA_3.pem
+Adding debian:Trustwave_Global_ECC_P384_Certification_Authority.pem
+Adding debian:GlobalSign_Root_CA_-_R6.pem
+Adding debian:QuoVadis_Root_CA.pem
+Adding debian:Sonera_Class_2_Root_CA.pem
+Adding debian:Network_Solutions_Certificate_Authority.pem
+Adding debian:DigiCert_Trusted_Root_G4.pem
+Adding debian:D-TRUST_Root_Class_3_CA_2_EV_2009.pem
+Adding debian:NAVER_Global_Root_Certification_Authority.pem
+Adding debian:Amazon_Root_CA_2.pem
+Adding debian:TWCA_Global_Root_CA.pem
+Adding debian:Autoridad_de_Certificacion_Firmaprofesional_CIF_A62634068.pem
+Adding debian:DigiCert_Assured_ID_Root_CA.pem
+Adding debian:QuoVadis_Root_CA_1_G3.pem
+Adding debian:Microsoft_ECC_Root_Certificate_Authority_2017.pem
+Adding debian:AffirmTrust_Commercial.pem
+Adding debian:SZAFIR_ROOT_CA2.pem
+Adding debian:ISRG_Root_X1.pem
+Adding debian:Chambers_of_Commerce_Root_-_2008.pem
+Adding debian:QuoVadis_Root_CA_2_G3.pem
+Adding debian:Certum_Trusted_Network_CA.pem
+Adding debian:Entrust_Root_Certification_Authority_-_EC1.pem
+Adding debian:Trustwave_Global_Certification_Authority.pem
+Adding debian:Security_Communication_RootCA2.pem
+Adding debian:Hellenic_Academic_and_Research_Institutions_RootCA_2011.pem
+Adding debian:Baltimore_CyberTrust_Root.pem
+Adding debian:NetLock_Arany_=Class_Gold=_Főtanúsítvány.pem
+Adding debian:GTS_Root_R4.pem
+Adding debian:SecureTrust_CA.pem
+Adding debian:OISTE_WISeKey_Global_Root_GB_CA.pem
+Adding debian:IdenTrust_Public_Sector_Root_CA_1.pem
+Adding debian:DigiCert_High_Assurance_EV_Root_CA.pem
+Adding debian:GTS_Root_R2.pem
+Adding debian:Atos_TrustedRoot_2011.pem
+Adding debian:TWCA_Root_Certification_Authority.pem
+Adding debian:USERTrust_ECC_Certification_Authority.pem
+Adding debian:AffirmTrust_Premium_ECC.pem
+Adding debian:T-TeleSec_GlobalRoot_Class_2.pem
+Adding debian:AffirmTrust_Networking.pem
+Adding debian:Starfield_Services_Root_Certificate_Authority_-_G2.pem
+Adding debian:AffirmTrust_Premium.pem
+Adding debian:UCA_Global_G2_Root.pem
+Adding debian:Starfield_Class_2_CA.pem
+Adding debian:Izenpe.com.pem
+Adding debian:Hongkong_Post_Root_CA_1.pem
+Adding debian:Secure_Global_CA.pem
+Adding debian:SwissSign_Gold_CA_-_G2.pem
+Adding debian:COMODO_RSA_Certification_Authority.pem
+Adding debian:DigiCert_Global_Root_CA.pem
+Adding debian:GDCA_TrustAUTH_R5_ROOT.pem
+Adding debian:DigiCert_Assured_ID_Root_G3.pem
+Adding debian:Cybertrust_Global_Root.pem
+Adding debian:Actalis_Authentication_Root_CA.pem
+Adding debian:Go_Daddy_Root_Certificate_Authority_-_G2.pem
+Adding debian:SwissSign_Silver_CA_-_G2.pem
+Adding debian:CFCA_EV_ROOT.pem
+Adding debian:GeoTrust_Primary_Certification_Authority_-_G2.pem
+Adding debian:EC-ACC.pem
+Adding debian:DigiCert_Global_Root_G3.pem
+Adding debian:SecureSign_RootCA11.pem
+Adding debian:GlobalSign_Root_CA.pem
+Adding debian:OISTE_WISeKey_Global_Root_GC_CA.pem
+Adding debian:GTS_Root_R3.pem
+Adding debian:Certum_Trusted_Network_CA_2.pem
+Adding debian:certSIGN_Root_CA_G2.pem
+Adding debian:Amazon_Root_CA_1.pem
+Adding debian:COMODO_Certification_Authority.pem
+Adding debian:Trustis_FPS_Root_CA.pem
+Adding debian:Microsec_e-Szigno_Root_CA_2009.pem
+Adding debian:Staat_der_Nederlanden_EV_Root_CA.pem
+Adding debian:Entrust_Root_Certification_Authority_-_G2.pem
+Adding debian:QuoVadis_Root_CA_3_G3.pem
+done.
+Processing triggers for libc-bin (2.31-0ubuntu9.7) ...
+Processing triggers for man-db (2.9.1-1) ...
+Processing triggers for ca-certificates (20210119~20.04.2) ...
+Updating certificates in /etc/ssl/certs...
+0 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+
+done.
+done.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  at-spi2-core fonts-dejavu-extra libatk-bridge2.0-0 libatk-wrapper-java
+  libatk-wrapper-java-jni libatk1.0-0 libatk1.0-data libatspi2.0-0
+  libdrm-amdgpu1 libdrm-nouveau2 libdrm-radeon1 libfontenc1 libgif7 libgl1
+  libgl1-mesa-dri libglapi-mesa libglvnd0 libglx-mesa0 libglx0 libice-dev
+  libice6 libllvm12 libpthread-stubs0-dev libsensors-config libsensors5
+  libsm-dev libsm6 libvulkan1 libwayland-client0 libx11-dev libx11-xcb1
+  libxau-dev libxaw7 libxcb-dri2-0 libxcb-dri3-0 libxcb-glx0 libxcb-present0
+  libxcb-randr0 libxcb-shape0 libxcb-shm0 libxcb-sync1 libxcb-xfixes0
+  libxcb1-dev libxcomposite1 libxdmcp-dev libxfixes3 libxft2 libxi6
+  libxinerama1 libxkbfile1 libxmu6 libxpm4 libxrandr2 libxrender1
+  libxshmfence1 libxt-dev libxt6 libxtst6 libxv1 libxxf86dga1 libxxf86vm1
+  mesa-vulkan-drivers openjdk-11-jdk-headless openjdk-11-jre x11-common
+  x11-utils x11proto-core-dev x11proto-dev xorg-sgml-doctools xtrans-dev
+Suggested packages:
+  libice-doc lm-sensors libsm-doc libx11-doc libxcb-doc libxt-doc
+  openjdk-11-demo openjdk-11-source visualvm mesa-utils
+The following NEW packages will be installed:
+  at-spi2-core fonts-dejavu-extra libatk-bridge2.0-0 libatk-wrapper-java
+  libatk-wrapper-java-jni libatk1.0-0 libatk1.0-data libatspi2.0-0
+  libdrm-amdgpu1 libdrm-nouveau2 libdrm-radeon1 libfontenc1 libgif7 libgl1
+  libgl1-mesa-dri libglapi-mesa libglvnd0 libglx-mesa0 libglx0 libice-dev
+  libice6 libllvm12 libpthread-stubs0-dev libsensors-config libsensors5
+  libsm-dev libsm6 libvulkan1 libwayland-client0 libx11-dev libx11-xcb1
+  libxau-dev libxaw7 libxcb-dri2-0 libxcb-dri3-0 libxcb-glx0 libxcb-present0
+  libxcb-randr0 libxcb-shape0 libxcb-shm0 libxcb-sync1 libxcb-xfixes0
+  libxcb1-dev libxcomposite1 libxdmcp-dev libxfixes3 libxft2 libxi6
+  libxinerama1 libxkbfile1 libxmu6 libxpm4 libxrandr2 libxrender1
+  libxshmfence1 libxt-dev libxt6 libxtst6 libxv1 libxxf86dga1 libxxf86vm1
+  mesa-vulkan-drivers openjdk-11-jdk openjdk-11-jdk-headless openjdk-11-jre
+  x11-common x11-utils x11proto-core-dev x11proto-dev xorg-sgml-doctools
+  xtrans-dev
+0 upgraded, 71 newly installed, 0 to remove and 11 not upgraded.
+Need to get 247 MB of archives.
+After this operation, 1271 MB of additional disk space will be used.
+Get:1 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libatspi2.0-0 arm64 2.36.0-2 [60.5 kB]
+Get:2 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 x11-common all 1:7.7+19ubuntu14 [22.3 kB]
+Get:3 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxtst6 arm64 2:1.2.3-1 [11.7 kB]
+Get:4 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 at-spi2-core arm64 2.36.0-2 [46.5 kB]
+Get:5 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 fonts-dejavu-extra all 2.37-1 [1953 kB]
+Get:6 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libatk1.0-data all 2.35.1-1ubuntu2 [2964 B]
+Get:7 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libatk1.0-0 arm64 2.35.1-1ubuntu2 [42.9 kB]
+Get:8 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libatk-bridge2.0-0 arm64 2.34.2-0ubuntu2~20.04.1 [54.8 kB]
+Get:9 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libfontenc1 arm64 1:1.1.4-0ubuntu1 [13.1 kB]
+Get:10 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libglvnd0 arm64 1.3.2-1~ubuntu0.20.04.2 [42.6 kB]
+Get:11 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libglapi-mesa arm64 21.2.6-0ubuntu0.1~20.04.2 [52.2 kB]
+Get:12 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libx11-xcb1 arm64 2:1.6.9-2ubuntu1.2 [9380 B]
+Get:13 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxcb-dri2-0 arm64 1.14-2 [6872 B]
+Get:14 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxcb-dri3-0 arm64 1.14-2 [6556 B]
+Get:15 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxcb-glx0 arm64 1.14-2 [22.1 kB]
+Get:16 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxcb-present0 arm64 1.14-2 [5484 B]
+Get:17 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxcb-shm0 arm64 1.14-2 [5560 B]
+Get:18 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxcb-sync1 arm64 1.14-2 [8824 B]
+Get:19 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxcb-xfixes0 arm64 1.14-2 [9268 B]
+Get:20 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxfixes3 arm64 1:5.0.3-2 [10.8 kB]
+Get:21 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxshmfence1 arm64 1.3-1 [4868 B]
+Get:22 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxxf86vm1 arm64 1:1.1.4-1build1 [9908 B]
+Get:23 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libdrm-amdgpu1 arm64 2.4.107-8ubuntu1~20.04.2 [17.9 kB]
+Get:24 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libdrm-nouveau2 arm64 2.4.107-8ubuntu1~20.04.2 [15.9 kB]
+Get:25 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libdrm-radeon1 arm64 2.4.107-8ubuntu1~20.04.2 [18.7 kB]
+Get:26 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libllvm12 arm64 1:12.0.0-3ubuntu1~20.04.5 [16.1 MB]
+Get:27 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libsensors-config all 1:3.6.0-2ubuntu1 [6092 B]
+Get:28 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libsensors5 arm64 1:3.6.0-2ubuntu1 [26.1 kB]
+Get:29 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libvulkan1 arm64 1.2.131.2-1 [89.8 kB]
+Get:30 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libgl1-mesa-dri arm64 21.2.6-0ubuntu0.1~20.04.2 [7595 kB]
+Get:31 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libglx-mesa0 arm64 21.2.6-0ubuntu0.1~20.04.2 [138 kB]
+Get:32 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libglx0 arm64 1.3.2-1~ubuntu0.20.04.2 [29.0 kB]
+Get:33 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libgl1 arm64 1.3.2-1~ubuntu0.20.04.2 [88.6 kB]
+Get:34 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libice6 arm64 2:1.0.10-0ubuntu1 [37.7 kB]
+Get:35 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libsm6 arm64 2:1.2.3-1 [15.1 kB]
+Get:36 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxt6 arm64 1:1.1.5-1 [128 kB]
+Get:37 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxmu6 arm64 2:1.1.3-0ubuntu1 [42.9 kB]
+Get:38 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxpm4 arm64 1:3.5.12-1 [28.8 kB]
+Get:39 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxaw7 arm64 2:1.0.13-1 [137 kB]
+Get:40 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxcb-shape0 arm64 1.14-2 [5896 B]
+Get:41 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxcomposite1 arm64 1:0.4.5-1 [6864 B]
+Get:42 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxrender1 arm64 1:0.9.10-1 [16.1 kB]
+Get:43 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxft2 arm64 2.3.3-0ubuntu1 [35.9 kB]
+Get:44 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxi6 arm64 2:1.7.10-0ubuntu1 [28.2 kB]
+Get:45 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxinerama1 arm64 2:1.1.4-2 [6872 B]
+Get:46 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxkbfile1 arm64 1:1.1.0-1 [61.1 kB]
+Get:47 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxrandr2 arm64 2:1.5.2-0ubuntu1 [17.7 kB]
+Get:48 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxv1 arm64 2:1.0.11-1 [9736 B]
+Get:49 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxxf86dga1 arm64 2:1.1.5-0ubuntu1 [11.6 kB]
+Get:50 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 x11-utils arm64 7.7+5 [191 kB]
+Get:51 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libatk-wrapper-java all 0.37.1-1 [53.0 kB]
+Get:52 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libatk-wrapper-java-jni arm64 0.37.1-1 [40.0 kB]
+Get:53 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libgif7 arm64 5.1.9-1 [31.9 kB]
+Get:54 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 xorg-sgml-doctools all 1:1.11-1 [12.9 kB]
+Get:55 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 x11proto-dev all 2019.2-1ubuntu1 [594 kB]
+Get:56 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 x11proto-core-dev all 2019.2-1ubuntu1 [2620 B]
+Get:57 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libice-dev arm64 2:1.0.10-0ubuntu1 [46.2 kB]
+Get:58 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libpthread-stubs0-dev arm64 0.4-1 [5376 B]
+Get:59 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libsm-dev arm64 2:1.2.3-1 [16.4 kB]
+Get:60 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libwayland-client0 arm64 1.18.0-1 [23.2 kB]
+Get:61 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxau-dev arm64 1:1.0.9-0ubuntu1 [9728 B]
+Get:62 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxdmcp-dev arm64 1:1.1.3-0ubuntu1 [25.1 kB]
+Get:63 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 xtrans-dev all 1.4.0-1 [68.9 kB]
+Get:64 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxcb1-dev arm64 1.14-2 [80.9 kB]
+Get:65 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 libx11-dev arm64 2:1.6.9-2ubuntu1.2 [635 kB]
+Get:66 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxcb-randr0 arm64 1.14-2 [16.2 kB]
+Get:67 http://ports.ubuntu.com/ubuntu-ports focal/main arm64 libxt-dev arm64 1:1.1.5-1 [374 kB]
+Get:68 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 mesa-vulkan-drivers arm64 21.2.6-0ubuntu0.1~20.04.2 [3569 kB]
+Get:69 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 openjdk-11-jre arm64 11.0.14.1+1-0ubuntu1~20.04 [163 kB]
+Get:70 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 openjdk-11-jdk-headless arm64 11.0.14.1+1-0ubuntu1~20.04 [212 MB]
+Get:71 http://ports.ubuntu.com/ubuntu-ports focal-updates/main arm64 openjdk-11-jdk arm64 11.0.14.1+1-0ubuntu1~20.04 [1836 kB]
+Fetched 247 MB in 20s (12.6 MB/s)
+Selecting previously unselected package libatspi2.0-0:arm64.
+(Reading database ...
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 65626 files and directories currently installed.)
+Preparing to unpack .../00-libatspi2.0-0_2.36.0-2_arm64.deb ...
+Unpacking libatspi2.0-0:arm64 (2.36.0-2) ...
+Selecting previously unselected package x11-common.
+Preparing to unpack .../01-x11-common_1%3a7.7+19ubuntu14_all.deb ...
+dpkg-query: no packages found matching nux-tools
+Unpacking x11-common (1:7.7+19ubuntu14) ...
+Selecting previously unselected package libxtst6:arm64.
+Preparing to unpack .../02-libxtst6_2%3a1.2.3-1_arm64.deb ...
+Unpacking libxtst6:arm64 (2:1.2.3-1) ...
+Selecting previously unselected package at-spi2-core.
+Preparing to unpack .../03-at-spi2-core_2.36.0-2_arm64.deb ...
+Unpacking at-spi2-core (2.36.0-2) ...
+Selecting previously unselected package fonts-dejavu-extra.
+Preparing to unpack .../04-fonts-dejavu-extra_2.37-1_all.deb ...
+Unpacking fonts-dejavu-extra (2.37-1) ...
+Selecting previously unselected package libatk1.0-data.
+Preparing to unpack .../05-libatk1.0-data_2.35.1-1ubuntu2_all.deb ...
+Unpacking libatk1.0-data (2.35.1-1ubuntu2) ...
+Selecting previously unselected package libatk1.0-0:arm64.
+Preparing to unpack .../06-libatk1.0-0_2.35.1-1ubuntu2_arm64.deb ...
+Unpacking libatk1.0-0:arm64 (2.35.1-1ubuntu2) ...
+Selecting previously unselected package libatk-bridge2.0-0:arm64.
+Preparing to unpack .../07-libatk-bridge2.0-0_2.34.2-0ubuntu2~20.04.1_arm64.deb ...
+Unpacking libatk-bridge2.0-0:arm64 (2.34.2-0ubuntu2~20.04.1) ...
+Selecting previously unselected package libfontenc1:arm64.
+Preparing to unpack .../08-libfontenc1_1%3a1.1.4-0ubuntu1_arm64.deb ...
+Unpacking libfontenc1:arm64 (1:1.1.4-0ubuntu1) ...
+Selecting previously unselected package libglvnd0:arm64.
+Preparing to unpack .../09-libglvnd0_1.3.2-1~ubuntu0.20.04.2_arm64.deb ...
+Unpacking libglvnd0:arm64 (1.3.2-1~ubuntu0.20.04.2) ...
+Selecting previously unselected package libglapi-mesa:arm64.
+Preparing to unpack .../10-libglapi-mesa_21.2.6-0ubuntu0.1~20.04.2_arm64.deb ...
+Unpacking libglapi-mesa:arm64 (21.2.6-0ubuntu0.1~20.04.2) ...
+Selecting previously unselected package libx11-xcb1:arm64.
+Preparing to unpack .../11-libx11-xcb1_2%3a1.6.9-2ubuntu1.2_arm64.deb ...
+Unpacking libx11-xcb1:arm64 (2:1.6.9-2ubuntu1.2) ...
+Selecting previously unselected package libxcb-dri2-0:arm64.
+Preparing to unpack .../12-libxcb-dri2-0_1.14-2_arm64.deb ...
+Unpacking libxcb-dri2-0:arm64 (1.14-2) ...
+Selecting previously unselected package libxcb-dri3-0:arm64.
+Preparing to unpack .../13-libxcb-dri3-0_1.14-2_arm64.deb ...
+Unpacking libxcb-dri3-0:arm64 (1.14-2) ...
+Selecting previously unselected package libxcb-glx0:arm64.
+Preparing to unpack .../14-libxcb-glx0_1.14-2_arm64.deb ...
+Unpacking libxcb-glx0:arm64 (1.14-2) ...
+Selecting previously unselected package libxcb-present0:arm64.
+Preparing to unpack .../15-libxcb-present0_1.14-2_arm64.deb ...
+Unpacking libxcb-present0:arm64 (1.14-2) ...
+Selecting previously unselected package libxcb-shm0:arm64.
+Preparing to unpack .../16-libxcb-shm0_1.14-2_arm64.deb ...
+Unpacking libxcb-shm0:arm64 (1.14-2) ...
+Selecting previously unselected package libxcb-sync1:arm64.
+Preparing to unpack .../17-libxcb-sync1_1.14-2_arm64.deb ...
+Unpacking libxcb-sync1:arm64 (1.14-2) ...
+Selecting previously unselected package libxcb-xfixes0:arm64.
+Preparing to unpack .../18-libxcb-xfixes0_1.14-2_arm64.deb ...
+Unpacking libxcb-xfixes0:arm64 (1.14-2) ...
+Selecting previously unselected package libxfixes3:arm64.
+Preparing to unpack .../19-libxfixes3_1%3a5.0.3-2_arm64.deb ...
+Unpacking libxfixes3:arm64 (1:5.0.3-2) ...
+Selecting previously unselected package libxshmfence1:arm64.
+Preparing to unpack .../20-libxshmfence1_1.3-1_arm64.deb ...
+Unpacking libxshmfence1:arm64 (1.3-1) ...
+Selecting previously unselected package libxxf86vm1:arm64.
+Preparing to unpack .../21-libxxf86vm1_1%3a1.1.4-1build1_arm64.deb ...
+Unpacking libxxf86vm1:arm64 (1:1.1.4-1build1) ...
+Selecting previously unselected package libdrm-amdgpu1:arm64.
+Preparing to unpack .../22-libdrm-amdgpu1_2.4.107-8ubuntu1~20.04.2_arm64.deb ...
+Unpacking libdrm-amdgpu1:arm64 (2.4.107-8ubuntu1~20.04.2) ...
+Selecting previously unselected package libdrm-nouveau2:arm64.
+Preparing to unpack .../23-libdrm-nouveau2_2.4.107-8ubuntu1~20.04.2_arm64.deb ...
+Unpacking libdrm-nouveau2:arm64 (2.4.107-8ubuntu1~20.04.2) ...
+Selecting previously unselected package libdrm-radeon1:arm64.
+Preparing to unpack .../24-libdrm-radeon1_2.4.107-8ubuntu1~20.04.2_arm64.deb ...
+Unpacking libdrm-radeon1:arm64 (2.4.107-8ubuntu1~20.04.2) ...
+Selecting previously unselected package libllvm12:arm64.
+Preparing to unpack .../25-libllvm12_1%3a12.0.0-3ubuntu1~20.04.5_arm64.deb ...
+Unpacking libllvm12:arm64 (1:12.0.0-3ubuntu1~20.04.5) ...
+Selecting previously unselected package libsensors-config.
+Preparing to unpack .../26-libsensors-config_1%3a3.6.0-2ubuntu1_all.deb ...
+Unpacking libsensors-config (1:3.6.0-2ubuntu1) ...
+Selecting previously unselected package libsensors5:arm64.
+Preparing to unpack .../27-libsensors5_1%3a3.6.0-2ubuntu1_arm64.deb ...
+Unpacking libsensors5:arm64 (1:3.6.0-2ubuntu1) ...
+Selecting previously unselected package libvulkan1:arm64.
+Preparing to unpack .../28-libvulkan1_1.2.131.2-1_arm64.deb ...
+Unpacking libvulkan1:arm64 (1.2.131.2-1) ...
+Selecting previously unselected package libgl1-mesa-dri:arm64.
+Preparing to unpack .../29-libgl1-mesa-dri_21.2.6-0ubuntu0.1~20.04.2_arm64.deb ...
+Unpacking libgl1-mesa-dri:arm64 (21.2.6-0ubuntu0.1~20.04.2) ...
+Selecting previously unselected package libglx-mesa0:arm64.
+Preparing to unpack .../30-libglx-mesa0_21.2.6-0ubuntu0.1~20.04.2_arm64.deb ...
+Unpacking libglx-mesa0:arm64 (21.2.6-0ubuntu0.1~20.04.2) ...
+Selecting previously unselected package libglx0:arm64.
+Preparing to unpack .../31-libglx0_1.3.2-1~ubuntu0.20.04.2_arm64.deb ...
+Unpacking libglx0:arm64 (1.3.2-1~ubuntu0.20.04.2) ...
+Selecting previously unselected package libgl1:arm64.
+Preparing to unpack .../32-libgl1_1.3.2-1~ubuntu0.20.04.2_arm64.deb ...
+Unpacking libgl1:arm64 (1.3.2-1~ubuntu0.20.04.2) ...
+Selecting previously unselected package libice6:arm64.
+Preparing to unpack .../33-libice6_2%3a1.0.10-0ubuntu1_arm64.deb ...
+Unpacking libice6:arm64 (2:1.0.10-0ubuntu1) ...
+Selecting previously unselected package libsm6:arm64.
+Preparing to unpack .../34-libsm6_2%3a1.2.3-1_arm64.deb ...
+Unpacking libsm6:arm64 (2:1.2.3-1) ...
+Selecting previously unselected package libxt6:arm64.
+Preparing to unpack .../35-libxt6_1%3a1.1.5-1_arm64.deb ...
+Unpacking libxt6:arm64 (1:1.1.5-1) ...
+Selecting previously unselected package libxmu6:arm64.
+Preparing to unpack .../36-libxmu6_2%3a1.1.3-0ubuntu1_arm64.deb ...
+Unpacking libxmu6:arm64 (2:1.1.3-0ubuntu1) ...
+Selecting previously unselected package libxpm4:arm64.
+Preparing to unpack .../37-libxpm4_1%3a3.5.12-1_arm64.deb ...
+Unpacking libxpm4:arm64 (1:3.5.12-1) ...
+Selecting previously unselected package libxaw7:arm64.
+Preparing to unpack .../38-libxaw7_2%3a1.0.13-1_arm64.deb ...
+Unpacking libxaw7:arm64 (2:1.0.13-1) ...
+Selecting previously unselected package libxcb-shape0:arm64.
+Preparing to unpack .../39-libxcb-shape0_1.14-2_arm64.deb ...
+Unpacking libxcb-shape0:arm64 (1.14-2) ...
+Selecting previously unselected package libxcomposite1:arm64.
+Preparing to unpack .../40-libxcomposite1_1%3a0.4.5-1_arm64.deb ...
+Unpacking libxcomposite1:arm64 (1:0.4.5-1) ...
+Selecting previously unselected package libxrender1:arm64.
+Preparing to unpack .../41-libxrender1_1%3a0.9.10-1_arm64.deb ...
+Unpacking libxrender1:arm64 (1:0.9.10-1) ...
+Selecting previously unselected package libxft2:arm64.
+Preparing to unpack .../42-libxft2_2.3.3-0ubuntu1_arm64.deb ...
+Unpacking libxft2:arm64 (2.3.3-0ubuntu1) ...
+Selecting previously unselected package libxi6:arm64.
+Preparing to unpack .../43-libxi6_2%3a1.7.10-0ubuntu1_arm64.deb ...
+Unpacking libxi6:arm64 (2:1.7.10-0ubuntu1) ...
+Selecting previously unselected package libxinerama1:arm64.
+Preparing to unpack .../44-libxinerama1_2%3a1.1.4-2_arm64.deb ...
+Unpacking libxinerama1:arm64 (2:1.1.4-2) ...
+Selecting previously unselected package libxkbfile1:arm64.
+Preparing to unpack .../45-libxkbfile1_1%3a1.1.0-1_arm64.deb ...
+Unpacking libxkbfile1:arm64 (1:1.1.0-1) ...
+Selecting previously unselected package libxrandr2:arm64.
+Preparing to unpack .../46-libxrandr2_2%3a1.5.2-0ubuntu1_arm64.deb ...
+Unpacking libxrandr2:arm64 (2:1.5.2-0ubuntu1) ...
+Selecting previously unselected package libxv1:arm64.
+Preparing to unpack .../47-libxv1_2%3a1.0.11-1_arm64.deb ...
+Unpacking libxv1:arm64 (2:1.0.11-1) ...
+Selecting previously unselected package libxxf86dga1:arm64.
+Preparing to unpack .../48-libxxf86dga1_2%3a1.1.5-0ubuntu1_arm64.deb ...
+Unpacking libxxf86dga1:arm64 (2:1.1.5-0ubuntu1) ...
+Selecting previously unselected package x11-utils.
+Preparing to unpack .../49-x11-utils_7.7+5_arm64.deb ...
+Unpacking x11-utils (7.7+5) ...
+Selecting previously unselected package libatk-wrapper-java.
+Preparing to unpack .../50-libatk-wrapper-java_0.37.1-1_all.deb ...
+Unpacking libatk-wrapper-java (0.37.1-1) ...
+Selecting previously unselected package libatk-wrapper-java-jni:arm64.
+Preparing to unpack .../51-libatk-wrapper-java-jni_0.37.1-1_arm64.deb ...
+Unpacking libatk-wrapper-java-jni:arm64 (0.37.1-1) ...
+Selecting previously unselected package libgif7:arm64.
+Preparing to unpack .../52-libgif7_5.1.9-1_arm64.deb ...
+Unpacking libgif7:arm64 (5.1.9-1) ...
+Selecting previously unselected package xorg-sgml-doctools.
+Preparing to unpack .../53-xorg-sgml-doctools_1%3a1.11-1_all.deb ...
+Unpacking xorg-sgml-doctools (1:1.11-1) ...
+Selecting previously unselected package x11proto-dev.
+Preparing to unpack .../54-x11proto-dev_2019.2-1ubuntu1_all.deb ...
+Unpacking x11proto-dev (2019.2-1ubuntu1) ...
+Selecting previously unselected package x11proto-core-dev.
+Preparing to unpack .../55-x11proto-core-dev_2019.2-1ubuntu1_all.deb ...
+Unpacking x11proto-core-dev (2019.2-1ubuntu1) ...
+Selecting previously unselected package libice-dev:arm64.
+Preparing to unpack .../56-libice-dev_2%3a1.0.10-0ubuntu1_arm64.deb ...
+Unpacking libice-dev:arm64 (2:1.0.10-0ubuntu1) ...
+Selecting previously unselected package libpthread-stubs0-dev:arm64.
+Preparing to unpack .../57-libpthread-stubs0-dev_0.4-1_arm64.deb ...
+Unpacking libpthread-stubs0-dev:arm64 (0.4-1) ...
+Selecting previously unselected package libsm-dev:arm64.
+Preparing to unpack .../58-libsm-dev_2%3a1.2.3-1_arm64.deb ...
+Unpacking libsm-dev:arm64 (2:1.2.3-1) ...
+Selecting previously unselected package libwayland-client0:arm64.
+Preparing to unpack .../59-libwayland-client0_1.18.0-1_arm64.deb ...
+Unpacking libwayland-client0:arm64 (1.18.0-1) ...
+Selecting previously unselected package libxau-dev:arm64.
+Preparing to unpack .../60-libxau-dev_1%3a1.0.9-0ubuntu1_arm64.deb ...
+Unpacking libxau-dev:arm64 (1:1.0.9-0ubuntu1) ...
+Selecting previously unselected package libxdmcp-dev:arm64.
+Preparing to unpack .../61-libxdmcp-dev_1%3a1.1.3-0ubuntu1_arm64.deb ...
+Unpacking libxdmcp-dev:arm64 (1:1.1.3-0ubuntu1) ...
+Selecting previously unselected package xtrans-dev.
+Preparing to unpack .../62-xtrans-dev_1.4.0-1_all.deb ...
+Unpacking xtrans-dev (1.4.0-1) ...
+Selecting previously unselected package libxcb1-dev:arm64.
+Preparing to unpack .../63-libxcb1-dev_1.14-2_arm64.deb ...
+Unpacking libxcb1-dev:arm64 (1.14-2) ...
+Selecting previously unselected package libx11-dev:arm64.
+Preparing to unpack .../64-libx11-dev_2%3a1.6.9-2ubuntu1.2_arm64.deb ...
+Unpacking libx11-dev:arm64 (2:1.6.9-2ubuntu1.2) ...
+Selecting previously unselected package libxcb-randr0:arm64.
+Preparing to unpack .../65-libxcb-randr0_1.14-2_arm64.deb ...
+Unpacking libxcb-randr0:arm64 (1.14-2) ...
+Selecting previously unselected package libxt-dev:arm64.
+Preparing to unpack .../66-libxt-dev_1%3a1.1.5-1_arm64.deb ...
+Unpacking libxt-dev:arm64 (1:1.1.5-1) ...
+Selecting previously unselected package mesa-vulkan-drivers:arm64.
+Preparing to unpack .../67-mesa-vulkan-drivers_21.2.6-0ubuntu0.1~20.04.2_arm64.deb ...
+Unpacking mesa-vulkan-drivers:arm64 (21.2.6-0ubuntu0.1~20.04.2) ...
+Selecting previously unselected package openjdk-11-jre:arm64.
+Preparing to unpack .../68-openjdk-11-jre_11.0.14.1+1-0ubuntu1~20.04_arm64.deb ...
+Unpacking openjdk-11-jre:arm64 (11.0.14.1+1-0ubuntu1~20.04) ...
+Selecting previously unselected package openjdk-11-jdk-headless:arm64.
+Preparing to unpack .../69-openjdk-11-jdk-headless_11.0.14.1+1-0ubuntu1~20.04_arm64.deb ...
+Unpacking openjdk-11-jdk-headless:arm64 (11.0.14.1+1-0ubuntu1~20.04) ...
+Selecting previously unselected package openjdk-11-jdk:arm64.
+Preparing to unpack .../70-openjdk-11-jdk_11.0.14.1+1-0ubuntu1~20.04_arm64.deb ...
+Unpacking openjdk-11-jdk:arm64 (11.0.14.1+1-0ubuntu1~20.04) ...
+Setting up libxcb-dri3-0:arm64 (1.14-2) ...
+Setting up libx11-xcb1:arm64 (2:1.6.9-2ubuntu1.2) ...
+Setting up libdrm-nouveau2:arm64 (2.4.107-8ubuntu1~20.04.2) ...
+Setting up libxcb-xfixes0:arm64 (1.14-2) ...
+Setting up libxpm4:arm64 (1:3.5.12-1) ...
+Setting up libxi6:arm64 (2:1.7.10-0ubuntu1) ...
+Setting up libxrender1:arm64 (1:0.9.10-1) ...
+Setting up libdrm-radeon1:arm64 (2.4.107-8ubuntu1~20.04.2) ...
+Setting up libglvnd0:arm64 (1.3.2-1~ubuntu0.20.04.2) ...
+Setting up libxcb-glx0:arm64 (1.14-2) ...
+Setting up libxcb-shape0:arm64 (1.14-2) ...
+Setting up x11-common (1:7.7+19ubuntu14) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+update-rc.d: warning: start and stop actions are no longer supported; falling back to defaults
+Setting up libsensors-config (1:3.6.0-2ubuntu1) ...
+Setting up libxxf86dga1:arm64 (2:1.1.5-0ubuntu1) ...
+Setting up libxcb-shm0:arm64 (1.14-2) ...
+Setting up openjdk-11-jdk-headless:arm64 (11.0.14.1+1-0ubuntu1~20.04) ...
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jar to provide /usr/bin/jar (jar) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jarsigner to provide /usr/bin/jarsigner (jarsigner) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/javac to provide /usr/bin/javac (javac) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/javadoc to provide /usr/bin/javadoc (javadoc) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/javap to provide /usr/bin/javap (javap) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jcmd to provide /usr/bin/jcmd (jcmd) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jdb to provide /usr/bin/jdb (jdb) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jdeprscan to provide /usr/bin/jdeprscan (jdeprscan) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jdeps to provide /usr/bin/jdeps (jdeps) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jfr to provide /usr/bin/jfr (jfr) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jimage to provide /usr/bin/jimage (jimage) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jinfo to provide /usr/bin/jinfo (jinfo) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jlink to provide /usr/bin/jlink (jlink) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jmap to provide /usr/bin/jmap (jmap) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jmod to provide /usr/bin/jmod (jmod) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jps to provide /usr/bin/jps (jps) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jrunscript to provide /usr/bin/jrunscript (jrunscript) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jshell to provide /usr/bin/jshell (jshell) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jstack to provide /usr/bin/jstack (jstack) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jstat to provide /usr/bin/jstat (jstat) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jstatd to provide /usr/bin/jstatd (jstatd) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/rmic to provide /usr/bin/rmic (rmic) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/serialver to provide /usr/bin/serialver (serialver) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jaotc to provide /usr/bin/jaotc (jaotc) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jhsdb to provide /usr/bin/jhsdb (jhsdb) in auto mode
+Setting up libatspi2.0-0:arm64 (2.36.0-2) ...
+Setting up libpthread-stubs0-dev:arm64 (0.4-1) ...
+Setting up libxxf86vm1:arm64 (1:1.1.4-1build1) ...
+Setting up libxcb-present0:arm64 (1.14-2) ...
+Setting up xtrans-dev (1.4.0-1) ...
+Setting up libfontenc1:arm64 (1:1.1.4-0ubuntu1) ...
+Setting up libxfixes3:arm64 (1:5.0.3-2) ...
+Setting up libxcb-sync1:arm64 (1.14-2) ...
+Setting up libllvm12:arm64 (1:12.0.0-3ubuntu1~20.04.5) ...
+Setting up libxinerama1:arm64 (2:1.1.4-2) ...
+Setting up libxv1:arm64 (2:1.0.11-1) ...
+Setting up libxrandr2:arm64 (2:1.5.2-0ubuntu1) ...
+Setting up libsensors5:arm64 (1:3.6.0-2ubuntu1) ...
+Setting up libglapi-mesa:arm64 (21.2.6-0ubuntu0.1~20.04.2) ...
+Setting up libvulkan1:arm64 (1.2.131.2-1) ...
+Setting up libxcb-dri2-0:arm64 (1.14-2) ...
+Setting up libgif7:arm64 (5.1.9-1) ...
+Setting up libatk1.0-data (2.35.1-1ubuntu2) ...
+Setting up fonts-dejavu-extra (2.37-1) ...
+Setting up libxshmfence1:arm64 (1.3-1) ...
+Setting up libxcb-randr0:arm64 (1.14-2) ...
+Setting up xorg-sgml-doctools (1:1.11-1) ...
+Setting up libatk1.0-0:arm64 (2.35.1-1ubuntu2) ...
+Setting up libxkbfile1:arm64 (1:1.1.0-1) ...
+Setting up libxcomposite1:arm64 (1:0.4.5-1) ...
+Setting up libdrm-amdgpu1:arm64 (2.4.107-8ubuntu1~20.04.2) ...
+Setting up libwayland-client0:arm64 (1.18.0-1) ...
+Setting up x11proto-dev (2019.2-1ubuntu1) ...
+Setting up mesa-vulkan-drivers:arm64 (21.2.6-0ubuntu0.1~20.04.2) ...
+Setting up libice6:arm64 (2:1.0.10-0ubuntu1) ...
+Setting up libxft2:arm64 (2.3.3-0ubuntu1) ...
+Setting up libxau-dev:arm64 (1:1.0.9-0ubuntu1) ...
+Setting up libice-dev:arm64 (2:1.0.10-0ubuntu1) ...
+Setting up libxtst6:arm64 (2:1.2.3-1) ...
+Setting up libgl1-mesa-dri:arm64 (21.2.6-0ubuntu0.1~20.04.2) ...
+Setting up libatk-bridge2.0-0:arm64 (2.34.2-0ubuntu2~20.04.1) ...
+Setting up libxdmcp-dev:arm64 (1:1.1.3-0ubuntu1) ...
+Setting up x11proto-core-dev (2019.2-1ubuntu1) ...
+Setting up at-spi2-core (2.36.0-2) ...
+Setting up libsm6:arm64 (2:1.2.3-1) ...
+Setting up libglx-mesa0:arm64 (21.2.6-0ubuntu0.1~20.04.2) ...
+Setting up libxcb1-dev:arm64 (1.14-2) ...
+Setting up libglx0:arm64 (1.3.2-1~ubuntu0.20.04.2) ...
+Setting up libsm-dev:arm64 (2:1.2.3-1) ...
+Setting up libx11-dev:arm64 (2:1.6.9-2ubuntu1.2) ...
+Setting up libgl1:arm64 (1.3.2-1~ubuntu0.20.04.2) ...
+Setting up libxt6:arm64 (1:1.1.5-1) ...
+Setting up libxmu6:arm64 (2:1.1.3-0ubuntu1) ...
+Setting up openjdk-11-jre:arm64 (11.0.14.1+1-0ubuntu1~20.04) ...
+Setting up libxaw7:arm64 (2:1.0.13-1) ...
+Setting up libxt-dev:arm64 (1:1.1.5-1) ...
+Setting up x11-utils (7.7+5) ...
+Setting up openjdk-11-jdk:arm64 (11.0.14.1+1-0ubuntu1~20.04) ...
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-arm64/bin/jconsole to provide /usr/bin/jconsole (jconsole) in auto mode
+Setting up libatk-wrapper-java (0.37.1-1) ...
+Setting up libatk-wrapper-java-jni:arm64 (0.37.1-1) ...
+Processing triggers for libc-bin (2.31-0ubuntu9.7) ...
+Processing triggers for systemd (245.4-4ubuntu3.15) ...
+Processing triggers for man-db (2.9.1-1) ...
+Processing triggers for mime-support (3.64ubuntu1) ...
+Executing: /tmp/apt-key-gpghome.Lm1kM7Ji3t/gpg.1.sh --keyserver pgp.mit.edu --recv-keys 5072E1F5
+
+=====================================================================
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 'echo setupCompleted=True >> .status'
+Executing build job : mutation-coverage
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 rm -rf /home/ubuntu/testing
+
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 'cp -r /home/ubuntu/shared/cwd/testing /home/ubuntu/'
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 rm -rf checkbox.io-micro-preview
+
+git clone https://aselvam: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@github.com/chrisparnin/checkbox.io-micro-preview
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 git clone https://aselvam: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@github.com/chrisparnin/checkbox.io-micro-preview
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/testingSetup.sh | tee logs/1650126320182/testingSetup.log
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following NEW packages will be installed:
+  chromium-browser
+0 upgraded, 1 newly installed, 0 to remove and 11 not upgraded.
+Need to get 48.3 kB of archives.
+After this operation, 164 kB of additional disk space will be used.
+Get:1 http://ports.ubuntu.com/ubuntu-ports focal-updates/universe arm64 chromium-browser arm64 1:85.0.4183.83-0ubuntu0.20.04.2 [48.3 kB]
+Fetched 48.3 kB in 0s (112 kB/s)
+Selecting previously unselected package chromium-browser.
+(Reading database ...
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 66897 files and directories currently installed.)
+Preparing to unpack .../chromium-browser_1%3a85.0.4183.83-0ubuntu0.20.04.2_arm64.deb ...
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+=> Installing the chromium snap
+==> Checking connectivity with the snap store
+==> Installing the chromium snap
+chromium 100.0.4896.88 from Canonical[32m✓[0m installed
+=> Snap installation complete
+Unpacking chromium-browser (1:85.0.4183.83-0ubuntu0.20.04.2) ...
+Setting up chromium-browser (1:85.0.4183.83-0ubuntu0.20.04.2) ...
+update-alternatives: using /usr/bin/chromium-browser to provide /usr/bin/x-www-browser (x-www-browser) in auto mode
+update-alternatives: using /usr/bin/chromium-browser to provide /usr/bin/gnome-www-browser (gnome-www-browser) in auto mode
+Processing triggers for mime-support (3.64ubuntu1) ...
+Running sudo apt-get install -y libatk1.0-0
+Running sudo apt-get install -y libatk-bridge2.0-0
+Running sudo apt-get install -y libcups2
+Running sudo apt-get install -y libgtk-3-0
+Running sudo apt-get install -y libgbm1
+Running sudo apt install nodejs -y
+Running sudo apt install npm -y
+/usr/local/bin/forever -> /usr/local/lib/node_modules/forever/bin/forever
++ forever@4.0.3
+added 287 packages from 185 contributors in 18.534s
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 'echo testingSetupCompleted=True >> .status'
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/testingPrep.sh | tee logs/1650126320182/testingPrep.log
+
+
+> puppeteer@13.5.2 install /home/ubuntu/testing/node_modules/puppeteer
+> node install.js
+
+added 255 packages from 255 contributors and audited 257 packages in 6.606s
+
+19 packages are looking for funding
+  run `npm fund` for details
+
+found 7 vulnerabilities (3 moderate, 4 high)
+  run `npm audit fix` to fix them, or `npm audit` for details
+audited 257 packages in 1.074s
+
+19 packages are looking for funding
+  run `npm fund` for details
+
+found 7 vulnerabilities (3 moderate, 4 high)
+  run `npm audit fix` to fix them, or `npm audit` for details
+/home/ubuntu/testing/lib/node_modules/testing -> /home/ubuntu/testing
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 npm install express --prefix checkbox.io-micro-preview
++ express@4.17.3
+added 97 packages from 56 contributors and audited 97 packages in 3.158s
+
+10 packages are looking for funding
+  run `npm fund` for details
+
+found 2 high severity vulnerabilities
+  run `npm audit fix` to fix them, or `npm audit` for details
+
+10 number
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 node testing/mutation.js 10 checkbox.io-micro-preview/marqdown.js | tee logs/1650126320182/mutation.log
+Running 10 iterations...
+
+Iteration 1:
+Running NegateConditionals...
+Replacing == with != on line 203
+
+Iteration 2:
+Running NegateConditionals...
+Replacing != with == on line 321
+
+Iteration 3:
+Running ConditionalBoundaryMutations...
+Replacing >= with <= on line 183
+
+Iteration 4:
+Running ConditionalBoundaryMutations...
+Replacing >= with <= on line 183
+
+Iteration 5:
+Running ConditionalBoundaryMutations...
+Replacing >= with <= on line 183
+
+Iteration 6:
+Running CloneReturnMutations...
+Return statement is cloned from 368 to 142
+
+Iteration 7:
+Running NonEmptyStringMutations...
+Replacing "" with a <div> with content on line 88
+
+Iteration 8:
+Running ControlFlowMutations...
+Swapped expressions in if-else block in line 289 and line 294
+
+Iteration 9:
+Running IncrementalMutations...
+Replacing ++ from sufix to prefix on line 377
+
+Iteration 10:
+Running NegateConditionals...
+Replacing == with != on line 267
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/prepareForSnapshot.sh checkbox.io-micro-preview http://localhost:3000/survey/long.md 0
+starting forever for baseline
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+taking snapshot for baseline
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] itbw [90m/usr/bin/node[39m [90mindex.js[39m 20415   20423    [35m/home/ubuntu/.forever/itbw.log[39m [33m0:0:0:19.095[39m
+stopping forever for baseline
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/prepareForSnapshot.sh checkbox.io-micro-preview http://localhost:3000/survey/upload.md 1
+starting forever for baseline
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+taking snapshot for baseline
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] z9dQ [90m/usr/bin/node[39m [90mindex.js[39m 20780   20788    [35m/home/ubuntu/.forever/z9dQ.log[39m [33m0:0:0:21.539[39m
+stopping forever for baseline
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/prepareForSnapshot.sh checkbox.io-micro-preview http://localhost:3000/survey/survey.md 2
+starting forever for baseline
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+taking snapshot for baseline
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] JT_p [90m/usr/bin/node[39m [90mindex.js[39m 21108   21116    [35m/home/ubuntu/.forever/JT_p.log[39m [33m0:0:0:17.089[39m
+stopping forever for baseline
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/prepareForSnapshot.sh checkbox.io-micro-preview http://localhost:3000/survey/variations.md 3
+starting forever for baseline
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+taking snapshot for baseline
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] 3ytX [90m/usr/bin/node[39m [90mindex.js[39m 21431   21439    [35m/home/ubuntu/.forever/3ytX.log[39m [33m0:0:0:17.112[39m
+stopping forever for baseline
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/startapp.sh 1 checkbox.io-micro-preview marqdown.js
+starting forever for mutation
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 1
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 1
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 1
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 1
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/stopapp.sh checkbox.io-micro-preview
+stopping forever for mutation
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] b4JR [90m/usr/bin/node[39m [90mindex.js[39m 21754   21762    [35m/home/ubuntu/.forever/b4JR.log[39m [33m0:0:0:14.173[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/startapp.sh 2 checkbox.io-micro-preview marqdown.js
+starting forever for mutation
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 2
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 2
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 2
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 2
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/stopapp.sh checkbox.io-micro-preview
+stopping forever for mutation
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] z-78 [90m/usr/bin/node[39m [90mindex.js[39m 23026   23034    [35m/home/ubuntu/.forever/z-78.log[39m [33m0:0:0:17.225[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/startapp.sh 3 checkbox.io-micro-preview marqdown.js
+starting forever for mutation
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 3
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 3
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 3
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 3
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/stopapp.sh checkbox.io-micro-preview
+stopping forever for mutation
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] ej1S [90m/usr/bin/node[39m [90mindex.js[39m 24296   24304    [35m/home/ubuntu/.forever/ej1S.log[39m [33m0:0:0:13.486[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/startapp.sh 4 checkbox.io-micro-preview marqdown.js
+starting forever for mutation
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 4
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 4
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 4
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 4
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/stopapp.sh checkbox.io-micro-preview
+stopping forever for mutation
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] 2r0F [90m/usr/bin/node[39m [90mindex.js[39m 25539   25547    [35m/home/ubuntu/.forever/2r0F.log[39m [33m0:0:0:13.5[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/startapp.sh 5 checkbox.io-micro-preview marqdown.js
+starting forever for mutation
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 5
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 5
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 5
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 5
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/stopapp.sh checkbox.io-micro-preview
+stopping forever for mutation
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] 0Civ [90m/usr/bin/node[39m [90mindex.js[39m 26781   26789    [35m/home/ubuntu/.forever/0Civ.log[39m [33m0:0:0:13.591[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/startapp.sh 6 checkbox.io-micro-preview marqdown.js
+starting forever for mutation
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 6
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 6
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 6
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 6
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/stopapp.sh checkbox.io-micro-preview
+stopping forever for mutation
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] lVRR [90m/usr/bin/node[39m [90mindex.js[39m 28027   29145    [35m/home/ubuntu/.forever/lVRR.log[39m [33m0:0:0:1.062[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/startapp.sh 7 checkbox.io-micro-preview marqdown.js
+starting forever for mutation
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 7
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 7
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 7
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 7
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/stopapp.sh checkbox.io-micro-preview
+stopping forever for mutation
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] H1bz [90m/usr/bin/node[39m [90mindex.js[39m 29313   30432    [35m/home/ubuntu/.forever/H1bz.log[39m [33m0:0:0:1.038[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/startapp.sh 8 checkbox.io-micro-preview marqdown.js
+starting forever for mutation
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 8
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 8
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 8
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 8
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/stopapp.sh checkbox.io-micro-preview
+stopping forever for mutation
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] MKle [90m/usr/bin/node[39m [90mindex.js[39m 30600   30608    [35m/home/ubuntu/.forever/MKle.log[39m [33m0:0:0:16.994[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/startapp.sh 9 checkbox.io-micro-preview marqdown.js
+starting forever for mutation
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 9
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 9
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 9
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 9
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/stopapp.sh checkbox.io-micro-preview
+stopping forever for mutation
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] 6n5X [90m/usr/bin/node[39m [90mindex.js[39m 31858   31866    [35m/home/ubuntu/.forever/6n5X.log[39m [33m0:0:0:13.581[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/startapp.sh 10 checkbox.io-micro-preview marqdown.js
+starting forever for mutation
+[33mwarn[39m:    --minUptime not set. Defaulting to: 1000ms
+[33mwarn[39m:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+[32minfo[39m:    Forever processing file: [90mindex.js[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 10
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 10
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 10
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 10
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 bash testing/stopapp.sh checkbox.io-micro-preview
+stopping forever for mutation
+[32minfo[39m:    Forever stopped process:
+[37m   [39m [37muid[39m  [90mcommand[39m       [90mscript[39m   [37mforever[39m [37mpid[39m   [37mid[39m [35mlogfile[39m                        [33muptime[39m
+[0] 4AL1 [90m/usr/bin/node[39m [90mindex.js[39m 33101   34209    [35m/home/ubuntu/.forever/4AL1.log[39m [33m0:0:0:1.055[39m
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 cp marqdown.js checkbox.io-micro-preview/marqdown.js
+
+ssh -i "/Users/ashok/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@192.168.64.4 node testing/snapshotCompare.js 10 4 | tee logs/1650126320182/results.log
+Iteration 1:
+ match = false
+Iteration 2:
+ match = false
+Iteration 3:
+ match = false
+Iteration 4:
+ match = false
+Iteration 5:
+ match = false
+file testing/html_snapshots/snapshot_0_6.html not found - runtime error! This case will NOT be considered in coverage
+Iteration 6:
+ match = false
+file testing/html_snapshots/snapshot_0_7.html not found - runtime error! This case will NOT be considered in coverage
+Iteration 7:
+ match = false
+Iteration 8:
+ match = true
+Iteration 9:
+ match = true
+file testing/html_snapshots/snapshot_0_10.html not found - runtime error! This case will NOT be considered in coverage
+Iteration 10:
+ match = false
+
+
+Mutation coverage:
+Total: 10
+Passed: 2(20%)
+Failed: 5(50%)
+Exceptions(killed mutant): 3(30%)
