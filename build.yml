@@ -21,7 +21,7 @@ jobs:
   - name: mutation-coverage
     mutation:
       url: https://github.com/chrisparnin/checkbox.io-micro-preview
-      iterations: 10
+      iterations: 1000
       mutationfile: marqdown.js
       snapshots:
       - http://localhost:3000/survey/long.md

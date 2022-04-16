@@ -43,7 +43,7 @@ function tempfun(iterations, numFiles) {
       match = match && run("testing/html_snapshots/snapshot_orig_" + j + ".html", "testing/html_snapshots/snapshot_" + j + "_" + i + ".html");
     }
     if(match) count++;
-    console.log("iteration " + i + " match = " + match);
+    console.log("Iteration " + i + ":\n" + " match = " + match);
   }
 
 }
