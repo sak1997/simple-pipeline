@@ -23,7 +23,7 @@ function run(arg1, arg2) {
   if(!fs.existsSync(arg2)) {
     console.log("file " + arg2 + " not found - compilcation error! This case will NOT be considered in coverage");
     totalIterationsWithoutError--;
-    return false;
+    return -1;
   } else {
     const html2 = fs.readFileSync(arg2, 'utf-8');
     const isEqual = !htmlCompare.compare(html1, html2).different;
@@ -40,7 +40,13 @@ function tempfun(iterations, numFiles) {
   for(let i = 1; i <= iterations; i++) {
     let match = true;
     for(let j = 0; j < numFiles; j++) {
-      match = match && run("testing/html_snapshots/snapshot_orig_" + j + ".html", "testing/html_snapshots/snapshot_" + j + "_" + i + ".html");
+      let val = run("testing/html_snapshots/snapshot_orig_" + j + ".html", "testing/html_snapshots/snapshot_" + j + "_" + i + ".html");
+      if(val === -1) {
+        match = false;
+        break;        
+      } else {
+        match = val && match;
+      }
     }
     if(match) count++;
     console.log("Iteration " + i + ":\n" + " match = " + match);
