@@ -21,7 +21,7 @@ const [, , ...args] = process.argv;
       waitUntil: 'networkidle0'
     })
   } catch(error) {
-    console.log("found a case where there's a compilation error - page not loading at all!");
+    console.log("found a case where there's a runtime error - page not loading at all!");
     await page.close();
     await browser.close();
   }

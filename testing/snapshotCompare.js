@@ -21,7 +21,7 @@ function run(arg1, arg2) {
 
   const html1 = fs.readFileSync(arg1, 'utf-8');
   if(!fs.existsSync(arg2)) {
-    console.log("file " + arg2 + " not found - compilcation error! This case will NOT be considered in coverage");
+    console.log("file " + arg2 + " not found - runtime error! This case will NOT be considered in coverage");
     totalIterationsWithoutError--;
     return -1;
   } else {
@@ -43,7 +43,7 @@ function tempfun(iterations, numFiles) {
       let val = run("testing/html_snapshots/snapshot_orig_" + j + ".html", "testing/html_snapshots/snapshot_" + j + "_" + i + ".html");
       if(val === -1) {
         match = false;
-        break;        
+        break;
       } else {
         match = val && match;
       }
