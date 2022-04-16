@@ -314,6 +314,7 @@ Building a test harness to put everything together was a very interesting exerci
 ## Screencasts
 
 The screencast can be found at the below link:
+[![Screencast](https://media.github.ncsu.edu/user/23524/files/a3778c60-0af3-4fc1-bd27-492efb010e15)](https://drive.google.com/file/d/1ORy6sithoDdzk5fVR4V3rk8kK-3tGoOr/view?usp=sharing "Screencast")
 
 
 ## Team Members
