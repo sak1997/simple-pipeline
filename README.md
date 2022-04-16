@@ -58,6 +58,7 @@ TOKEN=<your personal access token>
 
 - Mutations are saved inside the VM in the testing/mutations directory on the VM
 - Snapshots are saved in the testing/HTML_snapshots directory on the VM
+- Exceptions may contain a few compilation errors as well, but from our testing and experimentation, we have mostly seen only exceptions.
 
 ## Results
 
@@ -138,7 +139,52 @@ TOKEN=<your personal access token>
    <p>
   
    ```
-    TODO: Output       
+Iteration 1:
+Running NegateConditionals...
+Replacing != with == on line 321
+
+Iteration 2:
+Running NegateConditionals...
+Replacing < with > on line 104
+
+Iteration 3:
+Running ConditionalBoundaryMutations...
+Replacing >= with <= on line 183
+
+Iteration 4:
+Running ControlFlowMutations...
+Swapped expressions in if-else block in line 289 and line 294
+
+Iteration 5:
+Running CloneReturnMutations...
+Return statement is cloned from 117 to 103
+
+Iteration 6:
+Running NegateConditionals...
+Replacing == with != on line 217
+
+Iteration 7:
+Running CloneReturnMutations...
+Return statement is cloned from 117 to 103
+
+Iteration 8:
+Running ControlFlowMutations...
+Swapped expressions in if-else block in line 289 and line 294
+
+Iteration 9:
+Running NonEmptyStringMutations...
+Replacing "" with a <div> with content on line 288
+
+Iteration 10:
+Running CloneReturnMutations...
+Return statement is cloned from 117 to 103
+
+Mutation coverage:
+Total: 10
+Passed: 3(30%)
+Failed: 6(60%)
+Exceptions(killed mutant): 1(10%)
+
    ```
   </p>
 </details>
@@ -148,7 +194,45 @@ TOKEN=<your personal access token>
    <p>
   
    ```
-    TODO: Mutation Logs       
+Iteration 1:
+Running NegateConditionals...
+Replacing != with == on line 321
+
+Iteration 2:
+Running NegateConditionals...
+Replacing < with > on line 104
+
+Iteration 3:
+Running ConditionalBoundaryMutations...
+Replacing >= with <= on line 183
+
+Iteration 4:
+Running ControlFlowMutations...
+Swapped expressions in if-else block in line 289 and line 294
+
+Iteration 5:
+Running CloneReturnMutations...
+Return statement is cloned from 117 to 103
+
+Iteration 6:
+Running NegateConditionals...
+Replacing == with != on line 217
+
+Iteration 7:
+Running CloneReturnMutations...
+Return statement is cloned from 117 to 103
+
+Iteration 8:
+Running ControlFlowMutations...
+Swapped expressions in if-else block in line 289 and line 294
+
+Iteration 9:
+Running NonEmptyStringMutations...
+Replacing "" with a <div> with content on line 288
+
+Iteration 10:
+Running CloneReturnMutations...
+Return statement is cloned from 117 to 103
      
    ```
   </p>
@@ -159,7 +243,12 @@ TOKEN=<your personal access token>
    <p>
   
    ```
-    TODO: Results Logs      
+Mutation coverage:
+Total: 10
+Passed: 3(30%)
+Failed: 6(60%)
+Exceptions(killed mutant): 1(10%)
+     
    ```
   </p>
 </details>
