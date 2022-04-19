@@ -17,6 +17,7 @@
     "express": "^4.17.3",
     "hasbin": "^1.2.3",
     "js-yaml": "^4.1.0",
+    "properties-reader": "^2.2.0",
     "yaml": "^1.10.2",
     "yargs": "^17.3.1"
   }
