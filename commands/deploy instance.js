@@ -3,9 +3,9 @@ const path = require('path');
 var fs = require("fs");
 const PropertiesReader = require('properties-reader');
 const instanceFile = "instance.properties"
-const properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
 const execCmd = require('../lib/execCmd');
 const sshExec = require('../lib/ssh');
+const scpExec = require('../lib/scp');
 const pathUtil = require("path");
 const YamlParser = require('../lib/yamlParser');
 
@@ -22,6 +22,7 @@ exports.handler = async argv => {
 
     console.log(chalk.green("Deploying in production environment..."));
 
+    let properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
     let sshConfig = {
       host: properties.get("IP"),
       port: 22,
@@ -37,7 +38,9 @@ exports.handler = async argv => {
 
     await createSetup(data);
 
-    sshExec("ls", sshConfig);
+    // await sshExec("rm build.yml", sshConfig);
+    await scpExec("build.yml", "~", sshConfig);
+    await sshExec("ls", sshConfig);
 
 };
 
