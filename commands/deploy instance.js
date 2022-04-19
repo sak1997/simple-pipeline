@@ -8,7 +8,7 @@ const sshExec = require('../lib/ssh');
 const scpExec = require('../lib/scp');
 const pathUtil = require("path");
 const YamlParser = require('../lib/yamlParser');
-
+var sshConfig = null;
 exports.command = 'deploy instance <job_name> <build_file>';
 exports.desc = 'Create/Destroy production environment';
 exports.builder = yargs => {
@@ -23,7 +23,7 @@ exports.handler = async argv => {
     console.log(chalk.green("Deploying in production environment..."));
 
     let properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
-    let sshConfig = {
+    sshConfig = {
       host: properties.get("IP"),
       port: 22,
       user: 'root',
@@ -36,11 +36,14 @@ exports.handler = async argv => {
 
     let data = YamlParser.parse('./' + buildFile);
 
-    await createSetup(data);
+    await runSetup(data);
 
-    // await sshExec("rm build.yml", sshConfig);
-    await scpExec("build.yml", "~", sshConfig);
-    await sshExec("ls", sshConfig);
+    for (const job of data.jobs) {
+      if (job.name === jobName) {
+        await runJob(job);
+      }
+    }
+
 
 };
 
@@ -67,5 +70,30 @@ async function createSetup(data) {
         setupCmd = task;
       }
       await execCmd('echo "' + setupCmd + '" >> setup.sh');
+  }
+}
+
+async function runSetup(data) {
+  await createSetup(data);
+  await scpExec("setup.sh", "~", sshConfig);
+  await sshExec("bash setup.sh", sshConfig).then(function () {
+    console.log("Setup Completed!")
+    sshExec("'echo setupCompleted=True >> .status'", helper.sshConfig);
+  });;
+}
+
+async function runJob(job) {
+  runCmd = '';
+  console.log(chalk.green("Executing build job : "+ job.name));
+
+  if (job.steps) {
+    for (const step of job.steps) {
+        let x = step.run.substring(0, 9);
+        if (x === 'git clone') {
+          step.run = x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + step.run.substring(10);
+        }
+        runCmd = '"'+step.run+'"';
+        await sshExec(runCmd, sshConfig);
+    }
   }
 }
