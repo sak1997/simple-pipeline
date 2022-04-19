@@ -21,7 +21,7 @@ exports.handler = async argv => {
     const properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
 
     deleteDroplet(properties.get("ID"));
-    let dropletId = createDroplet(process.env.DIGITAL_OCEAN_TOKEN. process.env.PUB_KEY_PATH);
+    let dropletId = createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
     let dropletIp = getDropletIp(dropletId);
 
     properties.set("ID", dropletId);
