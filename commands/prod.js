@@ -34,12 +34,18 @@ exports.handler = async argv => {
     var fd = fs.openSync(instanceFile, 'a');
     const properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
 
-    deleteDroplet(properties.get("ID"));
-    let dropletId = await createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
-    let dropletIp = await getDropletIp(dropletId);
+    deleteDroplet(properties.get("BLUE_ID"));
+    let blueDropletId = await createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
+    let blueDropletIp = await getDropletIp(blueDropletId);
+    properties.set("BLUE_ID", blueDropletId);
+    properties.set("BLUE_IP", blueDropletIp);
 
-    properties.set("ID", dropletId);
-    properties.set("IP", dropletIp);
+    deleteDroplet(properties.get("GREEN_ID"));
+    let greenDropletId = await createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
+    let greenDropletIp = await getDropletIp(greenDropletId);
+    properties.set("GREEN_ID", greenDropletId);
+    properties.set("GREEN_IP", greenDropletIp);
+
     properties.save(instanceFile);
 
 };
