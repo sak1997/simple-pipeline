@@ -1,4 +1,12 @@
 setup:
+  - sudo systemctl disable apt-daily-upgrade.timer
+  - sudo systemctl mask apt-daily-upgrade.service
+  - sudo systemctl disable apt-daily.timer
+  - sudo systemctl mask apt-daily.service
+  - sudo timedatectl set-ntp off
+  - sudo timedatectl set-ntp on
+  - sleep 1
+  - sudo apt-get update
   - {package: maven, version: 3.6.3}
   - {package: openjdk-11-jdk, version: 11.0.14}
   - export DEBIAN_FRONTEND="noninteractive"
@@ -8,7 +16,7 @@ setup:
   - echo "deb http://repo.mysql.com/apt/ubuntu/ trusty mysql-8.0" | sudo tee -a /etc/apt/sources.list.d/mysql.list
   - sudo apt-get install -y mysql-server
 jobs:
-  - name: build
+  - name: itrust-build
     steps:
       - name: download prj
         run: git clone github.ncsu.edu/engr-csc326-staff/iTrust2-v10.git
@@ -21,10 +29,18 @@ jobs:
   - name: mutation-coverage
     mutation:
       url: https://github.com/chrisparnin/checkbox.io-micro-preview
-      iterations: 1000
+      iterations: 2
       mutationfile: marqdown.js
       snapshots:
       - http://localhost:3000/survey/long.md
       - http://localhost:3000/survey/upload.md
       - http://localhost:3000/survey/survey.md
       - http://localhost:3000/survey/variations.md
+  - name: itrust-deploy
+    steps:
+      - name: maven package
+        run: mvn -f ~/iTrust2-v10/iTrust2 -Dmaven.test.skip=true package > mvndeploy.txt
+      - name: scp
+        run: scp -i ssh/web-srv ~/iTrust2-v10/iTrust2/target/iTrust2-10.jar root@ip:~
+      - name: run in cloud
+        run: java -jar iTrust2-10.jar

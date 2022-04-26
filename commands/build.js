@@ -83,10 +83,10 @@ exports.handler = async argv => {
       for (const task of data.setup) {
           setupCmd = '';
           if(task.hasOwnProperty("package")){
-              if(!isAptUpdate){
-                  await execCmd('echo "' + aptUpdateCmd + '" >> setup.sh');
-                  isAptUpdate = true;
-              }
+              // if(!isAptUpdate){
+              //     await execCmd('echo "' + aptUpdateCmd + '" >> setup.sh');
+              //     isAptUpdate = true;
+              // }
             setupCmd = aptInstallCmd + task.package;
           } else{
             setupCmd = task;
