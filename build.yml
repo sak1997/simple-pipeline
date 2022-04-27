@@ -1,4 +1,12 @@
 setup:
+  - sudo systemctl disable apt-daily-upgrade.timer
+  - sudo systemctl mask apt-daily-upgrade.service
+  - sudo systemctl disable apt-daily.timer
+  - sudo systemctl mask apt-daily.service
+  - sudo timedatectl set-ntp off
+  - sudo timedatectl set-ntp on
+  - sleep 1
+  - sudo apt-get update
   - {package: maven, version: 3.6.3}
   - {package: openjdk-11-jdk, version: 11.0.14}
   - export DEBIAN_FRONTEND="noninteractive"
@@ -18,13 +26,21 @@ jobs:
         run: sed -i 's/password:/password:\ rootpw/g' ~/iTrust2-v10/iTrust2/src/main/resources/application.yml
       - name: run maven
         run: mvn -f ~/iTrust2-v10/iTrust2 clean test > mvnOutput.txt
+      - name: maven package
+        run: mvn -f ~/iTrust2-v10/iTrust2 -Dmaven.test.skip=true package > mvndeploy.txt
+      - name: copy artifact
+        shared: ~/iTrust2-v10/iTrust2/target/iTrust2-10.jar
   - name: mutation-coverage
     mutation:
       url: https://github.com/chrisparnin/checkbox.io-micro-preview
-      iterations: 1000
+      iterations: 2
       mutationfile: marqdown.js
       snapshots:
       - http://localhost:3000/survey/long.md
       - http://localhost:3000/survey/upload.md
       - http://localhost:3000/survey/survey.md
       - http://localhost:3000/survey/variations.md
+  - name: deploy
+    steps:
+      - name: run in cloud
+        run: java -jar shared/iTrust2-10.jar

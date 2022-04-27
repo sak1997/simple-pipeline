@@ -1,8 +1,8 @@
 const chalk = require('chalk');
 const path = require('path');
 var fs = require("fs");
-const axios    = require("axios");
-const os     = require('os');
+const axios = require("axios");
+const os = require('os');
 var shell = require('shelljs');
 const PropertiesReader = require('properties-reader');
 const instanceFile = "instance.properties"
@@ -26,7 +26,7 @@ exports.handler = async argv => {
   headers =
   {
     'Content-Type':'application/json',
-    Authorization: 'Bearer ' + token 
+    Authorization: 'Bearer ' + token
   };
 
     console.log(chalk.green("Creating production environment..."));
@@ -34,12 +34,18 @@ exports.handler = async argv => {
     var fd = fs.openSync(instanceFile, 'a');
     const properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
 
-    deleteDroplet(properties.get("ID"));
-    let dropletId = await createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
-    let dropletIp = await getDropletIp(dropletId);
+    deleteDroplet(properties.get("BLUE_ID"));
+    let blueDropletId = await createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
+    let blueDropletIp = await getDropletIp(blueDropletId);
+    properties.set("BLUE_ID", blueDropletId);
+    properties.set("BLUE_IP", blueDropletIp);
 
-    properties.set("ID", dropletId);
-    properties.set("IP", dropletIp);
+    deleteDroplet(properties.get("GREEN_ID"));
+    let greenDropletId = await createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
+    let greenDropletIp = await getDropletIp(greenDropletId);
+    properties.set("GREEN_ID", greenDropletId);
+    properties.set("GREEN_IP", greenDropletIp);
+
     properties.save(instanceFile);
 
 };
@@ -55,7 +61,7 @@ async function createDroplet(token, sshKey) {
     var region = "nyc3"; // Fill one in from #1
     var imageName = "ubuntu-21-10-x64"; // Fill one in from #2
 
-    var data = 
+    var data =
     {
       "name": dropletName,
       "region":region,
@@ -68,14 +74,14 @@ async function createDroplet(token, sshKey) {
       "private_networking":null
     };
 
-    // console.log("Attempting to create: "+ JSON.stringify(data) );
+    console.log("Attempting to create: "+ JSON.stringify(data) );
 
-    let response = await axios.post("https://api.digitalocean.com/v2/droplets", 
+    let response = await axios.post("https://api.digitalocean.com/v2/droplets",
     data,
     {
       headers:headers,
-    }).catch( err => 
-      console.error(chalk.red(`createDroplet: ${err}`)) 
+    }).catch( err =>
+      console.error(chalk.red(`createDroplet: ${err}`))
     );
     // console.log("response = " + response);
     if( !response ) return;
@@ -140,4 +146,3 @@ async function deleteDroplet(id) {
     console.log('response code was NOT 204 but ' + response.status);
   }
 }
-
