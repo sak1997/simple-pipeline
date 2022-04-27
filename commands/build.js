@@ -8,6 +8,7 @@ const fs = require('fs');
 const { help } = require('yargs');
 const pathUtil = require("path");
 const oneTimeSetup = true;
+const sharedDirPath = "~/shared/"
 
 exports.command = 'build <job_name> <build_file>';
 exports.desc = 'Trigger a specified Build job';
@@ -114,12 +115,16 @@ exports.handler = async argv => {
 
             if (job.steps) {
               for (const step of job.steps) {
-                  let x = step.run.substring(0, 9);
-                  if (x === 'git clone') {
-                    step.run = x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + step.run.substring(10);
+                  if (step.shared) {
+                    await sshExec("cp -r " + step.shared + " " + sharedDirPath)
+                  } else if (step.run){
+                    let x = step.run.substring(0, 9);
+                    if (x === 'git clone') {
+                      step.run = x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + step.run.substring(10);
+                    }
+                    runCmd = '"'+step.run+'"';
+                    await sshExec(runCmd, helper.sshConfig);
                   }
-                  runCmd = '"'+step.run+'"';
-                  await sshExec(runCmd, helper.sshConfig);
               }
             }
         }
