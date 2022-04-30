@@ -8,7 +8,9 @@ const fs = require('fs');
 const { help } = require('yargs');
 const pathUtil = require("path");
 const oneTimeSetup = true;
-const sharedDirPath = "~/shared/"
+const outputDirPath = "/home/ubuntu/output"
+
+
 
 exports.command = 'build <job_name> <build_file>';
 exports.desc = 'Trigger a specified Build job';
@@ -116,11 +118,12 @@ exports.handler = async argv => {
             if (job.steps) {
               for (const step of job.steps) {
                   if (step.shared) {
-                    await sshExec("cp -r " + step.shared + " " + sharedDirPath)
+                    await sshExec("sudo mkdir -p "+outputDirPath, helper.sshConfig);
+                    await sshExec("sudo cp -r " + step.shared + " " + outputDirPath, helper.sshConfig)
                   } else if (step.run){
                     let x = step.run.substring(0, 9);
                     if (x === 'git clone') {
-                      step.run = x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + step.run.substring(10);
+                      step.run = 'git -C "'+ step.run.substring(step.run.lastIndexOf('/')+1, step.run.lastIndexOf('.')) + '" pull ||' +x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + step.run.substring(10);
                     }
                     runCmd = '"'+step.run+'"';
                     await sshExec(runCmd, helper.sshConfig);
