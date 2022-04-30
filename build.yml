@@ -8,6 +8,7 @@ setup:
   - sleep 1
   - sudo apt-get update
   - sudo apt update
+  - sudo apt remove flash-kernel -y
   - {package: maven, version: 3.6.3}
   - {package: openjdk-11-jdk, version: 11.0.14}
   - export DEBIAN_FRONTEND="noninteractive"
@@ -17,7 +18,7 @@ setup:
   - echo "deb http://repo.mysql.com/apt/ubuntu/ trusty mysql-8.0" | sudo tee -a /etc/apt/sources.list.d/mysql.list
   - sudo apt-get install -y mysql-server
 jobs:
-  - name: itrust-build
+  - name: build
     steps:
       - name: download prj
         run: git clone github.ncsu.edu/engr-csc326-staff/iTrust2-v10.git
