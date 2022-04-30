@@ -31,23 +31,23 @@ exports.handler = async argv => {
     let properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
     doHelper = new DOHelper(process.env.DIGITAL_OCEAN_TOKEN);
 
-    // // Delete Blue server
-    // await doHelper.deleteDroplet(properties.get("BLUE_ID"));
-    //
-    // // Change Green Server to Blue
-    // properties.set("BLUE_ID", properties.get("GREEN_ID"));
-    // properties.set("BLUE_IP", properties.get("GREEN_ID"));
-    //
-    // // Create new Green server
-    // let greenDropletId = await doHelper.createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
-    // let greenDropletIp = await doHelper.getDropletIp(greenDropletId);
-    // properties.set("GREEN_ID", greenDropletId);
-    // properties.set("GREEN_IP", greenDropletIp);
-    //
-    // // Save instance info
-    // properties.save(instanceFile);
+    // Delete Blue server
+    await doHelper.deleteDroplet(properties.get("BLUE_ID"));
 
-    // await new Promise(r => setTimeout(r, 120000));
+    // Change Green Server to Blue
+    properties.set("BLUE_ID", properties.get("GREEN_ID"));
+    properties.set("BLUE_IP", properties.get("GREEN_ID"));
+
+    // Create new Green server
+    let greenDropletId = await doHelper.createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
+    let greenDropletIp = await doHelper.getDropletIp(greenDropletId);
+    properties.set("GREEN_ID", greenDropletId);
+    properties.set("GREEN_IP", greenDropletIp);
+
+    // Save instance info
+    properties.save(instanceFile);
+
+    await new Promise(r => setTimeout(r, 120000));
 
     sshConfig = {
       host: properties.get("GREEN_IP"),
@@ -68,32 +68,14 @@ exports.handler = async argv => {
     }
     await helper.updateSSHConfig();
 
-    logPrefix = helper.getLogPrefix();
+    // logPrefix = helper.getLogPrefix();
 
-    // prodSetupCompleted = false;
     // await execCmd(`mkdir logs`);
     // await execCmd(`mkdir ` + logPrefix);
-    //
-    // await sshExec("touch .status", sshConfig, false);
-    // await sshExec("cat .status > .status", sshConfig, false);
-    //
-    // fs.readFile('./.status', 'utf8' , (err, data) => {
-    //   if (err) {
-    //     console.error(err)
-    //     return
-    //   }
-    //   if(data.includes('setupCompleted=True')) {
-    //     setupAlreadyDone = true;
-    //   }
-    //   if(data.includes('prodSetupCompleted=True')) {
-    //     prodSetupAlreadyDone = true;
-    //   }
-    //   console.log(data);
-    // })
 
-    // await scpExec(outputDirPath, "~", helper.sshConfig, sshConfig);
-    //
-    // await runSetup(data);
+    await scpExec(outputDirPath, "~", helper.sshConfig, sshConfig);
+
+    await runSetup(data);
 
     for (const job of data.jobs) {
       if (job.name === jobName) {
@@ -130,7 +112,6 @@ async function createSetup(data) {
 }
 
 async function runSetup(data) {
-  // await helper.moveToDeployEnv();
   await createSetup(data);
   await scpExec("setup.sh", "~", null, sshConfig);
   await sshExec("bash setup.sh", sshConfig).then(function () {
