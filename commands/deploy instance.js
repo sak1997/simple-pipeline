@@ -36,7 +36,7 @@ exports.handler = async argv => {
 
     // Change Green Server to Blue
     properties.set("BLUE_ID", properties.get("GREEN_ID"));
-    properties.set("BLUE_IP", properties.get("GREEN_ID"));
+    properties.set("BLUE_IP", properties.get("GREEN_IP"));
 
     // Create new Green server
     let greenDropletId = await doHelper.createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
