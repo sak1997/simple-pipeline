@@ -8,7 +8,7 @@ const fs = require('fs');
 const { help } = require('yargs');
 const pathUtil = require("path");
 const oneTimeSetup = true;
-const outputDirPath = "/home/ubuntu/output"
+const outputDirPath = "~/output"
 
 
 

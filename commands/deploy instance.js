@@ -109,6 +109,21 @@ async function createSetup(data) {
     }
       await execCmd('echo "' + setupCmd + '" >> setup.sh');
   }
+
+    console.log("copying..")
+    await execCmd('echo > newsetup.sh');
+    fs.readFileSync('./setup.sh').toString().split('\n').forEach(function (line) { 
+        console.log(line);
+        let newline = line;
+        if(line.charAt(0) == "\"" || line.charAt(0) == '\'') {
+          newline = line.slice(1, -3); 
+        }
+        fs.appendFileSync("./newsetup.sh", newline.toString() + "\n");
+    });
+    await execCmd('rm setup.sh');
+    await execCmd('mv newsetup.sh setup.sh');
+    await execCmd('dos2unix setup.sh ');
+
 }
 
 async function runSetup(data) {
