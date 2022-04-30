@@ -28,7 +28,7 @@ exports.handler = async argv => {
 
     let properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
     sshConfig = {
-      host: properties.get("IP"),
+      host: properties.get("GREEN_IP"),
       port: 22,
       user: 'root',
       identifyFile: process.env.PVT_KEY_PATH
@@ -44,7 +44,7 @@ exports.handler = async argv => {
     } else {
         helper = new WinHelper();
     }
-    logPrefix = helper.getLogPrefix();  
+    logPrefix = helper.getLogPrefix();
     await helper.updateSSHConfig();
 
     prodSetupCompleted = false;
@@ -68,9 +68,9 @@ exports.handler = async argv => {
       console.log(data);
     })
 
-  
 
-     
+
+
     await runSetup(data);
 
     for (const job of data.jobs) {
@@ -83,7 +83,7 @@ exports.handler = async argv => {
 };
 
 async function createSetup(data) {
-  
+
   await execCmd(`echo '#!/bin/bash' > setup.sh`);
   await execCmd(`echo 'set -e' >> setup.sh`);
   await execCmd(`echo 'set -x' >> setup.sh`);
@@ -93,7 +93,7 @@ async function createSetup(data) {
   let isAptUpdate = false;
   const aptInstallCmd = 'sudo apt-get install -y ';
   const aptUpdateCmd = 'sudo apt-get update';
-  
+
   for (const task of data.setup) {
       setupCmd = '';
       if(oneTimeSetup ) {
@@ -127,10 +127,10 @@ async function runJob(job) {
         config = helper.sshConfig;
         if (x === 'scp ') {
             step.run = x + '-i ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ~/iTrust2-v10/iTrust2/target/iTrust2-10.jar root@' + sshConfig.host + ':~';
-          }
+        }
         if (x === 'java') {
           config = sshConfig;
-      }
+        }
         runCmd = '"'+step.run+'"';
         await sshExec(runCmd, config);
     }
