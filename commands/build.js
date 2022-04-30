@@ -123,7 +123,7 @@ exports.handler = async argv => {
                   } else if (step.run){
                     let x = step.run.substring(0, 9);
                     if (x === 'git clone') {
-                      step.run = 'git -C "'+ step.run.substring(step.run.lastIndexOf('/')+1, step.run.lastIndexOf('.')) + '" pull ||' +x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + step.run.substring(10);
+                      step.run = 'git -C "'+ step.run.substring(step.run.lastIndexOf('/')+1, step.run.lastIndexOf('.')) + '" pull || ' + x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + step.run.substring(10);
                     }
                     runCmd = '"'+step.run+'"';
                     await sshExec(runCmd, helper.sshConfig);
