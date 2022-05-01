@@ -32,10 +32,12 @@ We have designed a build.yml file to cover the steps involved in the constructio
 
 Finally, we have also parsed, interpreted and run the commands from the build.yml file in the new VM to set up the environment and build iTrust.
 
-## Instructions
+## Setup Instructions
 
-
-### Sample env File
+  1) Create an account in [Digital Ocean](https://www.digitalocean.com).
+  2) Create a public key/private key pair in the host machine.
+  3) Add the public key in the Digital Ocean account.
+  4) Create a .env in the repo home based on the following sample given below.
 
 #### Windows
 
