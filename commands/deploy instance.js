@@ -81,10 +81,10 @@ exports.handler = async argv => {
       }
     }
 
-    await execCmd("forever start lib/lb.js");
-
     // Save instance info
     properties.save(instanceFile);
+
+    await execCmd("forever start lib/lb.js");
     
     process.exit(0);
 
@@ -117,7 +117,7 @@ async function createSetup(data) {
     console.log("copying..")
     await execCmd('echo > newsetup.sh');
     fs.readFileSync('./setup.sh').toString().split('\n').forEach(function (line) {
-        console.log(line);
+        // console.log(line);
         let newline = line;
         if(line.charAt(0) == "\"" || line.charAt(0) == '\'') {
           newline = line.slice(1, -3);
