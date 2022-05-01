@@ -8,7 +8,7 @@ const fs = require('fs');
 const { help } = require('yargs');
 const pathUtil = require("path");
 const oneTimeSetup = true;
-const outputDirPath = "/home/ubuntu/output"
+const outputDirPath = "~/output"
 
 
 
@@ -44,8 +44,8 @@ exports.handler = async argv => {
     await execCmd(`mkdir logs`);
     await execCmd(`mkdir ` + logPrefix);
 
-    await sshExec("touch .status", helper.sshConfig, false);
-    await sshExec("cat .status > .status", helper.sshConfig, false);
+    await sshExec("touch .status", helper.sshConfig, false, false);
+    await sshExec("cat .status > .status", helper.sshConfig, false, false);
 
     fs.readFile('./.status', 'utf8' , (err, data) => {
       if (err) {
@@ -118,8 +118,8 @@ exports.handler = async argv => {
             if (job.steps) {
               for (const step of job.steps) {
                   if (step.shared) {
-                    await sshExec("sudo mkdir -p "+outputDirPath, helper.sshConfig);
-                    await sshExec("sudo cp -r " + step.shared + " " + outputDirPath, helper.sshConfig)
+                    await sshExec('"sudo mkdir -p '+ outputDirPath + '"', helper.sshConfig);
+                    await sshExec('"sudo cp -r ' + step.shared + " " + outputDirPath + '"', helper.sshConfig)
                   } else if (step.run){
                     let x = step.run.substring(0, 9);
                     if (x === 'git clone') {

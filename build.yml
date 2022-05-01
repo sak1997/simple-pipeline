@@ -31,7 +31,7 @@ jobs:
       - name: maven package
         run: mvn -f ~/iTrust2-v10/iTrust2 -Dmaven.test.skip=true package > mvndeploy.txt
       - name: copy artifact
-        shared: /home/ubuntu/iTrust2-v10/iTrust2/target/iTrust2-10.jar
+        shared: ~/iTrust2-v10/iTrust2/target/iTrust2-10.jar
   - name: mutation-coverage
     mutation:
       url: https://github.com/chrisparnin/checkbox.io-micro-preview
@@ -45,4 +45,4 @@ jobs:
   - name: deploy
     steps:
       - name: run in cloud
-        run: java -jar output/iTrust2-10.jar
+        backgroundRun: java -jar output/iTrust2-10.jar
