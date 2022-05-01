@@ -9,6 +9,7 @@
 |-|-|
 |Tasks | [click here](#tasks-and-progress) |
 |Setup Instructions| [click here](#setup-instructions)|
+|Commands| [Click here](#commands)|
 |Results| [click here](#results)|
 |Experiences | [click here](#experiences)|
 |Challenges | [click here](#challenges)|
@@ -75,6 +76,23 @@ http://localhost:3090/iTrust2/login
 
 - Sometimes, we see issues with the Digital Ocean droplets having network issues and failing - this is intermittent and in case the deploy stops due to some reason, we recommend running pipeline prod up and pipeline deploy once more. 
 
+## Commands
+  - ```pipeline init ```
+    * Creates a vm in the host machine.
+          
+  - ```pipeline build <job-name> <path to build yml file>```
+    * Executs the scripts in setup and the spcified job from the build yml file in the vm. 
+  - ```pipeline prod up```
+    * Deletes all the existing droplets and creates new blue and green droplets.
+    * Start the loadbalancer. Restart if the loadbalancer is already running.
+  - ```pipeline deploy inatance <job-name> <path to build yml file>```
+    * Create a new droplet.
+    * Executs the scripts in setup and the spcified job from the build yml file in the new droplet.
+    * Executes the following when the deployment is completd.
+      + Delete the current blue droplet.
+      + Change the current green droplet to blue.
+      + Add the newly created droplet as green.
+          
 ## Results
 
 
