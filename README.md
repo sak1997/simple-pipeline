@@ -44,6 +44,9 @@ IP=192.168.10.112
 VM_NAME=pipeline-vm
 USER_NAME=<your username for the Personal access token>
 TOKEN=<your personal access token>
+DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
+PUB_KEY_PATH=<path to public key>
+PVT_KEY_PATH=<path to private key>
 ```
 
 #### M1 Mac
@@ -51,7 +54,10 @@ TOKEN=<your personal access token>
 ```
 VM_NAME='vm1'
 USER_NAME=<your username for the Personal access token>
-TOKEN=<your personal access token>
+TOKEN=<your personal access token for GitHub>
+DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
+PUB_KEY_PATH=<path to public key>
+PVT_KEY_PATH=<path to private key>
 ```
 
 #### Notes
