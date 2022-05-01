@@ -82,7 +82,7 @@ exports.handler = async argv => {
     }
 
     // Save instance info
-    properties.save(instanceFile);
+    await properties.save(instanceFile);
 
     process.exit(0);
 
