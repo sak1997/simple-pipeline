@@ -118,8 +118,8 @@ exports.handler = async argv => {
             if (job.steps) {
               for (const step of job.steps) {
                   if (step.shared) {
-                    await sshExec('"sudo mkdir -p '+ outputDirPath + "'", helper.sshConfig);
-                    await sshExec('"sudo cp -r ' + step.shared + " " + outputDirPath + "'", helper.sshConfig)
+                    await sshExec('"sudo mkdir -p '+ outputDirPath + '"', helper.sshConfig);
+                    await sshExec('"sudo cp -r ' + step.shared + " " + outputDirPath + '"', helper.sshConfig)
                   } else if (step.run){
                     let x = step.run.substring(0, 9);
                     if (x === 'git clone') {
