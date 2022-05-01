@@ -51,12 +51,13 @@
       <summary>M1 Mac</summary>
         <p>
 
-        VM_NAME='vm1'
-        USER_NAME=<your username for the Personal access token>
-        TOKEN=<your personal access token for GitHub>
-        DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
-        PUB_KEY_PATH=<path to public key>
-        PVT_KEY_PATH=<path to private key>
+          VM_NAME='vm1'
+          USER_NAME=<your username for the Personal access token>
+          TOKEN=<your personal access token for GitHub>
+          DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
+          PUB_KEY_PATH=<path to public key>
+          PVT_KEY_PATH=<path to private key>
+
      </details>
 
 #### Notes
