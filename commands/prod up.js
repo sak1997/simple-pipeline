@@ -4,6 +4,7 @@ var fs = require("fs");
 const axios = require("axios");
 const os = require('os');
 var shell = require('shelljs');
+const execCmd = require('../lib/execCmd');
 const DOHelper = require('../lib/digitalOceanHelper')
 const PropertiesReader = require('properties-reader');
 const instanceFile = "instance.properties"
@@ -42,4 +43,5 @@ exports.handler = async argv => {
 
     properties.save(instanceFile);
 
+    await execCmd("forever stopall & forever start lib/lb.js");
 };
