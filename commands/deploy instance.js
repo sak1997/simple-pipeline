@@ -84,6 +84,9 @@ exports.handler = async argv => {
     // Save instance info
     await properties.save(instanceFile);
 
+    //await new Promise(r => setTimeout(r, 1000));
+    //await execCmd("echo 'Deploy Completed - go to localhost:3090/<your url> to check'");
+
     process.exit(0);
 
 };
@@ -150,6 +153,8 @@ async function runJob(job) {
         if (step.backgroundRun) {
           runCmd = `"sh -c 'nohup ` + cmd  + ` &'"`;
           sshExec(runCmd, sshConfig, true);
+          await new Promise(r => setTimeout(r, 1000));
+          await execCmd("echo Background Command Run ");
         } else {
           runCmd = '"' + cmd + '"';
           await sshExec(runCmd, sshConfig);
