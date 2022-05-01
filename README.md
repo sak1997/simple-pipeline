@@ -19,11 +19,9 @@
 
 | Task | Progress | Challenges
 |-|-|-|
-| Generate snapshots | Completed - see testing/snapshot.js for HTML snapshot code | Compare and contrast between HTML and image snapshots
-| Mutation operators |  Done - please see testing/mutation.js for the implementation | Understanding the structure of ASTs for various operators
-| Test harness | Done - please see commands/build.js for implementation |
-| Mutation coverage | Done |Ignoring whitespace and comments in HTML snapshots | Handling compliation failures
-| Build specification | Done - available in the build.yml in this repo
+| Provisioning | Completed - generates droplet IP and ID in instance.properties file | Choose a provider, understand how to set up droplets on DO with SSH enabled
+| Deploy job |  Done - please see build.yml for the deploy job |  
+| Deployment strategy | Done - please see commands/build.js for implementation | proxy server to route requests, switch from blue to green on re-running deploy command
 | Screencast and Milestone Report | Please see below for the screencast
 
 ## Setup Instructions
@@ -51,12 +49,12 @@
       <summary>M1 Mac</summary>
         <p>
 
-        VM_NAME='vm1'
-        USER_NAME=<your username for the Personal access token>
-        TOKEN=<your personal access token for GitHub>
-        DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
-        PUB_KEY_PATH=<path to public key>
-        PVT_KEY_PATH=<path to private key>
+          VM_NAME='vm1'
+          USER_NAME=<your username for the Personal access token>
+          TOKEN=<your personal access token for GitHub>
+          DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
+          PUB_KEY_PATH=<path to public key>
+          PVT_KEY_PATH=<path to private key>
      </details>
 
 #### Notes
