@@ -45,4 +45,4 @@ jobs:
   - name: deploy
     steps:
       - name: run in cloud
-        run: java -jar output/iTrust2-10.jar
+        backgroundRun: java -jar output/iTrust2-10.jar

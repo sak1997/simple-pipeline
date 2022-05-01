@@ -44,8 +44,8 @@ exports.handler = async argv => {
     await execCmd(`mkdir logs`);
     await execCmd(`mkdir ` + logPrefix);
 
-    await sshExec("touch .status", helper.sshConfig, false);
-    await sshExec("cat .status > .status", helper.sshConfig, false);
+    await sshExec("touch .status", helper.sshConfig, false, false);
+    await sshExec("cat .status > .status", helper.sshConfig, false, false);
 
     fs.readFile('./.status', 'utf8' , (err, data) => {
       if (err) {

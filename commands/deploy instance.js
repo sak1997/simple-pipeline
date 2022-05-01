@@ -83,6 +83,8 @@ exports.handler = async argv => {
       }
     }
 
+    await execCmd("forever start lib/lb.js");
+    process.exit(0);
 
 };
 
@@ -112,11 +114,11 @@ async function createSetup(data) {
 
     console.log("copying..")
     await execCmd('echo > newsetup.sh');
-    fs.readFileSync('./setup.sh').toString().split('\n').forEach(function (line) { 
+    fs.readFileSync('./setup.sh').toString().split('\n').forEach(function (line) {
         console.log(line);
         let newline = line;
         if(line.charAt(0) == "\"" || line.charAt(0) == '\'') {
-          newline = line.slice(1, -3); 
+          newline = line.slice(1, -3);
         }
         fs.appendFileSync("./newsetup.sh", newline.toString() + "\n");
     });
@@ -139,13 +141,19 @@ async function runJob(job) {
   console.log(chalk.green("Executing build job : "+ job.name));
   if (job.steps) {
     for (const step of job.steps) {
-      if (step.run){
-        let x = step.run.substring(0, 9);
+      let cmd = step.run || step.backgroundRun;
+      if (cmd){
+        let x = cmd.substring(0, 9);
         if (x === 'git clone') {
-          step.run = 'git -C "'+ step.run.substring(step.run.lastIndexOf('/')+1, step.run.lastIndexOf('.')) + '" pull || ' + x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + step.run.substring(10);
+          cmd = 'git -C "'+ cmd.substring(cmd.lastIndexOf('/')+1, cmd.lastIndexOf('.')) + '" pull || ' + x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + cmd.substring(10);
         }
-        runCmd = '"'+step.run+'"';
-        await sshExec(runCmd, sshConfig);
+        if (step.backgroundRun) {
+          runCmd = `"sh -c 'nohup ` + cmd  + ` &'"`;
+          sshExec(runCmd, sshConfig, true);
+        } else {
+          runCmd = '"' + cmd + '"';
+          await sshExec(runCmd, sshConfig);
+        }
       }
     }
   }
