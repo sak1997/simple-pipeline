@@ -16,6 +16,7 @@
     "escodegen": "^2.0.0",
     "esprima": "^4.0.1",
     "express": "^4.17.3",
+    "forever": "^4.0.3",
     "got": "^11.8.3",
     "hasbin": "^1.2.3",
     "http-proxy": "^1.18.1",
