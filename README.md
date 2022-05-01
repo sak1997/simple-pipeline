@@ -88,7 +88,7 @@ http://localhost:3090/iTrust2/login
   - ```pipeline deploy inatance <job-name> <path to build yml file>```
     * Create a new droplet.
     * Executs the scripts in setup and the spcified job from the build yml file in the new droplet.
-    * Executes the following when the deployment is completd.
+    * Executes the following when the deployment is completed.
       + Delete the current blue droplet.
       + Change the current green droplet to blue.
       + Add the newly created droplet as green.
