@@ -37,30 +37,33 @@ Finally, we have also parsed, interpreted and run the commands from the build.ym
   1) Create an account in [Digital Ocean](https://www.digitalocean.com).
   2) Create a public key/private key pair in the host machine.
   3) Add the public key in the Digital Ocean account.
-  4) Create a .env in the repo home based on the following sample given below.
+  4) Create a .env in the repo home based on the sample given below.
 
-#### Windows
+     <details>
+      <summary>Windows</summary>
+        <p>
 
-```
-IP=192.168.10.112
-VM_NAME=pipeline-vm
-USER_NAME=<your username for the Personal access token>
-TOKEN=<your personal access token>
-DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
-PUB_KEY_PATH=<path to public key>
-PVT_KEY_PATH=<path to private key>
-```
+          IP=192.168.10.112
+          VM_NAME=pipeline-vm
+          USER_NAME=<your username for the Personal access token>
+          TOKEN=<your personal access token>
+          DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
+          PUB_KEY_PATH=<path to public key>
+          PVT_KEY_PATH=<path to private key>  
 
-#### M1 Mac
+     </details>
 
-```
-VM_NAME='vm1'
-USER_NAME=<your username for the Personal access token>
-TOKEN=<your personal access token for GitHub>
-DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
-PUB_KEY_PATH=<path to public key>
-PVT_KEY_PATH=<path to private key>
-```
+     <details>
+      <summary>M1 Mac</summary>
+        <p>
+
+        VM_NAME='vm1'
+        USER_NAME=<your username for the Personal access token>
+        TOKEN=<your personal access token for GitHub>
+        DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
+        PUB_KEY_PATH=<path to public key>
+        PVT_KEY_PATH=<path to private key>
+     </details>
 
 #### Notes
 
