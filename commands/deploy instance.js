@@ -44,13 +44,11 @@ exports.handler = async argv => {
     properties.set("GREEN_ID", greenDropletId);
     properties.set("GREEN_IP", greenDropletIp);
 
-    // Save instance info
-    properties.save(instanceFile);
 
     await new Promise(r => setTimeout(r, 120000));
 
     sshConfig = {
-      host: properties.get("GREEN_IP"),
+      host: greenDropletIp,
       port: 22,
       user: 'root',
       identifyFile: process.env.PVT_KEY_PATH
@@ -84,6 +82,10 @@ exports.handler = async argv => {
     }
 
     await execCmd("forever start lib/lb.js");
+
+    // Save instance info
+    properties.save(instanceFile);
+    
     process.exit(0);
 
 };
