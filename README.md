@@ -8,7 +8,7 @@
 | Topic | Location |
 |-|-|
 |Tasks | [click here](#tasks-and-progress) |
-|Instructions| [click here](#instructions)|
+|Setup Instructions| [click here](#setup-instructions)|
 |Results| [click here](#results)|
 |Experiences | [click here](#experiences)|
 |Challenges | [click here](#challenges)|
