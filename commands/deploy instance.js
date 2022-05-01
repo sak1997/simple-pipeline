@@ -84,8 +84,6 @@ exports.handler = async argv => {
     // Save instance info
     properties.save(instanceFile);
 
-    await execCmd("forever start lib/lb.js");
-    
     process.exit(0);
 
 };
