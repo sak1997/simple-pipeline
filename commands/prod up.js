@@ -41,7 +41,7 @@ exports.handler = async argv => {
     properties.set("GREEN_ID", greenDropletId);
     properties.set("GREEN_IP", greenDropletIp);
 
-    properties.save(instanceFile);
+    await properties.save(instanceFile);
 
     await execCmd("forever stopall & forever start lib/lb.js");
 };
