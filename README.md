@@ -9,7 +9,7 @@
 |-|-|
 |Tasks | [click here](#tasks-and-progress) |
 |Setup Instructions| [click here](#setup-instructions)|
-|Build YAML Specs|[click here](#build-yaml-specs)|
+|Build YML Specs|[click here](#build-yml-specs)|
 |Commands| [Click here](#commands)|
 |Experiences | [click here](#experiences)|
 |Challenges | [click here](#challenges)|
@@ -73,7 +73,7 @@ http://localhost:3090/iTrust2/login
 
 - Sometimes, we see issues with the Digital Ocean droplets having network issues and failing - this is intermittent and in case the deploy stops due to some reason, we recommend running pipeline prod up and pipeline deploy once more. 
 
-## Build YAML Specs
+## Build YML Specs
   ```
   setup:
      // All the commands in this block will be executed sequentially for all the jobs and commands
