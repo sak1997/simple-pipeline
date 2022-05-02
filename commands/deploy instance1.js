@@ -155,8 +155,6 @@ async function runJob(job) {
         if (step.backgroundRun) {
           runCmd = `"sh -c 'nohup ` + cmd  + ` &'"`;
           sshExec(runCmd, sshConfig, true);
-          await new Promise(r => setTimeout(r, 1000));
-          await execCmd("echo Background Command Run ");
         } else {
           runCmd = '"' + cmd + '"';
           await sshExec(runCmd, sshConfig);
