@@ -46,5 +46,6 @@ exports.handler = async argv => {
 
     await properties.save(instanceFile);
 
-    await execCmd("forever stopall & forever start lib/lb.js");
+    await execCmd("forever stopall");
+    await execCmd("forever start lib/lb.js");
 };
