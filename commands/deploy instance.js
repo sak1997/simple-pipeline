@@ -31,61 +31,63 @@ exports.handler = async argv => {
     let properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
     doHelper = new DOHelper(process.env.DIGITAL_OCEAN_TOKEN);
 
-    // Delete Blue server
-    await doHelper.deleteDroplet(properties.get("BLUE_ID"));
+    let poolSize = process.env.POOL_SIZE;
 
-    // Change Green Server to Blue
-    properties.set("BLUE_ID", properties.get("GREEN_ID"));
-    properties.set("BLUE_IP", properties.get("GREEN_IP"));
+    for (let i = 0; i < poolSize; i++) {
+      // Delete Blue server
+      await doHelper.deleteDroplet(properties.get("BLUE_ID_" + i));
 
-    // Create new Green server
-    let greenDropletId = await doHelper.createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
-    let greenDropletIp = await doHelper.getDropletIp(greenDropletId);
-    properties.set("GREEN_ID", greenDropletId);
-    properties.set("GREEN_IP", greenDropletIp);
+      // Change Green Server to Blue
+      properties.set("BLUE_ID_" + i, properties.get("GREEN_ID_" + i));
+      properties.set("BLUE_IP_" + i, properties.get("GREEN_IP_" + i));
+
+      // Create new Green server
+      let greenDropletId = await doHelper.createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
+      let greenDropletIp = await doHelper.getDropletIp(greenDropletId);
+      properties.set("GREEN_ID_" + i, greenDropletId);
+      properties.set("GREEN_IP_" + i, greenDropletIp);
 
 
-    await new Promise(r => setTimeout(r, 120000));
+      await new Promise(r => setTimeout(r, 120000));
 
-    sshConfig = {
-      host: greenDropletIp,
-      port: 22,
-      user: 'root',
-      identifyFile: process.env.PVT_KEY_PATH
-    }
-
-    let jobName = pathUtil.basename( job_name );
-    let buildFile = pathUtil.basename( build_file );
-
-    let data = YamlParser.parse('./' + buildFile);
-
-    if (processor == 'Arm64') {
-        helper = new M1Helper();
-    } else {
-        helper = new WinHelper();
-    }
-    await helper.updateSSHConfig();
-
-    // logPrefix = helper.getLogPrefix();
-
-    // await execCmd(`mkdir logs`);
-    // await execCmd(`mkdir ` + logPrefix);
-
-    await scpExec(outputDirPath, "~", helper.sshConfig, sshConfig);
-
-    await runSetup(data);
-
-    for (const job of data.jobs) {
-      if (job.name === jobName) {
-        await runJob(job);
+      sshConfig = {
+        host: greenDropletIp,
+        port: 22,
+        user: 'root',
+        identifyFile: process.env.PVT_KEY_PATH
       }
+
+      let jobName = pathUtil.basename( job_name );
+      let buildFile = pathUtil.basename( build_file );
+
+      let data = YamlParser.parse('./' + buildFile);
+
+      if (processor == 'Arm64') {
+          helper = new M1Helper();
+      } else {
+          helper = new WinHelper();
+      }
+      await helper.updateSSHConfig();
+
+      // logPrefix = helper.getLogPrefix();
+
+      // await execCmd(`mkdir logs`);
+      // await execCmd(`mkdir ` + logPrefix);
+
+      await scpExec(outputDirPath, "~", helper.sshConfig, sshConfig);
+
+      await runSetup(data);
+
+      for (const job of data.jobs) {
+        if (job.name === jobName) {
+          await runJob(job);
+        }
+      }
+
+      // Save instance info
+      await properties.save(instanceFile);
+
     }
-
-    // Save instance info
-    await properties.save(instanceFile);
-
-    //await new Promise(r => setTimeout(r, 1000));
-    //await execCmd("echo 'Deploy Completed - go to localhost:3090/<your url> to check'");
 
     process.exit(0);
 
