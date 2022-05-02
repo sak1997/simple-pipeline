@@ -1,0 +1,35 @@
+setup:
+  - sudo systemctl disable apt-daily-upgrade.timer
+  - sudo systemctl mask apt-daily-upgrade.service
+  - sudo systemctl disable apt-daily.timer
+  - sudo systemctl mask apt-daily.service
+  - sudo timedatectl set-ntp off
+  - sudo timedatectl set-ntp on
+  - sleep 1
+  - sudo apt-get update
+  - sudo apt update
+  - sudo apt remove flash-kernel -y
+  - sudo apt-get install npm -y
+jobs:
+  - name: build
+    steps:
+      - name: download prj
+        run: git clone github.com/pnicolli/demo-calculator
+      - name: run npm install
+        run: npm install --prefix demo-calculator/
+      - name: build the project
+        run: npm run build --prefix demo-calculator/ > npmbuild.txt
+      - name: store build output
+        shared:  ~/npmbuild.txt
+  - name: test
+    steps:
+      - name: run tests
+        run: cd demo-calculator/ && npm test -- --coverage > ../npmtest.txt
+  - name: deploy
+    steps:
+      - name: download prj
+        run: git clone github.com/pnicolli/demo-calculator
+      - name: run npm install
+        run: npm install --prefix demo-calculator/
+      - name: run 
+        backgroundRun: npm start --prefix demo-calculator/
