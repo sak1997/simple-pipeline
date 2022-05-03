@@ -9,15 +9,22 @@ const DOHelper = require('../lib/digitalOceanHelper')
 const PropertiesReader = require('properties-reader');
 const instanceFile = "instance.properties"
 
-exports.command = 'prod up';
+exports.command = 'prod up1';
 exports.desc = 'Create/Destroy production environment';
 exports.builder = yargs => {
     yargs.options({
+      'port': {
+        alias: 'p',
+        describe: 'Deployment port (defaults to 8080)',
+        type: 'number',
+        default: 8080
+      }
     });
 };
 
 exports.handler = async argv => {
-    const { processor } = argv;
+    const { processor, port } = argv;
+    console.log(port);
 
     let token = process.env.DIGITAL_OCEAN_TOKEN;
     // console.log("here " + process.env.DIGITAL_OCEAN_TOKEN);
@@ -46,5 +53,6 @@ exports.handler = async argv => {
 
     await properties.save(instanceFile);
 
-    await execCmd("forever stopall & forever start lib/lb.js");
+    await execCmd("forever stopall");
+    await execCmd("forever start lib/lb.js");
 };

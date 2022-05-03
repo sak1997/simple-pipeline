@@ -13,11 +13,18 @@ exports.command = 'prod up';
 exports.desc = 'Create/Destroy production environment';
 exports.builder = yargs => {
     yargs.options({
+      'port': {
+        alias: 'p',
+        describe: 'Deployment port (defaults to 8080)',
+        type: 'number',
+        default: 8080
+      }
     });
 };
 
 exports.handler = async argv => {
-    const { processor } = argv;
+    const { processor, port } = argv;
+    console.log(port);
 
     let token = process.env.DIGITAL_OCEAN_TOKEN;
     // console.log("here " + process.env.DIGITAL_OCEAN_TOKEN);
@@ -27,8 +34,10 @@ exports.handler = async argv => {
     console.log(chalk.green("Creating production environment..."));
 
     var fd = fs.openSync(instanceFile, 'a');
-    const properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
+    let properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
     properties.set("POOL_SIZE", poolSize);
+    properties.set("PORT", port);
+
 
     for (let i=0; i<poolSize; i++) {
       await helper.deleteDroplet(properties.get("BLUE_ID_" + i));

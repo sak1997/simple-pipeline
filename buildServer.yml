@@ -1,0 +1,22 @@
+setup:
+  - sudo apt-get update
+  - sudo apt-get remove flash-kernel -y
+  - sudo apt-get install nodejs -y
+  - sudo apt-get install npm -y
+jobs:
+  - name: build
+    steps:
+      - run: git clone github.com/mars/heroku-cra-node.git
+      - run: npm install --prefix heroku-cra-node
+      - run: mkdir -p server
+      - run: cp -r heroku-cra-node/server server/
+      - run: cp heroku-cra-node/package.json server/
+      - shared: server/
+  - name: test
+    steps:
+      - run: git clone github.com/mars/heroku-cra-node.git
+      - run: npm --prefix heroku-cra-node/react-ui test -- --watchAll=false
+  - name: deploy
+    steps:
+      - run: npm install --prefix output/server
+      - backgroundRun: node output/server/server
