@@ -1,0 +1,30 @@
+setup:
+  - sudo apt update
+  - sudo apt-get update
+  - sleep 30
+  - sudo apt autoremove -y flash-kernel
+  - curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
+  - sudo apt-get install -y nodejs
+  - sudo npm install --global @leon-ai/cli
+  - sudo leon create birth --yes
+jobs:
+  - name: build
+    steps:
+      - name: clone repo
+        run: git clone github.com/leon-ai/leon.git -b master
+      - name: install
+        run: cd ~/leon && npm install 
+      - name: build
+        run: cd ~/leon && sudo npm run build 
+  - name: test
+    steps:
+      - name: test
+        run: cd ~/leon && sudo npm run test:unit
+  - name: run
+    steps:
+      - name: run
+        run: cd ~/leon && sudo npm start
+  - name: analyze
+    steps:
+      - name: static analysis
+        run:  ~/leon/scripts/train.js

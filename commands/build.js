@@ -8,7 +8,7 @@ const fs = require('fs');
 const { help } = require('yargs');
 const pathUtil = require("path");
 const oneTimeSetup = true;
-const outputDirPath = "/home/ubuntu/output"
+const outputDirPath = "~/output"
 
 
 
@@ -46,7 +46,6 @@ exports.handler = async argv => {
 
     await sshExec("touch .status", helper.sshConfig, false);
     await sshExec("cat .status > .status", helper.sshConfig, false);
-
     fs.readFile('./.status', 'utf8' , (err, data) => {
       if (err) {
         console.error(err)
@@ -60,7 +59,7 @@ exports.handler = async argv => {
       }
       console.log(data);
     })
-
+    setupAlreadyDone = false;
     const aptInstallCmd = 'sudo apt-get install -y ';
     const aptUpdateCmd = 'sudo apt-get update';
     let data = YamlParser.parse('./' + buildFile);
@@ -69,34 +68,22 @@ exports.handler = async argv => {
     let runCmd;
     let isAptUpdate = false;
 
-    // await execCmd(`rm setup.sh`);
-
     await execCmd(`echo '#!/bin/bash' > setup.sh`);
     await execCmd(`echo 'set -e' >> setup.sh`);
     await execCmd(`echo 'set -x' >> setup.sh`);
 
-    // // Remove if pkg is fixed
-    // const rmDamagedPkg1 = 'sudo apt remove flash-kernel -y';
-    // // const rmDamagedPkg2 = 'sudo apt remove u-boot-rpi:arm64 -y'
-    // await execCmd('echo "' + rmDamagedPkg1 + '" >> setup.sh');
-    // // await execCmd('echo "' + rmDamagedPkg2 + '" >> setup.sh');
-
-    // await execCmd('echo "' + aptInstallCmd + '" >> setup.sh');
     if(oneTimeSetup && (!setupAlreadyDone)) {
+    console.log("here"+setupAlreadyDone);
+    
       for (const task of data.setup) {
           setupCmd = '';
           if(task.hasOwnProperty("package")){
-              // if(!isAptUpdate){
-              //     await execCmd('echo "' + aptUpdateCmd + '" >> setup.sh');
-              //     isAptUpdate = true;
-              // }
             setupCmd = aptInstallCmd + task.package;
           } else{
             setupCmd = task;
           }
           await execCmd('echo "' + setupCmd + '" >> setup.sh');
       }
-      // await new Promise(r => setTimeout(r, 10000));
       await helper.moveToBuildEnv();
       await sshExec("bash setup.sh | tee " + logPrefix + "setup.log", helper.sshConfig).then(function () {
         console.log("=====================================================================")
@@ -118,12 +105,12 @@ exports.handler = async argv => {
             if (job.steps) {
               for (const step of job.steps) {
                   if (step.shared) {
-                    await sshExec("sudo mkdir -p "+outputDirPath, helper.sshConfig);
-                    await sshExec("sudo cp -r " + step.shared + " " + outputDirPath, helper.sshConfig)
+                    await sshExec('"'+"sudo mkdir -p "+outputDirPath + '"', helper.sshConfig);
+                    await sshExec('"'+ "sudo cp -r " + step.shared + " " + outputDirPath +'"', helper.sshConfig)
                   } else if (step.run){
                     let x = step.run.substring(0, 9);
                     if (x === 'git clone') {
-                      step.run = 'git -C "'+ step.run.substring(step.run.lastIndexOf('/')+1, step.run.lastIndexOf('.')) + '" pull ||' +x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + step.run.substring(10);
+                      step.run = 'git -C "'+ step.run.substring(step.run.lastIndexOf('/')+1, step.run.lastIndexOf('.')) + '" pull ||' +x + ' http://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + step.run.substring(10);
                     }
                     runCmd = '"'+step.run+'"';
                     await sshExec(runCmd, helper.sshConfig);

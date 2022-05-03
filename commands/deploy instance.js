@@ -11,6 +11,7 @@ const WinHelper = require('../lib/winHelper');
 const pathUtil = require("path");
 const YamlParser = require('../lib/yamlParser');
 const { config } = require('dotenv');
+const outputDirPath = "~/output"
 var sshConfig = null;
 exports.command = 'deploy instance <job_name> <build_file>';
 exports.desc = 'Create/Destroy production environment';
@@ -28,7 +29,7 @@ exports.handler = async argv => {
 
     let properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
     sshConfig = {
-      host: properties.get("IP"),
+      host: properties.get("GREEN_IP"),
       port: 22,
       user: 'root',
       identifyFile: process.env.PVT_KEY_PATH
@@ -47,30 +48,8 @@ exports.handler = async argv => {
     logPrefix = helper.getLogPrefix();  
     await helper.updateSSHConfig();
 
-    prodSetupCompleted = false;
-    await execCmd(`mkdir logs`);
-    await execCmd(`mkdir ` + logPrefix);
+    await scpExec(outputDirPath, "~", helper.sshConfig, sshConfig);
 
-    await sshExec("touch .status", sshConfig, false);
-    await sshExec("cat .status > .status", sshConfig, false);
-
-    fs.readFile('./.status', 'utf8' , (err, data) => {
-      if (err) {
-        console.error(err)
-        return
-      }
-      if(data.includes('setupCompleted=True')) {
-        setupAlreadyDone = true;
-      }
-      if(data.includes('prodSetupCompleted=True')) {
-        prodSetupAlreadyDone = true;
-      }
-      console.log(data);
-    })
-
-  
-
-     
     await runSetup(data);
 
     for (const job of data.jobs) {
@@ -105,34 +84,30 @@ async function createSetup(data) {
     }
       await execCmd('echo "' + setupCmd + '" >> setup.sh');
   }
+
 }
 
 async function runSetup(data) {
-  await helper.moveToDeployEnv();
+ // await helper.moveToDeployEnv();
   await createSetup(data);
-  await scpExec("setup.sh", "~", sshConfig);
+  await scpExec("setup.sh", "~", null,sshConfig);
   await sshExec("bash setup.sh", sshConfig).then(function () {
      console.log("Setup Completed!")
-     sshExec("'echo setupCompleted=True >> .status'", sshConfig);
   });;
 }
 
 async function runJob(job) {
   runCmd = '';
   console.log(chalk.green("Executing build job : "+ job.name));
-  let config;
   if (job.steps) {
     for (const step of job.steps) {
-        let x = step.run.substring(0, 4);
-        config = helper.sshConfig;
-        if (x === 'scp ') {
-            step.run = x + '-i ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ~/iTrust2-v10/iTrust2/target/iTrust2-10.jar root@' + sshConfig.host + ':~';
-          }
-        if (x === 'java') {
-          config = sshConfig;
-      }
-        runCmd = '"'+step.run+'"';
-        await sshExec(runCmd, config);
+       let cmd = step.run;
+       let x = cmd.substring(0, 9);
+        if (x === 'git clone') {
+          cmd = 'git -C "'+ cmd.substring(cmd.lastIndexOf('/')+1, cmd.lastIndexOf('.')) + '" pull || ' + x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + cmd.substring(10);
+        }
+        runCmd = '"'+cmd+'"';
+        await sshExec(runCmd, sshConfig);
     }
   }
 }

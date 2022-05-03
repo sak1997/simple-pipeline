@@ -20,8 +20,6 @@ exports.handler = async argv => {
     const { processor } = argv;
 
     let token = process.env.DIGITAL_OCEAN_TOKEN;
-    // console.log("here " + process.env.DIGITAL_OCEAN_TOKEN);
-  // console.log(process.env);
 
   headers =
   {
@@ -34,11 +32,11 @@ exports.handler = async argv => {
     var fd = fs.openSync(instanceFile, 'a');
     const properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
 
-    deleteDroplet(properties.get("BLUE_ID"));
-    let blueDropletId = await createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
-    let blueDropletIp = await getDropletIp(blueDropletId);
-    properties.set("BLUE_ID", blueDropletId);
-    properties.set("BLUE_IP", blueDropletIp);
+    // deleteDroplet(properties.get("BLUE_ID"));
+    // let blueDropletId = await createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
+    // let blueDropletIp = await getDropletIp(blueDropletId);
+    // properties.set("BLUE_ID", blueDropletId);
+    // properties.set("BLUE_IP", blueDropletIp);
 
     deleteDroplet(properties.get("GREEN_ID"));
     let greenDropletId = await createDroplet(process.env.DIGITAL_OCEAN_TOKEN, process.env.PUB_KEY_PATH);
@@ -83,11 +81,7 @@ async function createDroplet(token, sshKey) {
     }).catch( err =>
       console.error(chalk.red(`createDroplet: ${err}`))
     );
-    // console.log("response = " + response);
     if( !response ) return;
-
-    // console.log(response.status);
-    // console.log(response.data);
     console.log("the droplet ID is " + response.data.droplet.id)
 
     if(response.status == 202)

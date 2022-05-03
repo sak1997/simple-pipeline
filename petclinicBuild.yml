@@ -1,0 +1,30 @@
+setup:
+  # - sudo systemctl disable apt-daily-upgrade.timer
+  # - sudo systemctl mask apt-daily-upgrade.service
+  # - sudo systemctl disable apt-daily.timer
+  # - sudo systemctl mask apt-daily.service
+  # - sudo timedatectl set-ntp off
+  # - sudo timedatectl set-ntp on
+  - sleep 1
+  - sudo apt-get update
+  - sleep 50
+  - sudo apt autoremove -y flash-kernel
+  - {package: maven, version: 3.6.3}
+  - {package: openjdk-11-jdk, version: 11.0.14}
+jobs:
+  - name: build
+    steps:
+      - name: download prj
+        run: git clone github.com/spring-projects/spring-petclinic.git
+      - name: create application.yml
+        run: cd ~/spring-petclinic && bash ./mvnw package
+      - name: copy artifact
+        shared: spring-petclinic/target/spring-petclinic-2.6.0-SNAPSHOT.jar
+  - name: deploy
+    steps:
+      - name: run in cloud
+        run: java -jar output/spring-petclinic-2.6.0-SNAPSHOT.jar
+  - name: test
+    steps:
+      - name: unit test
+        run: cd ~/spring-petclinic && mvn test

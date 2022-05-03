@@ -4,7 +4,7 @@ const M1Helper = require('../lib/m1Helper');
 const WinHelper = require('../lib/winHelper');
 
 exports.command = 'init';
-exports.desc = 'Prepare tool';
+exports.desc = 'Prepare ';
 exports.builder = yargs => {
     yargs.options({
     });
