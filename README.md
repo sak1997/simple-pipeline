@@ -153,18 +153,12 @@ http://localhost:3090/iTrust2/login
 
 ## Experiences
 
-We compared and contrasted blue-green vs canary deployments, and decided to use blue-green. We also thought about using digital ocean vs other providers but elected to use Digital Ocean due to convenience, simplicity and our previous experiences working with it. 
 
-Additionally, we wrote a proxy in node js that would keep running and redirect requests to the currently running green server. This proxy refreshes its green server using the instance.properties file every few seconds to ensure that it routes requests to the current green server. 
 
 
 ## Challenges
 
-We faced challenges in understanding how to set up Digital Ocean droplets with SSH enabled by default, and after going through their documentation, we found the options required to do this.
 
-We also had to understand how we could set up a proxy server that serve requests to the current server, whatever it may be, and refresh this every few seconds to ensure the current green server is always being used for incoming requests. 
-
-For this, we found that we could have the proxy server (lib/lb.js) could read the instance.properties file every few seconds and update itself should the green server be changed.
 
 
 ## Screencasts
