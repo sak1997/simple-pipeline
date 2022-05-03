@@ -8,14 +8,22 @@ jobs:
     steps:
       - run: git clone github.com/mars/heroku-cra-node.git
       - run: npm install --prefix heroku-cra-node
+      - run: mkdir -p server
+      - run: cp -r heroku-cra-node/server server/
+      - run: cp heroku-cra-node/package.json server/
       - run: npm install --prefix heroku-cra-node/react-ui
       - run: npm run build --prefix heroku-cra-node
-      - shared: heroku-cra-node/react-ui/build
+      - run: mkdir -p server/react-ui
+      - run: cp -r heroku-cra-node/react-ui/build server/react-ui/
+      - shared: server/
   - name: test
     steps:
       - run: git clone github.com/mars/heroku-cra-node.git
       - run: npm --prefix heroku-cra-node/react-ui test -- --watchAll=false
   - name: deploy
     steps:
+      - run: touch output/server/.env
+      - run: npm install --prefix output/server
+      - backgroundRun: node output/server/server
       - run: npm install -g serve
-      - backgroundRun: serve -s output/build -l 8080
+      - backgroundRun: serve -s output/server/react-ui/build -l 5000
