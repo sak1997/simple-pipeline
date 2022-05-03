@@ -1,0 +1,59 @@
+setup:
+  - sudo apt-get update
+  # - sudo apt autoremove -y
+  - sudo apt remove flash-kernel -y
+  - {package: maven, version: 3.6.3}
+  - {package: openjdk-8-jdk, version: 8.0.14}
+  - sudo apt purge openjdk-11-* -y
+jobs:
+  - name: build
+    steps:
+      - name: download prj
+        run: git clone github.com/SpringSource/spring-mvc-showcase.git
+      - name: package
+        run: mvn -f spring-mvc-showcase/ package
+      - name: move to shared dir
+        shared: spring-mvc-showcase/target/spring-mvc-showcase.war
+  - name: test
+    steps:
+      - name: download prj
+        run: git clone github.com/SpringSource/spring-mvc-showcase.git
+      - name: test
+        run: mvn -f spring-mvc-showcase/ clean test
+  - name: deploy
+    steps:
+      - run: sudo groupadd tomcat
+      - run: sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+      - run: curl -o /tmp/apache-tomcat-8.5.78.tar.gz https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.78/bin/apache-tomcat-8.5.78.tar.gz
+      - run: sudo mkdir /opt/tomcat
+      - run: sudo tar xzvf /tmp/apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
+      - run: sudo chown -R tomcat /opt/tomcat/webapps/ /opt/tomcat/work/ /opt/tomcat/temp/ /opt/tomcat/logs/
+      - run: sudo chgrp -R tomcat /opt/tomcat
+      - run: sudo chmod -R g+r /opt/tomcat/conf
+      - run: sudo chmod g+x /opt/tomcat/conf
+      - run: sudo touch /etc/systemd/system/tomcat.service
+      - run: echo [Unit] > /etc/systemd/system/tomcat.service
+      - run: echo Description=Apache Tomcat Web Application Container >> /etc/systemd/system/tomcat.service
+      - run: echo After=network.target >> /etc/systemd/system/tomcat.service
+      - run: echo [Service] >> /etc/systemd/system/tomcat.service
+      - run: echo Type=forking >> /etc/systemd/system/tomcat.service
+      - run: echo Environment=JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre >> /etc/systemd/system/tomcat.service
+      - run: echo Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid >> /etc/systemd/system/tomcat.service
+      - run: echo Environment=CATALINA_HOME=/opt/tomcat >> /etc/systemd/system/tomcat.service
+      - run: echo Environment=CATALINA_BASE=/opt/tomcat >> /etc/systemd/system/tomcat.service
+      - run: echo Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC' >> /etc/systemd/system/tomcat.service
+      - run: echo Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom' >> /etc/systemd/system/tomcat.service
+      - run: echo ExecStart=/opt/tomcat/bin/startup.sh >> /etc/systemd/system/tomcat.service
+      - run: echo ExecStop=/opt/tomcat/bin/shutdown.sh >> /etc/systemd/system/tomcat.service
+      - run: echo User=tomcat >> /etc/systemd/system/tomcat.service
+      - run: echo Group=tomcat >> /etc/systemd/system/tomcat.service
+      - run: echo UMask=0007 >> /etc/systemd/system/tomcat.service
+      - run: echo RestartSec=10 >> /etc/systemd/system/tomcat.service
+      - run: echo Restart=always >> /etc/systemd/system/tomcat.service
+      - run: echo [Install] >> /etc/systemd/system/tomcat.service
+      - run: echo WantedBy=multi-user.target >> /etc/systemd/system/tomcat.service
+      - run: rm -rf /opt/tomcat/webapps/ROOT
+      - run: cp output/spring-mvc-showcase.war /opt/tomcat/webapps/ROOT.war
+      - run: sudo systemctl daemon-reload
+      - run: sudo systemctl start tomcat
+      - run: sudo ufw allow 8080
