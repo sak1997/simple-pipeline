@@ -20,16 +20,14 @@ jobs:
       - name: build the project
         run: npm run build --prefix demo-calculator/ > npmbuild.txt
       - name: store build output
-        shared:  ~/npmbuild.txt
+        shared:  ~/demo-calculator/build
   - name: test
     steps:
       - name: run tests
         run: cd demo-calculator/ && npm test -- --coverage > ../npmtest.txt
   - name: deploy
     steps:
-      - name: download prj
-        run: git clone github.com/pnicolli/demo-calculator
-      - name: run npm install
-        run: npm install --prefix demo-calculator/
+      - name: install serve
+        run: npm install -g serve
       - name: run 
-        backgroundRun: npm start --prefix demo-calculator/
+        backgroundRun: serve -s output/build -l 8080

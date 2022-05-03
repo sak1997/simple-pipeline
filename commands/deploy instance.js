@@ -29,7 +29,7 @@ exports.handler = async argv => {
     console.log(chalk.green("Deploying in production environment..."));
 
     let properties = PropertiesReader(instanceFile, { writer: { saveSections: true } });
-    doHelper = new DOHelper(process.env.DIGITAL_OCEAN_TOKEN);
+    let doHelper = new DOHelper(process.env.DIGITAL_OCEAN_TOKEN);
 
     // Delete Blue server
     await doHelper.deleteDroplet(properties.get("BLUE_ID"));
@@ -71,7 +71,15 @@ exports.handler = async argv => {
     // await execCmd(`mkdir logs`);
     // await execCmd(`mkdir ` + logPrefix);
 
-    await scpExec(outputDirPath, "~", helper.sshConfig, sshConfig);
+    //await scpExec(outputDirPath, "~", helper.sshConfig, sshConfig, false);
+
+    await sshExec("sudo cp -r output /bakerx", helper.sshConfig);
+
+    console.log(" ip is " + sshConfig.host);
+
+    await scpExec("output", "~", null, sshConfig);
+
+    await scpExec(outputDirPath, "~", helper.sshConfig, sshConfig, false);
 
     await runSetup(data);
 

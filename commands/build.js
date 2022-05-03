@@ -127,6 +127,16 @@ exports.handler = async argv => {
                     }
                     runCmd = '"'+step.run+'"';
                     await sshExec(runCmd, helper.sshConfig);
+                  } else if (step.scriptRun) {
+                    console.log("script run command running!")
+                    await execCmd("echo " + step.scriptRun + " > tempscript.sh ");
+                    await execCmd('dos2unix tempscript.sh ');
+
+                    await sshExec("cp /bakerx/tempscript.sh ~/tempscript.sh", helper.sshConfig);
+                    //await scpExec("tempscript.sh", "~", null, sshConfig);
+
+                    sshExec("bash tempscript.sh",  helper.sshConfig, true);          
+                    sshExec("rm tempscript.sh",  helper.sshConfig, true);
                   }
               }
             }

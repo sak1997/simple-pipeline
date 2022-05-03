@@ -19,30 +19,27 @@ jobs:
         run: git clone github.com/reljicd/django-blog.git
       - name: install django and other requirements
         run: pip install -r django-blog/requirements.txt 
-      - name: migrate for django
-        run: python3 django-blog/manage.py migrate
-      - name: load sample data
-        run: python3 django-blog/manage.py loaddata users posts comments
-      - name: build docker image
-        run: sudo docker build -t reljicd/django-blognew -f django-blog/docker/Dockerfile django-blog/ > dockerbuildoutput.txt
-      - name: store build output
-        shared: ~/dockerbuildoutput.txt
-  - name: test
-    steps:
-      - name: run tests after build
-        run: python3 django-blog/manage.py test blog > blog-tests.txt
-  - name: deploy
-    steps:
-      - name: download prj
-        run: git clone github.com/reljicd/django-blog.git
-      - name: install django and other requirements
-        run: pip install -r django-blog/requirements.txt 
       - name: edit settings.py
         scriptRun: sed -i "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \[\'"*"\'\]/"  django-blog/mysite/settings.py
       - name: migrate for django
         run: python3 django-blog/manage.py migrate
       - name: load sample data
         run: python3 django-blog/manage.py loaddata users posts comments
-      - name: run 
-        backgroundRun: python3 django-blog/manage.py runserver 0.0.0.0:8080
+      - name: build docker image
+        run: sudo docker build -t reljicd/django-blognew -f django-blog/docker/Dockerfile django-blog/ > dockerbuildoutput.txt
+      - name: save docker image as tar
+        run: sudo docker save -o ~/dockerimage.tar reljicd/django-blognew
+      - name: store build output
+        shared: ~/dockerimage.tar
+  - name: test
+    steps:
+      - name: run tests after build
+        run: python3 django-blog/manage.py test blog > blog-tests.txt
+  - name: deploy
+    steps:
+      - name: save docker image from tar
+        run: docker load -i output/dockerimage.tar
+      - name: run docker image
+        backgroundRun: docker run --rm -i -p 8000:8000 reljicd/django-blognew
+
 
