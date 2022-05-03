@@ -1,0 +1,50 @@
+setup:
+  - sudo systemctl disable apt-daily-upgrade.timer
+  - sudo systemctl mask apt-daily-upgrade.service
+  - sudo systemctl disable apt-daily.timer
+  - sudo systemctl mask apt-daily.service
+  - sudo timedatectl set-ntp off
+  - sudo timedatectl set-ntp on
+  - sleep 1
+  - sudo apt-get update
+  - sudo apt update
+  - sudo apt remove flash-kernel -y
+  - apt install python3 -y
+  - apt install python3-pip -y
+  - apt install docker.io -y
+jobs:
+  - name: build
+    steps:
+      - name: download prj
+        run: git clone github.com/reljicd/django-blog.git
+      - name: install django and other requirements
+        run: pip install -r django-blog/requirements.txt 
+      - name: edit settings.py
+        run: sed -i "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \[\'"*"\'\]/"  django-blog/mysite/settings.py
+      - name: migrate for django
+        run: python3 django-blog/manage.py migrate
+      - name: load sample data
+        run: python3 django-blog/manage.py loaddata users posts comments
+      - name: build docker image
+        run: docker build -t reljicd/django-blognew -f django-blog/docker/Dockerfile django-blog/ > dockerbuildoutput.txt
+      - name: store build output
+        shared: ~/dockerbuildoutput.txt
+  - name: test
+    steps:
+      - name: run tests after build
+        run: python3 django-blog/manage.py test blog > ../blog-tests.txt
+  - name: deploy
+    steps:
+      - name: download prj
+        run: git clone github.com/reljicd/django-blog.git
+      - name: install django and other requirements
+        run: pip install -r django-blog/requirements.txt 
+      - name: edit settings.py
+        run: sed -i "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \[\'"*"\'\]/"  django-blog/mysite/settings.py
+      - name: migrate for django
+        run: python3 django-blog/manage.py migrate
+      - name: load sample data
+        run: python3 django-blog/manage.py loaddata users posts comments
+      - name: run 
+        backgroundRun: python3 django-blog/manage.py runserver 0.0.0.0:8000
+
