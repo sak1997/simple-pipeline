@@ -9,8 +9,8 @@
 |-|-|
 |Tasks | [click here](#tasks-and-progress) |
 |Setup Instructions| [click here](#setup-instructions)|
+|Build YML Specs|[click here](#build-yml-specs)|
 |Commands| [Click here](#commands)|
-|Results| [click here](#results)|
 |Experiences | [click here](#experiences)|
 |Challenges | [click here](#challenges)|
 |Screencast | [click here](#screencasts)|
@@ -38,8 +38,8 @@
 
           IP=192.168.10.112
           VM_NAME=pipeline-vm
-          USER_NAME=<your username for the Personal access token>
-          TOKEN=<your personal access token>
+          USER_NAME=<your username for GitHub>
+          TOKEN=<your personal access token for GitHub>
           DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
           PUB_KEY_PATH=<path to public key>
           PVT_KEY_PATH=<path to private key>  
@@ -51,7 +51,7 @@
         <p>
 
           VM_NAME='vm1'
-          USER_NAME=<your username for the Personal access token>
+          USER_NAME=<your username for GitHub>
           TOKEN=<your personal access token for GitHub>
           DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
           PUB_KEY_PATH=<path to public key>
@@ -73,6 +73,49 @@ http://localhost:3090/iTrust2/login
 
 - Sometimes, we see issues with the Digital Ocean droplets having network issues and failing - this is intermittent and in case the deploy stops due to some reason, we recommend running pipeline prod up and pipeline deploy once more. 
 
+## Build YML Specs
+  ```
+  setup:
+     // All the commands in this block will be executed sequentially for all the jobs and commands
+     - command 1
+     - command 2
+     .
+     .
+     .
+  jobs:
+     // Add all the jobs here
+     // Job spec for build and deploy
+     - name: job1
+       steps:
+          // usage 1: The command in the run block will be executed
+          - name: description
+            run: command
+          // usage 2: The command in the backgroundRun block will be executed async.
+                      The command will be executed in the background of the vm.
+                      The host machine will not wait for this command to be completed.
+                      [Only supported in deploy command in this version]
+          - name: description
+            backgroundRun: command
+          // usage 3: The file/directory in <path to file> will be copied to a directory (output) when the job is used in build command.
+                      The content of this directory (output) will be copied to the home directory of the deploy machine (droplet) on each deploy.
+                      [Only supported in build command in this version]
+          - name: description
+            shared: <path to file>
+     // Job spec for mutation
+     - name: job2
+       mutation:
+          url: <repo url>
+          iterations: <no of iterations>
+          mutationfile: <file to mutate> // marqdown.js is used by default
+          snapshots:
+          - <snapshot1>
+          - <snapshot2>
+          .
+          .
+              
+          
+  ```
+          
 ## Commands
   - ```pipeline init ```
     * Creates a vm in the host machine.
@@ -90,7 +133,6 @@ http://localhost:3090/iTrust2/login
       + Change the current green droplet to blue.
       + Add the newly created droplet as green.
           
-## Results
 
 
 ## Experiences
