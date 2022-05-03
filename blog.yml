@@ -9,9 +9,9 @@ setup:
   - sudo apt-get update
   - sudo apt update
   - sudo apt remove flash-kernel -y
-  - apt install python3 -y
-  - apt install python3-pip -y
-  - apt install docker.io -y
+  - sudo apt install python3 -y
+  - sudo apt install python3-pip -y
+  - sudo apt install docker.io -y
 jobs:
   - name: build
     steps:
@@ -19,20 +19,18 @@ jobs:
         run: git clone github.com/reljicd/django-blog.git
       - name: install django and other requirements
         run: pip install -r django-blog/requirements.txt 
-      - name: edit settings.py
-        run: sed -i "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \[\'"*"\'\]/"  django-blog/mysite/settings.py
       - name: migrate for django
         run: python3 django-blog/manage.py migrate
       - name: load sample data
         run: python3 django-blog/manage.py loaddata users posts comments
       - name: build docker image
-        run: docker build -t reljicd/django-blognew -f django-blog/docker/Dockerfile django-blog/ > dockerbuildoutput.txt
+        run: sudo docker build -t reljicd/django-blognew -f django-blog/docker/Dockerfile django-blog/ > dockerbuildoutput.txt
       - name: store build output
         shared: ~/dockerbuildoutput.txt
   - name: test
     steps:
       - name: run tests after build
-        run: python3 django-blog/manage.py test blog > ../blog-tests.txt
+        run: python3 django-blog/manage.py test blog > blog-tests.txt
   - name: deploy
     steps:
       - name: download prj
@@ -40,11 +38,11 @@ jobs:
       - name: install django and other requirements
         run: pip install -r django-blog/requirements.txt 
       - name: edit settings.py
-        run: sed -i "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \[\'"*"\'\]/"  django-blog/mysite/settings.py
+        scriptRun: sed -i "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \[\'"*"\'\]/"  django-blog/mysite/settings.py
       - name: migrate for django
         run: python3 django-blog/manage.py migrate
       - name: load sample data
         run: python3 django-blog/manage.py loaddata users posts comments
       - name: run 
-        backgroundRun: python3 django-blog/manage.py runserver 0.0.0.0:8000
+        backgroundRun: python3 django-blog/manage.py runserver 0.0.0.0:8080
 

@@ -144,7 +144,7 @@ async function runJob(job) {
   console.log(chalk.green("Executing build job : "+ job.name));
   if (job.steps) {
     for (const step of job.steps) {
-      let cmd = step.run || step.backgroundRun;
+      let cmd = step.run || step.backgroundRun || step.scriptRun;
       if (cmd){
         let x = cmd.substring(0, 9);
         if (x === 'git clone') {
@@ -155,6 +155,13 @@ async function runJob(job) {
           sshExec(runCmd, sshConfig, true);
           await new Promise(r => setTimeout(r, 1000));
           await execCmd("echo Background Command Run ");
+        } else if(step.scriptRun) {
+          console.log("script run command running!")
+          await execCmd("echo " + cmd + " > tempscript.sh ");
+          await execCmd('dos2unix tempscript.sh ');
+          await scpExec("tempscript.sh", "~", null, sshConfig);
+          sshExec("bash tempscript.sh", sshConfig, true);          
+          sshExec("rm tempscript.sh", sshConfig, true);
         } else {
           runCmd = '"' + cmd + '"';
           await sshExec(runCmd, sshConfig);
