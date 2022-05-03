@@ -1,13 +1,22 @@
 # Pipeline Tool 
 
 ### A pipeline tool to automate builds.
-### Milestone 3 - Deployment
+### F0-aselvam Final Exam
+
+| | |
+|-|-|
+| **Name** | Ashok Kumar Selvam |
+| **Unity ID** | aselvam |
+| **Email** | aselvam@ncsu.edu |
+
+
 
 ## Contents
 
 | Topic | Location |
 |-|-|
 |Tasks | [click here](#tasks-and-progress) |
+|New Features| [Click here](#new-features)|
 |Setup Instructions| [click here](#setup-instructions)|
 |Build YML Specs|[click here](#build-yml-specs)|
 |Commands| [Click here](#commands)|
@@ -24,6 +33,9 @@
 | Deploy job |  Done - please see build.yml for the deploy job |  
 | Deployment strategy | Done - please see commands/build.js for implementation | proxy server to route requests, switch from blue to green on re-running deploy command
 | Screencast and Milestone Report | Please see below for the screencast
+
+## New Features
+
 
 ## Setup Instructions
 
@@ -42,7 +54,8 @@
           TOKEN=<your personal access token for GitHub>
           DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
           PUB_KEY_PATH=<path to public key>
-          PVT_KEY_PATH=<path to private key>  
+          PVT_KEY_PATH=<path to private key> 
+          POOL_SIZE=<count of blue and green server pool>
 
      </details>
 
@@ -56,6 +69,7 @@
           DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
           PUB_KEY_PATH=<path to public key>
           PVT_KEY_PATH=<path to private key>
+          POOL_SIZE=<count of blue and green server pool>
      </details>
 
 #### Notes
@@ -122,9 +136,10 @@ http://localhost:3090/iTrust2/login
           
   - ```pipeline build <job-name> <path to build yml file>```
     * Executs the scripts in setup and the spcified job from the build yml file in the vm. 
-  - ```pipeline prod up```
+  - ```pipeline prod up [-p <port no>]```
     * Deletes all the existing droplets and creates new blue and green droplets.
     * Start the loadbalancer. Restart if the loadbalancer is already running.
+    * The app will use the 8080 port by default. If the port option is given in the command, it will be server in the specified port number.
   - ```pipeline deploy inatance <job-name> <path to build yml file>```
     * Create a new droplet.
     * Executs the scripts in setup and the spcified job from the build yml file in the new droplet.
@@ -132,6 +147,7 @@ http://localhost:3090/iTrust2/login
       + Delete the current blue droplet.
       + Change the current green droplet to blue.
       + Add the newly created droplet as green.
+  - ```pipeline chaos```
           
 
 
@@ -155,11 +171,3 @@ For this, we found that we could have the proxy server (lib/lb.js) could read th
 
 The screencast can be found at the below link:
 https://drive.google.com/file/d/1gb6x6w6kSX54NHHnu9SNFbCGV3LturrO/view?usp=sharing
-
-## Team Members
-
-| Name | Unity ID |
-| ------------- |:-------------:|
-|Ashok Kumar Selvam | aselvam |
-|Sri Athithya Kruth Babu | sbabu |
-|Smayana Pidugu | spidugu |
