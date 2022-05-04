@@ -128,6 +128,10 @@ jobs:
         run: npm install -g serve
       - name: run 
         backgroundRun: serve -s output/build -l 8080
+  - name: monitor
+    steps:
+      - name: use this URL for monitoring
+        run: /
 
 ```
 
@@ -195,7 +199,11 @@ jobs:
       - name: save docker image from tar
         run: docker load -i output/dockerimage.tar
       - name: run docker image
-        backgroundRun: docker run --rm -i -p 8000:8000 reljicd/django-blognew
+        backgroundRun: docker run --rm -i -p 8080:8000 reljicd/django-blognew
+  - name: monitor
+    steps:
+      - name: use this URL for monitoring
+        run: /admin
 
 ```
 
@@ -206,10 +214,19 @@ jobs:
 The new feature implemented in F0-sbabu is a monitoring feature for a blue-green deployment. This feature can be run with the below command:
 
 ```
-pipeline monitor
+pipeline monitor <monitor job in .yml file> <.yml file location>
 ```
 
 This command is supposed to be run only after the ```pipeline deploy instance``` command has completed running. The command sets up a monitoring server (droplet on Digital Ocean) and its IP is saved in the ```instance.properties``` files in the project home directory with the name ```MONITOR_IP```. The monitoring dashboard can be accessed through by going to ```MONITOR_IP:8080``` on a browser. 
+
+This command expects a job in the .yml file that look something like the below example. The job expects the endpoint for the HTTP request [localhost:8000/<endpoint>] in the run command:
+
+```
+  - name: monitor
+    steps:
+      - name: use this URL for monitoring
+        run: /admin <or the URL endpoint to test>
+```
 
 ## Experiences
 
@@ -230,6 +247,14 @@ Another challenge I faced was getting the IPs of the monitoring server and the b
 ## Screencasts
 
 The screencast can be found at the below link:
+
+calc.yml screencast: (needs ncsu.edu drive access)
+
+https://drive.google.com/file/d/1Pq88o55YWSdJhs1bQz34OM7pf83_r2og/view?usp=sharing
+
+blog.yml screencast: (needs ncsu.edu drive access)
+
+https://drive.google.com/file/d/1XytwgaBVsfk6h2evNg4w-nQs4aYRZfU_/view?usp=sharing
 
 ## Student Information
 Student Name: Sri Athithya Kruth Babu
