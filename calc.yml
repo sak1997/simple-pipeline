@@ -31,3 +31,7 @@ jobs:
         run: npm install -g serve
       - name: run 
         backgroundRun: serve -s output/build -l 8080
+  - name: monitor
+    steps:
+      - name: use this URL for monitoring
+        run: /

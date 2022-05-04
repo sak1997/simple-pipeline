@@ -131,8 +131,8 @@ exports.handler = async argv => {
                     console.log("script run command running!")
                     await execCmd("echo " + step.scriptRun + " > tempscript.sh ");
                     await execCmd('dos2unix tempscript.sh ');
-
-                    await sshExec("cp /bakerx/tempscript.sh ~/tempscript.sh", helper.sshConfig);
+                    await('sleep 5s');
+                    await sshExec("cp /bakerx/tempscript.sh ./tempscript.sh", helper.sshConfig);
                     //await scpExec("tempscript.sh", "~", null, sshConfig);
 
                     sshExec("bash tempscript.sh",  helper.sshConfig, true);          

@@ -74,13 +74,9 @@ exports.handler = async argv => {
     //await scpExec(outputDirPath, "~", helper.sshConfig, sshConfig, false);
 
     await sshExec("sudo cp -r output /bakerx", helper.sshConfig);
-
     console.log(" ip is " + sshConfig.host);
-
     await scpExec("output", "~", null, sshConfig);
-
     await scpExec(outputDirPath, "~", helper.sshConfig, sshConfig, false);
-
     await runSetup(data);
 
     for (const job of data.jobs) {

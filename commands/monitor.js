@@ -8,10 +8,12 @@ const execCmd = require('../lib/execCmd');
 const scpExec = require('../lib/scp');
 const sshExec = require('../lib/ssh');
 const DOHelper = require('../lib/digitalOceanHelper')
+const pathUtil = require("path");
+const YamlParser = require('../lib/yamlParser');
 const PropertiesReader = require('properties-reader');
 const instanceFile = "instance.properties"
 const monitoringpath = "Monitoring"
-exports.command = 'monitor';
+exports.command = 'monitor <job_name> <build_file>';
 exports.desc = 'Monitoring setup for blue-green';
 exports.builder = yargs => {
     yargs.options({
@@ -19,12 +21,36 @@ exports.builder = yargs => {
 };
 
 exports.handler = async argv => {
-    const { processor } = argv;
+    const { processor, job_name, build_file } = argv;
+
+    let jobName = pathUtil.basename( job_name );
+    let buildFile = pathUtil.basename( build_file );
+    let data = YamlParser.parse('./' + buildFile);
+
+    let myurl = "not yet read";
+    try {
+        for (const job of data.jobs) {
+            if (job.name === jobName) {
+            //await runJob(job);
+            for (const step of job.steps) {
+                let cmd = step.run;
+                if(cmd) {
+                    await execCmd("echo " + cmd + " > Monitoring/dashboard/url.txt");
+                    myurl = cmd;
+                }
+            }
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        console.log("did not parse job properly!");
+        console.log("url read = " + myurl);
+
+    }
+ 
 
     let token = process.env.DIGITAL_OCEAN_TOKEN;
-    // console.log("here " + process.env.DIGITAL_OCEAN_TOKEN);
-    // console.log(process.env);
-    helper = new DOHelper(token);
+    let helper = new DOHelper(token);
 
     console.log(chalk.green("Creating monitoring environment..."));
 
