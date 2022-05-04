@@ -300,7 +300,7 @@ http://localhost:3090/iTrust2/login
 
 
 ## Challenges
- -  In the previous version of the application, the sourse port of the application is hard coded to 8080. Since, some applications use different port, I added an option in prod up command to specify the port number.
+ -  In the previous version of the application, the source port of the application is hard coded to 8080. Since, some applications use different port, I added an option in prod up command to specify the port number.
  - Using chaos scripts when there is only one server makes it very hard to test So, I updated the tool to deploy in pool of servers instead and added a variable in the .env file to specify the POOL_SIZE.
 
 
