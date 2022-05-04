@@ -31,6 +31,9 @@ exports.handler = async argv => {
     // console.log(process.env);
     helper = new DOHelper(token);
     let poolSize = process.env.POOL_SIZE;
+    if (!process.env.POOL_SIZE) {
+      poolSize = 1;
+    }
     console.log(chalk.green("Creating production environment..."));
 
     var fd = fs.openSync(instanceFile, 'a');
