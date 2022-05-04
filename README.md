@@ -1,13 +1,16 @@
 # Pipeline Tool 
 
 ### A pipeline tool to automate builds.
-### F0-aselvam Final Exam
+### Final Exam
 
 | | |
 |-|-|
 | **Name** | Ashok Kumar Selvam |
 | **Unity ID** | aselvam |
 | **Email** | aselvam@ncsu.edu |
+| **Development Env** | M1 MAC |
+
+Note: The new features are not tested on Windows or Intel Mac.
 
 
 
@@ -15,27 +18,26 @@
 
 | Topic | Location |
 |-|-|
-|Tasks | [click here](#tasks-and-progress) |
 |New Features| [Click here](#new-features)|
-|Setup Instructions| [click here](#setup-instructions)|
-|Build YML Specs|[click here](#build-yml-specs)|
+|Setup Instructions| [Click here](#setup-instructions)|
+|Build YML Specs|[Click here](#build-yml-specs)|
 |Commands| [Click here](#commands)|
-|Experiences | [click here](#experiences)|
-|Challenges | [click here](#challenges)|
-|Screencast | [click here](#screencasts)|
+|Apps Deployed|[Click here](#apps-deployed)|
+|Experiences | [Click here](#experiences)|
+|Challenges | [Click here](#challenges)|
+|Screencast | [Click here](#screencasts)|
 
-
-## Tasks and Progress
-
-| Task | Progress | Challenges
-|-|-|-|
-| Provisioning | Completed - generates droplet IP and ID in instance.properties file | Choose a provider, understand how to set up droplets on DO with SSH enabled
-| Deploy job |  Done - please see build.yml for the deploy job |  
-| Deployment strategy | Done - please see commands/build.js for implementation | proxy server to route requests, switch from blue to green on re-running deploy command
-| Screencast and Milestone Report | Please see below for the screencast
 
 ## New Features
-
+  - Chaos Command:
+    * Added a new command ```pipeline chaos``` which can be executed to start one of the random chaos scripts added in the tool.
+    * Refer [Commands](#commands) section for more details.
+  - Server Pool:
+    * The application is now deployed in a pool of blue/green servers instead of one blue and one green server.
+    * The pool size must be added in the .env file. The default pool size is 1.
+    * During the deployment process, one by one green servers are changed to blue and new green server is added to the pool when its ready.
+    * The load balancer uses round robbin to decide which server shoud be used at any point in time.
+  
 
 ## Setup Instructions
 
@@ -149,7 +151,131 @@ http://localhost:3090/iTrust2/login
       + Add the newly created droplet as green.
   - ```pipeline chaos```
           
+## Apps Deployed
+  
+### Spring MVC Showcase
 
+<details>
+<summary>Build.yml</summary>
+  <p>
+
+    setup:
+      - sudo apt-get update
+      - sudo apt remove flash-kernel -y
+      - {package: maven, version: 3.6.3}
+      - {package: openjdk-8-jdk, version: 8.0.14}
+      - sudo apt purge openjdk-11-* -y
+    jobs:
+      - name: build
+        steps:
+          - name: download prj
+            run: git clone github.com/SpringSource/spring-mvc-showcase.git
+          - name: package
+            run: mvn -f spring-mvc-showcase/ package
+          - name: move to shared dir
+            shared: spring-mvc-showcase/target/spring-mvc-showcase.war
+      - name: test
+        steps:
+          - name: download prj
+            run: git clone github.com/SpringSource/spring-mvc-showcase.git
+          - name: test
+            run: mvn -f spring-mvc-showcase/ clean test
+      - name: deploy
+        steps:
+          - run: sudo groupadd tomcat
+          - run: sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+          - run: curl -o /tmp/apache-tomcat-8.5.78.tar.gz https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.78/bin/apache-tomcat-8.5.78.tar.gz
+          - run: sudo mkdir /opt/tomcat
+          - run: sudo tar xzvf /tmp/apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
+          - run: sudo chown -R tomcat /opt/tomcat/webapps/ /opt/tomcat/work/ /opt/tomcat/temp/ /opt/tomcat/logs/
+          - run: sudo chgrp -R tomcat /opt/tomcat
+          - run: sudo chmod -R g+r /opt/tomcat/conf
+          - run: sudo chmod g+x /opt/tomcat/conf
+          - run: sudo touch /etc/systemd/system/tomcat.service
+          - run: echo [Unit] > /etc/systemd/system/tomcat.service
+          - run: echo Description=Apache Tomcat Web Application Container >> /etc/systemd/system/tomcat.service
+          - run: echo After=network.target >> /etc/systemd/system/tomcat.service
+          - run: echo [Service] >> /etc/systemd/system/tomcat.service
+          - run: echo Type=forking >> /etc/systemd/system/tomcat.service
+          - run: echo Environment=JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre >> /etc/systemd/system/tomcat.service
+          - run: echo Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid >> /etc/systemd/system/tomcat.service
+          - run: echo Environment=CATALINA_HOME=/opt/tomcat >> /etc/systemd/system/tomcat.service
+          - run: echo Environment=CATALINA_BASE=/opt/tomcat >> /etc/systemd/system/tomcat.service
+          - run: echo Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC' >> /etc/systemd/system/tomcat.service
+          - run: echo Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom' >> /etc/systemd/system/tomcat.service
+          - run: echo ExecStart=/opt/tomcat/bin/startup.sh >> /etc/systemd/system/tomcat.service
+          - run: echo ExecStop=/opt/tomcat/bin/shutdown.sh >> /etc/systemd/system/tomcat.service
+          - run: echo User=tomcat >> /etc/systemd/system/tomcat.service
+          - run: echo Group=tomcat >> /etc/systemd/system/tomcat.service
+          - run: echo UMask=0007 >> /etc/systemd/system/tomcat.service
+          - run: echo RestartSec=10 >> /etc/systemd/system/tomcat.service
+          - run: echo Restart=always >> /etc/systemd/system/tomcat.service
+          - run: echo [Install] >> /etc/systemd/system/tomcat.service
+          - run: echo WantedBy=multi-user.target >> /etc/systemd/system/tomcat.service
+          - run: rm -rf /opt/tomcat/webapps/ROOT
+          - run: cp output/spring-mvc-showcase.war /opt/tomcat/webapps/ROOT.war
+          - run: sudo systemctl daemon-reload
+          - run: sudo systemctl start tomcat
+          - run: sudo ufw allow 8080
+
+</details>
+
+#### Commands
+  - ```pipeline init```
+  - ```pipeline build build springMVCApp.yml```
+  - ```pipeline prod up```
+  - ```pipeline deploy instance deploy springMVCApp.yml```
+
+#### Deployment URL
+[localhost:3090/](localhost:3090/)
+          
+### React app
+
+<details>
+<summary>Build.yml</summary>
+  <p>
+
+    setup:
+      - sudo apt-get update
+      - sudo apt-get remove flash-kernel -y
+      - sudo apt-get install nodejs -y
+      - sudo apt-get install npm -y
+    jobs:
+      - name: build
+        steps:
+          - run: git clone github.com/mars/heroku-cra-node.git
+          - run: npm install --prefix heroku-cra-node
+          - run: mkdir -p server
+          - run: cp -r heroku-cra-node/server server/
+          - run: cp heroku-cra-node/package.json server/
+          - run: npm install --prefix heroku-cra-node/react-ui
+          - run: npm run build --prefix heroku-cra-node
+          - run: mkdir -p server/react-ui
+          - run: cp -r heroku-cra-node/react-ui/build server/react-ui/
+          - shared: server/
+      - name: test
+        steps:
+          - run: git clone github.com/mars/heroku-cra-node.git
+          - run: npm --prefix heroku-cra-node/react-ui test -- --watchAll=false
+      - name: deploy
+        steps:
+          - run: touch output/server/.env
+          - run: npm install --prefix output/server
+          - backgroundRun: node output/server/server
+          - run: npm install -g serve
+          - backgroundRun: serve -s output/server/react-ui/build -l 5000
+
+
+</details>
+
+#### Commands
+  - ```pipeline init```
+  - ```pipeline build build springMVCApp.yml```
+  - ```pipeline prod up -p 5000``` [Note: The server port is hard coded to 5000 in this react app so, the backend server will not work without this port option]
+  - ```pipeline deploy instance deploy springMVCApp.yml```
+
+#### Deployment URL
+[localhost:3090/](localhost:3090/)
 
 ## Experiences
 
@@ -162,6 +288,3 @@ http://localhost:3090/iTrust2/login
 
 
 ## Screencasts
-
-The screencast can be found at the below link:
-https://drive.google.com/file/d/1gb6x6w6kSX54NHHnu9SNFbCGV3LturrO/view?usp=sharing
