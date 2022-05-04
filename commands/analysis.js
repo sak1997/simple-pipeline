@@ -39,7 +39,7 @@ exports.handler = async argv => {
 		if (job.name === jobName) {
 			if (job.steps) {
 				for (const step of job.steps) {
-					sshExec('"'+"cp" + " "+ step.run+" "+ suffix_path+'"', helper.sshConfig);
+					await sshExec('"'+"cp" + " "+ step.run+" "+ suffix_path+'"', helper.sshConfig);
 
 					console.log( "Parsing ast and running static analysis of "+step.run.substring(step.run.lastIndexOf('/')+1));
 					var builders = {};
