@@ -1,10 +1,10 @@
 # Pipeline Tool - F0 [Unity ID: sbabu]
 
-Student Name: Sri Athithya Kruth Babu
+Student Name: *Sri Athithya Kruth Babu*
 
-Unity ID: sbabu
+Unity ID: *_**sbabu**_*
 
-Developed and tested in Windows environment - not tested in Mac or M1 environments.
+*Developed and tested in **Windows environment** - not tested in Mac or M1 environments.*
 
 ### A pipeline tool to automate builds.
 ### F0 - monitoring feature and 2 jobs
@@ -36,7 +36,7 @@ Please see below for more about the challenges and experiences in the correspond
 
 #### Notes
 
-- F0-sbabu has been written and tested on a Windows machine. Based on a discussion on discord with the TAs, I understand that is accepted since I do not have an M1 system to test with.
+- F0-sbabu has been written and tested only on a **Windows machine**. 
 - Digital Ocean droplets created have their IP and droplet ID stored in the instance.properties in the project's main directory.
 - There is a load balancer (lib/lb.js) running that changes the IP to the current green machine IP. The load balancer can be accessesed by using localhost:3090 instead of the droplet IP. After typing it in, follow it up with the rest of the URL as you would when using the normal IP.
 
