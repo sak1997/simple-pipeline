@@ -30,7 +30,8 @@ Note: The new features are not tested on Windows or Intel Mac.
 
 ## New Features
   - Chaos Command:
-    * Added a new command ```pipeline chaos``` which can be executed to start one of the random chaos scripts added in the tool.
+    * Added a new command which can be executed to start one of the random chaos scripts added in the tool.
+    *  ```pipeline chaos [--ip <ip of the server>] [-c <no of times to run chaos>] [-s <server type (BLUE/GREEN)>] [-t <type of chaos>]``` 
     * Refer [Commands](#commands) section for more details.
   - Server Pool:
     * The application is now deployed in a pool of blue/green servers instead of one blue and one green server.
@@ -149,7 +150,13 @@ http://localhost:3090/iTrust2/login
       + Delete the current blue droplet.
       + Change the current green droplet to blue.
       + Add the newly created droplet as green.
-  - ```pipeline chaos```
+  - ```pipeline chaos [--ip <ip of the server>] [-c <no of times to run chaos>] [-s <server type (BLUE/GREEN)>] [-t <type of chaos>]```
+    * Executes one of the chaos scripts in the production server.
+    * Options:
+      + --ip: Runs chaos scripts on a specific server.
+      + --count / -c: Runs specified no of chaos scripts in random.
+      + --server / -s: Runs chaos scripts on a specific pool of servers.
+      + --type / -t: Runs a specific chaos (chaos script name without .sh at the end).
           
 ## Apps Deployed
   
@@ -223,11 +230,12 @@ http://localhost:3090/iTrust2/login
 #### Commands
   - ```pipeline init```
   - ```pipeline build build springMVCApp.yml```
+  - ```pipeline build test springMVCApp.yml```
   - ```pipeline prod up```
   - ```pipeline deploy instance deploy springMVCApp.yml```
 
 #### Deployment URL
-[localhost:3090/](localhost:3090/)
+[http://localhost:3090/](http://localhost:3090/)
           
 ### React app
 
@@ -270,12 +278,13 @@ http://localhost:3090/iTrust2/login
 
 #### Commands
   - ```pipeline init```
-  - ```pipeline build build springMVCApp.yml```
+  - ```pipeline build build reactApp.yml```
+  - ```pipeline build test reactApp.yml```
   - ```pipeline prod up -p 5000``` [Note: The server port is hard coded to 5000 in this react app so, the backend server will not work without this port option]
-  - ```pipeline deploy instance deploy springMVCApp.yml```
+  - ```pipeline deploy instance deploy reactApp.yml```
 
 #### Deployment URL
-[localhost:3090/](localhost:3090/)
+[http://localhost:3090/](http://localhost:3090/)
 
 ## Experiences
 
