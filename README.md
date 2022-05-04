@@ -301,4 +301,4 @@ http://localhost:3090/iTrust2/login
 - Screencast for Spring MVC App
 [![Screencast for Spring MVC App](https://media.github.ncsu.edu/user/23524/files/7125046b-4279-411b-90c0-781e73a51477)](https://drive.google.com/file/d/15lAQuHPRME_2ad34yGxJKgQgrD8_puXU/view?usp=sharing)
 - Screencast for React App
-[![]()]()
+[![Screencast for React App](https://media.github.ncsu.edu/user/23524/files/7125046b-4279-411b-90c0-781e73a51477)](https://drive.google.com/file/d/1VO6VNOhEV23wkls-NgydOY4b1TGUcF5H/view?usp=sharing)
