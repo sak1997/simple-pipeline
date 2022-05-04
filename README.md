@@ -228,6 +228,8 @@ http://localhost:3090/iTrust2/login
 </details>
 
 #### Commands
+  - ```npm install```
+  - ```npm link```
   - ```pipeline init```
   - ```pipeline build build springMVCApp.yml```
   - ```pipeline build test springMVCApp.yml```
@@ -277,6 +279,8 @@ http://localhost:3090/iTrust2/login
 </details>
 
 #### Commands
+  - ```npm install```
+  - ```npm link```
   - ```pipeline init```
   - ```pipeline build build reactApp.yml```
   - ```pipeline build test reactApp.yml```
