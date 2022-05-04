@@ -16,16 +16,16 @@ Note: The new features are not tested on Windows or Intel Mac.
 
 ## Contents
 
-| Topic | Location |
+|S.No | Topic |
 |-|-|
-|New Features| [Click here](#new-features)|
-|Setup Instructions| [Click here](#setup-instructions)|
-|Build YML Specs|[Click here](#build-yml-specs)|
-|Commands| [Click here](#commands)|
-|Apps Deployed|[Click here](#apps-deployed)|
-|Experiences | [Click here](#experiences)|
-|Challenges | [Click here](#challenges)|
-|Screencast | [Click here](#screencasts)|
+|1|[New Features](#new-features)|
+|2|[Setup Instructions](#setup-instructions)|
+|3|[Build YML Specs](#build-yml-specs)|
+|4|[Commands](#commands)|
+|5|[Apps Deployed](#apps-deployed)|
+|6|[Experiences](#experiences)|
+|7|[Challenges](#challenges)|
+|8|[Screencast](#screencasts)|
 
 
 ## New Features
@@ -291,18 +291,23 @@ http://localhost:3090/iTrust2/login
 [http://localhost:3090/](http://localhost:3090/)
 
 ## Experiences
+- Chaos Command:
+  * I learnt a lot regarding how much stress the actual production server will undergo in real life. The various chaos scripts I used helped me understand various way in which a server can be stressed.
 
-
+- Deployment:
+  * In the process of searching for the application to deploy using this pipeline tool, I learnt various ways in which applications with different tech stack are deployed. 
+  * I also learnt that although the tools used for deployment for different tech stack are different, in high level they use the same principle.
 
 
 ## Challenges
-
+ -  In the previous version of the application, the sourse port of the application is hard coded to 8080. Since, some applications use different port, I added an option in prod up command to specify the port number.
+ - Using chaos scripts when there is only one server makes it very hard to test So, I updated the tool to deploy in pool of servers instead and added a variable in the .env file to specify the POOL_SIZE.
 
 
 
 ## Screencasts
 
-- Screencast for Spring MVC App
+- Screencast for Spring MVC App (NCSU account required)
 [![Screencast for Spring MVC App](https://media.github.ncsu.edu/user/23524/files/7125046b-4279-411b-90c0-781e73a51477)](https://drive.google.com/file/d/15lAQuHPRME_2ad34yGxJKgQgrD8_puXU/view?usp=sharing)
-- Screencast for React App
+- Screencast for React App (NCSU account required)
 [![Screencast for React App](https://media.github.ncsu.edu/user/23524/files/7125046b-4279-411b-90c0-781e73a51477)](https://drive.google.com/file/d/1VO6VNOhEV23wkls-NgydOY4b1TGUcF5H/view?usp=sharing)
