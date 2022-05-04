@@ -19,7 +19,7 @@ exports.builder = yargs => {
       },
       'ip': {
         describe: 'IP of the server to run chaos on',
-        type: 'number',
+        type: 'string',
         default: null
       },
       'type': {
