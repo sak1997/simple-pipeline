@@ -1,6 +1,5 @@
 setup:
   - sudo apt-get update
-  # - sudo apt autoremove -y
   - sudo apt remove flash-kernel -y
   - {package: maven, version: 3.6.3}
   - {package: openjdk-8-jdk, version: 8.0.14}
