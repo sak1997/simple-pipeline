@@ -192,7 +192,7 @@ jobs:
 
 ### Command: pipeline analyze <job-name> <path to build yml file>
 
-This command is supposed to be run only after the ```pipeline build ``` command has completed running. The command performs static analysis on JS file mentioned in the job in yml file. It copies file from project repo of localVM to host machine and analysis the Javascript file for packages, literals, function parameters, cyclomatic complexity and Halstead value.  
+This command is supposed to be run only after the ```pipeline build ``` command has completed running. The command performs static analysis on JS file mentioned in the job in yml file. It copies file from project repo of localVM to host machine and analyzes the javascript file for packages, literals, function parameters, ,function length, cyclomatic complexity and Halstead value.  
            
 ```
   - name: analyse
