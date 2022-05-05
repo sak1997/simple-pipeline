@@ -1,0 +1,1143 @@
+
+Athithya@DESKTOP-DM1OEHR MINGW64 ~/Desktop/Classes/devops/ProjectM1/DEVOPS-20 (M2)
+$ pipeline init
+Preparing computing environment...
+Running Win init...........
+WARNING: THIS WILL CLEAR ANY VM WITH THE VMNAME IN THE .env FILE
+bakerx delete vm pipeline-vm
+
+
+
+vm named pipeline-vm deleted.
+
+bakerx pull focal cloud-images.ubuntu.com
+
+
+bakerx run pipeline-vm focal --ip 192.168.10.112 --sync --memory 3072 > vmcreate.txt
+- Waiting for VM network to initialize... (can take a few seconds or minutes on slower hosts).
+
+
+touch vminfo.txt
+
+
+echo user=vagrant > vminfo.txt
+
+
+echo ip=192.168.10.112 >> vminfo.txt
+
+
+echo private_key is located at : >> vminfo.txt
+
+
+cat vmcreate.txt | grep "ssh -i" | awk '{print $3}' >> vminfo.txt
+
+
+
+Athithya@DESKTOP-DM1OEHR MINGW64 ~/Desktop/Classes/devops/ProjectM1/DEVOPS-20 (M2)
+$
+
+Athithya@DESKTOP-DM1OEHR MINGW64 ~/Desktop/Classes/devops/ProjectM1/DEVOPS-20 (M2)
+$ pipeline build mutation-coverage build.yml
+cat vmcreate.txt | grep "ssh -i" | awk '{print $3}'
+
+"C:/Users/Athithya/.bakerx/insecure_private_key"
+
+"C:/Users/Athithya/.bakerx/insecure_private_key"
+
+started running build job
+mkdir logs
+Error: Command failed: mkdir logs
+A subdirectory or file logs already exists.
+
+    at ChildProcess.exithandler (node:child_process:397:12)
+    at ChildProcess.emit (node:events:390:28)
+    at maybeClose (node:internal/child_process:1064:16)
+    at Process.ChildProcess._handle.onexit (node:internal/child_process:301:5) {
+  killed: false,
+  code: 1,
+  signal: null,
+  cmd: 'mkdir logs'
+}
+
+mkdir logs\1650167798781\
+
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 touch .status
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 cat .status > .status
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+
+echo '#!/bin/bash' > setup.sh
+
+
+
+echo 'set -e' >> setup.sh
+
+
+echo 'set -x' >> setup.sh
+
+
+echo "sudo apt-get update" >> setup.sh
+
+
+echo "sudo apt-get install -y maven" >> setup.sh
+
+
+echo "sudo apt-get install -y openjdk-11-jdk" >> setup.sh
+
+
+echo "export DEBIAN_FRONTEND="noninteractive"" >> setup.sh
+
+
+echo "sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password rootpw'" >> setup.sh
+
+
+echo "sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password rootpw'" >> setup.sh
+
+
+echo "sudo mkdir -p /etc/mysql/conf.d && sudo apt-key adv --keyserver pgp.mit.edu --recv-keys 5072E1F5" >> setup.sh
+
+
+echo "echo "deb http://repo.mysql.com/apt/ubuntu/ trusty mysql-8.0" | sudo tee -a /etc/apt/sources.list.d/mysql.list" >> setup.sh
+
+
+echo "sudo apt-get install -y mysql-server" >> setup.sh
+
+
+sed -i 's/"//g' setup.sh
+
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 cp /bakerx/setup.sh ~/setup.sh
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash setup.sh | tee logs\1650167798781\setup.log
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+setup.sh: line 1: #!/bin/bash: No such file or directory
+setup.sh: line 2: set -e: command not found
+setup.sh: line 3: set -x: command not found
+W: GPG error: http://repo.mysql.com/apt/ubuntu trusty InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 467B942D3A79BD29
+E: The repository 'http://repo.mysql.com/apt/ubuntu trusty InRelease' is not signed.
+W: Target Packages (mysql-8.0/binary-amd64/Packages) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:2
+W: Target Packages (mysql-8.0/binary-all/Packages) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:2
+W: Target Translations (mysql-8.0/i18n/Translation-en) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:2
+W: Target CNF (mysql-8.0/cnf/Commands-amd64) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:2
+W: Target CNF (mysql-8.0/cnf/Commands-all) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:2
+Warning: apt-key output should not be parsed (stdout is not a terminal)
+gpg: keyserver receive failed: No data
+W: Target Packages (mysql-8.0/binary-amd64/Packages) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:2
+W: Target Packages (mysql-8.0/binary-all/Packages) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:2
+W: Target Translations (mysql-8.0/i18n/Translation-en) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:2
+W: Target CNF (mysql-8.0/cnf/Commands-amd64) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:2
+W: Target CNF (mysql-8.0/cnf/Commands-all) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:2
+W: Target Packages (mysql-8.0/binary-amd64/Packages) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:3
+W: Target Packages (mysql-8.0/binary-all/Packages) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:3
+W: Target Translations (mysql-8.0/i18n/Translation-en) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:3
+W: Target CNF (mysql-8.0/cnf/Commands-amd64) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:3
+W: Target CNF (mysql-8.0/cnf/Commands-all) is configured multiple times in /etc/apt/sources.list.d/mysql.list:1 and /etc/apt/sources.list.d/mysql.list:3
+
+Hit:1 http://archive.ubuntu.com/ubuntu focal InRelease
+Get:2 http://archive.ubuntu.com/ubuntu focal-updates InRelease [114 kB]
+Get:3 http://repo.mysql.com/apt/ubuntu trusty InRelease [34.0 kB]
+Get:4 http://security.ubuntu.com/ubuntu focal-security InRelease [114 kB]
+Get:5 http://archive.ubuntu.com/ubuntu focal-backports InRelease [108 kB]
+Err:3 http://repo.mysql.com/apt/ubuntu trusty InRelease
+  The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 467B942D3A79BD29
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+maven is already the newest version (3.6.3-1).
+0 upgraded, 0 newly installed, 0 to remove and 104 not upgraded.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+openjdk-11-jdk is already the newest version (11.0.14.1+1-0ubuntu1~20.04).
+0 upgraded, 0 newly installed, 0 to remove and 104 not upgraded.
+Executing: /tmp/apt-key-gpghome.gZgD893shJ/gpg.1.sh --keyserver pgp.mit.edu --recv-keys 5072E1F5
+deb http://repo.mysql.com/apt/ubuntu/ trusty mysql-8.0
+Reading package lists...
+Building dependency tree...
+Reading state information...
+mysql-server is already the newest version (8.0.28-0ubuntu0.20.04.3).
+0 upgraded, 0 newly installed, 0 to remove and 104 not upgraded.
+
+=====================================================================
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 'echo setupCompleted=True >> .status'
+Executing build job : mutation-coverage
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 rm -rf ~/testing
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 'cp -R /bakerx/testing ~/'
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 rm -rf checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+
+git clone https://sbabu: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@github.com/chrisparnin/checkbox.io-micro-preview
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 git clone https://sbabu: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@github.com/chrisparnin/checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+Cloning into 'checkbox.io-micro-preview'...
+
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/testingSetup.sh | tee logs\1650167798781\testingSetup.log
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ sudo apt install chromium-browser -y
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+dpkg-preconfigure: unable to re-open stdin:
++ echo 'Running sudo apt-get install -y libatk1.0-0'
++ sudo apt-get install -y libatk1.0-0
++ echo 'Running sudo apt-get install -y libatk-bridge2.0-0'
++ sudo apt-get install -y libatk-bridge2.0-0
++ echo 'Running sudo apt-get install -y libcups2'
++ sudo apt-get install -y libcups2
++ echo 'Running sudo apt-get install -y libgtk-3-0'
++ sudo apt-get install -y libgtk-3-0
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+dpkg-preconfigure: unable to re-open stdin:
++ echo 'Running sudo apt-get install -y libgbm1'
++ sudo apt-get install -y libgbm1
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+dpkg-preconfigure: unable to re-open stdin:
++ echo 'Running sudo apt install nodejs -y'
++ sudo apt install nodejs -y
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+dpkg-preconfigure: unable to re-open stdin:
++ echo 'Running sudo apt install npm -y'
++ sudo apt install npm -y
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+dpkg-preconfigure: unable to re-open stdin:
++ sudo npm install forever -g
+npm WARN deprecated chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
+npm WARN deprecated fsevents@1.2.13: fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
+npm WARN deprecated source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
+npm WARN deprecated source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
+npm WARN deprecated resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated
+npm WARN deprecated urix@0.1.0: Please see https://github.com/lydell/urix#deprecated
+npm WARN notsup Unsupported engine for winston@3.7.2: wanted: {"node":">= 12.0.0"} (current: {"node":"10.19.0","npm":"6.14.4"})
+npm WARN notsup Not compatible with your version of node/npm: winston@3.7.2
+npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@^1.2.7 (node_modules/forever/node_modules/chokidar/node_modules/fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@1.2.13: wanted {"os":"darwin","arch":"any"} (current: {"os":"linux","arch":"x64"})
+
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following NEW packages will be installed:
+  chromium-browser
+0 upgraded, 1 newly installed, 0 to remove and 104 not upgraded.
+Need to get 48.3 kB of archives.
+After this operation, 164 kB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu focal-updates/universe amd64 chromium-browser amd64 1:85.0.4183.83-0ubuntu0.20.04.2 [48.3 kB]
+Fetched 48.3 kB in 0s (110 kB/s)
+Selecting previously unselected package chromium-browser.
+(Reading database ... 66556 files and directories currently installed.)
+Preparing to unpack .../chromium-browser_1%3a85.0.4183.83-0ubuntu0.20.04.2_amd64.deb ...
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+=> Installing the chromium snap
+==> Checking connectivity with the snap store
+==> Installing the chromium snap
+chromium 100.0.4896.127 from Canonical✓ installed
+=> Snap installation complete
+Unpacking chromium-browser (1:85.0.4183.83-0ubuntu0.20.04.2) ...
+Setting up chromium-browser (1:85.0.4183.83-0ubuntu0.20.04.2) ...
+update-alternatives: using /usr/bin/chromium-browser to provide /usr/bin/x-www-browser (x-www-browser) in auto mode
+update-alternatives: using /usr/bin/chromium-browser to provide /usr/bin/gnome-www-browser (gnome-www-browser) in auto mode
+Processing triggers for mime-support (3.64ubuntu1) ...
+Running sudo apt-get install -y libatk1.0-0
+Running sudo apt-get install -y libatk-bridge2.0-0
+Running sudo apt-get install -y libcups2
+Running sudo apt-get install -y libgtk-3-0
+Running sudo apt-get install -y libgbm1
+Running sudo apt install nodejs -y
+Running sudo apt install npm -y
+/usr/local/bin/forever -> /usr/local/lib/node_modules/forever/bin/forever
++ forever@4.0.3
+added 287 packages from 185 contributors in 19.558s
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 'echo testingSetupCompleted=True >> .status'
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/testingPrep.sh | tee logs\1650167798781\testingPrep.log
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ rm -rf testing/mutations
++ rm -rf testing/image_snapshots
++ rm -rf testing/html_snapshots
++ mkdir testing/mutations
++ mkdir testing/image_snapshots
++ mkdir testing/html_snapshots
++ npm install --prefix testing
+npm WARN read-shrinkwrap This version of npm is compatible with lockfileVersion@1, but package-lock.json was generated for lockfileVersion@2. I'll try to do my best with it!
+
+npm WARN testing@1.0.0 No description
+npm WARN testing@1.0.0 No repository field.
+npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@2.3.2 (node_modules/fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@2.3.2: wanted {"os":"darwin","arch":"any"} (current: {"os":"linux","arch":"x64"})
+
++ npm link --prefix testing
+npm WARN testing@1.0.0 No description
+npm WARN testing@1.0.0 No repository field.
+npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@2.3.2 (node_modules/fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@2.3.2: wanted {"os":"darwin","arch":"any"} (current: {"os":"linux","arch":"x64"})
+
+
+
+> puppeteer@13.5.2 install /home/vagrant/testing/node_modules/puppeteer
+> node install.js
+
+Chromium (970485) downloaded to /home/vagrant/testing/node_modules/puppeteer/.local-chromium/linux-970485
+added 30 packages from 12 contributors, removed 19 packages, updated 228 packages and audited 260 packages in 18.328s
+
+19 packages are looking for funding
+  run `npm fund` for details
+
+found 7 vulnerabilities (2 moderate, 5 high)
+  run `npm audit fix` to fix them, or `npm audit` for details
+removed 1 package and audited 260 packages in 1.867s
+
+19 packages are looking for funding
+  run `npm fund` for details
+
+found 7 vulnerabilities (2 moderate, 5 high)
+  run `npm audit fix` to fix them, or `npm audit` for details
+/home/vagrant/testing/lib/node_modules/testing -> /home/vagrant/testing
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 npm install express --prefix checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+npm WARN read-shrinkwrap This version of npm is compatible with lockfileVersion@1, but package-lock.json was generated for lockfileVersion@2. I'll try to do my best with it!
+npm WARN preview@1.0.0 No repository field.
+
+
++ express@4.17.3
+added 97 packages from 56 contributors and audited 97 packages in 4.498s
+
+10 packages are looking for funding
+  run `npm fund` for details
+
+found 2 high severity vulnerabilities
+  run `npm audit fix` to fix them, or `npm audit` for details
+
+10 number
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 node testing/mutation.js 10 checkbox.io-micro-preview/marqdown.js | tee logs\1650167798781\mutation.log
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+Running 10 iterations...
+
+Iteration 1:
+Running NonEmptyStringMutations...
+Replacing "" with a <div> with content on line 338
+
+Iteration 2:
+Running IncrementalMutations...
+Replacing ++ from sufix to prefix on line 104
+
+Iteration 3:
+Running ConstantReplacementMutations...
+Replacing 1 with a 2 with content on line 341
+
+Iteration 4:
+Running CloneReturnMutations...
+Return statement is cloned from 368 to 364
+
+Iteration 5:
+Running ConstantReplacementMutations...
+Replacing 3 with a 4 with content on line 177
+
+Iteration 6:
+Running NegateConditionals...
+Replacing != with == on line 321
+
+Iteration 7:
+Running CloneReturnMutations...
+Return statement is cloned from 117 to 103
+
+Iteration 8:
+Running NonEmptyStringMutations...
+Replacing "" with a <div> with content on line 373
+
+Iteration 9:
+Running ControlFlowMutations...
+Swapped expressions in if-else block in line 289 and line 294
+
+Iteration 10:
+Running ConstantReplacementMutations...
+Replacing 1 with a 2 with content on line 328
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/prepareForSnapshot.sh checkbox.io-micro-preview http://localhost:3000/survey/long.md 0
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+starting forever for baseline
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+taking snapshot for baseline
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] qj8G /usr/bin/node index.js 69275   69285    /home/vagrant/.forever/qj8G.log 0:0:0:17.05
+stopping forever for baseline
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/prepareForSnapshot.sh checkbox.io-micro-preview http://localhost:3000/survey/upload.md 1
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+starting forever for baseline
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+taking snapshot for baseline
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] MOlZ /usr/bin/node index.js 69487   69495    /home/vagrant/.forever/MOlZ.log 0:0:0:16.915
+stopping forever for baseline
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/prepareForSnapshot.sh checkbox.io-micro-preview http://localhost:3000/survey/survey.md 2
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+starting forever for baseline
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+taking snapshot for baseline
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] 4FcL /usr/bin/node index.js 69697   69707    /home/vagrant/.forever/4FcL.log 0:0:0:16.936
+stopping forever for baseline
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/prepareForSnapshot.sh checkbox.io-micro-preview http://localhost:3000/survey/variations.md 3
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+starting forever for baseline
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+taking snapshot for baseline
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] Cn4E /usr/bin/node index.js 69913   69921    /home/vagrant/.forever/Cn4E.log 0:0:0:16.945
+stopping forever for baseline
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/startapp.sh 1 checkbox.io-micro-preview marqdown.js
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ cp mutations/mutation1.js ../checkbox.io-micro-preview/marqdown.js
++ echo 'starting forever for mutation'
++ cd ../checkbox.io-micro-preview
++ forever start index.js
++ sleep 5s
+
+starting forever for mutation
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 1
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/long.md snapshot_0_1
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 1
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/upload.md snapshot_1_1
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 1
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/survey.md snapshot_2_1
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 1
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/variations.md snapshot_3_1
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/stopapp.sh checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ echo 'stopping forever for mutation'
++ cd checkbox.io-micro-preview
++ forever stop index.js
++ cd ..
+
+stopping forever for mutation
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] _j75 /usr/bin/node index.js 70130   70138    /home/vagrant/.forever/_j75.log 0:0:0:15.435
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/startapp.sh 2 checkbox.io-micro-preview marqdown.js
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ cp mutations/mutation2.js ../checkbox.io-micro-preview/marqdown.js
++ echo 'starting forever for mutation'
++ cd ../checkbox.io-micro-preview
++ forever start index.js
++ sleep 5s
+
+starting forever for mutation
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 2
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/long.md snapshot_0_2
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 2
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/upload.md snapshot_1_2
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 2
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/survey.md snapshot_2_2
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 2
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/variations.md snapshot_3_2
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/stopapp.sh checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ echo 'stopping forever for mutation'
++ cd checkbox.io-micro-preview
++ forever stop index.js
++ cd ..
+
+stopping forever for mutation
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] r0P- /usr/bin/node index.js 70915   70925    /home/vagrant/.forever/r0P-.log 0:0:0:14.989
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/startapp.sh 3 checkbox.io-micro-preview marqdown.js
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ cp mutations/mutation3.js ../checkbox.io-micro-preview/marqdown.js
++ echo 'starting forever for mutation'
++ cd ../checkbox.io-micro-preview
++ forever start index.js
++ sleep 5s
+
+starting forever for mutation
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 3
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/long.md snapshot_0_3
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 3
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/upload.md snapshot_1_3
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 3
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/survey.md snapshot_2_3
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 3
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/variations.md snapshot_3_3
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/stopapp.sh checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ echo 'stopping forever for mutation'
++ cd checkbox.io-micro-preview
++ forever stop index.js
++ cd ..
+
+stopping forever for mutation
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] IKuq /usr/bin/node index.js 71675   71683    /home/vagrant/.forever/IKuq.log 0:0:0:13.908
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/startapp.sh 4 checkbox.io-micro-preview marqdown.js
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ cp mutations/mutation4.js ../checkbox.io-micro-preview/marqdown.js
++ echo 'starting forever for mutation'
++ cd ../checkbox.io-micro-preview
++ forever start index.js
++ sleep 5s
+
+starting forever for mutation
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 4
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/long.md snapshot_0_4
+(node:72499) UnhandledPromiseRejectionWarning: Error: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
+    at CDPSession.send (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/Connection.js:218:35)
+    at ExecutionContext._evaluateInternal (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:204:50)
+    at ExecutionContext.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:110:27)
+    at DOMWorld.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/DOMWorld.js:97:24)
+(node:72499) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 3)
+(node:72499) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
++ echo 'taking snapshot for mutation'
+
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 4
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/upload.md snapshot_1_4
+(node:72645) UnhandledPromiseRejectionWarning: Error: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
+    at CDPSession.send (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/Connection.js:218:35)
+    at ExecutionContext._evaluateInternal (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:204:50)
+    at ExecutionContext.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:110:27)
+    at DOMWorld.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/DOMWorld.js:97:24)
+(node:72645) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 3)
+(node:72645) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
++ echo 'taking snapshot for mutation'
+
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 4
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/survey.md snapshot_2_4
+(node:72797) UnhandledPromiseRejectionWarning: Error: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
+    at CDPSession.send (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/Connection.js:218:35)
+    at ExecutionContext._evaluateInternal (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:204:50)
+    at ExecutionContext.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:110:27)
+    at DOMWorld.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/DOMWorld.js:97:24)
+(node:72797) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 3)
+(node:72797) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
++ echo 'taking snapshot for mutation'
+
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 4
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/variations.md snapshot_3_4
+(node:72945) UnhandledPromiseRejectionWarning: Error: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
+    at CDPSession.send (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/Connection.js:218:35)
+    at ExecutionContext._evaluateInternal (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:204:50)
+    at ExecutionContext.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:110:27)
+    at DOMWorld.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/DOMWorld.js:97:24)
+(node:72945) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 3)
+(node:72945) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
++ echo 'taking snapshot for mutation'
+
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/stopapp.sh checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ echo 'stopping forever for mutation'
++ cd checkbox.io-micro-preview
++ forever stop index.js
++ cd ..
+
+stopping forever for mutation
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] gOmq /usr/bin/node index.js 72410   73017    /home/vagrant/.forever/gOmq.log 0:0:0:1.938
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/startapp.sh 5 checkbox.io-micro-preview marqdown.js
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ cp mutations/mutation5.js ../checkbox.io-micro-preview/marqdown.js
++ echo 'starting forever for mutation'
++ cd ../checkbox.io-micro-preview
++ forever start index.js
++ sleep 5s
+
+starting forever for mutation
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 5
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/long.md snapshot_0_5
+(node:73280) UnhandledPromiseRejectionWarning: Error: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
+    at CDPSession.send (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/Connection.js:218:35)
+    at ExecutionContext._evaluateInternal (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:204:50)
+    at ExecutionContext.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:110:27)
+    at DOMWorld.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/DOMWorld.js:97:24)
+(node:73280) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 3)
+(node:73280) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
++ echo 'taking snapshot for mutation'
+
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 5
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/upload.md snapshot_1_5
+(node:73427) UnhandledPromiseRejectionWarning: Error: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
+    at CDPSession.send (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/Connection.js:218:35)
+    at ExecutionContext._evaluateInternal (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:204:50)
+    at ExecutionContext.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:110:27)
+    at DOMWorld.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/DOMWorld.js:97:24)
+(node:73427) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 3)
+(node:73427) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
++ echo 'taking snapshot for mutation'
+
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 5
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/survey.md snapshot_2_5
+(node:73579) UnhandledPromiseRejectionWarning: Error: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
+    at CDPSession.send (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/Connection.js:218:35)
+    at ExecutionContext._evaluateInternal (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:204:50)
+    at ExecutionContext.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:110:27)
+    at DOMWorld.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/DOMWorld.js:97:24)
+(node:73579) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 3)
+(node:73579) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
++ echo 'taking snapshot for mutation'
+
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 5
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/variations.md snapshot_3_5
+(node:73727) UnhandledPromiseRejectionWarning: Error: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
+    at CDPSession.send (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/Connection.js:218:35)
+    at ExecutionContext._evaluateInternal (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:204:50)
+    at ExecutionContext.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/ExecutionContext.js:110:27)
+    at DOMWorld.evaluate (/home/vagrant/testing/node_modules/puppeteer/lib/cjs/puppeteer/common/DOMWorld.js:97:24)
+(node:73727) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 3)
+(node:73727) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
++ echo 'taking snapshot for mutation'
+
+found a case where there's a runtime error - page not loading at all!
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/stopapp.sh checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ echo 'stopping forever for mutation'
++ cd checkbox.io-micro-preview
++ forever stop index.js
++ cd ..
+
+stopping forever for mutation
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] v4L3 /usr/bin/node index.js 73191   73800    /home/vagrant/.forever/v4L3.log 0:0:0:2.002
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/startapp.sh 6 checkbox.io-micro-preview marqdown.js
+arning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ cp mutations/mutation6.js ../checkbox.io-micro-preview/marqdown.js
++ echo 'starting forever for mutation'
++ cd ../checkbox.io-micro-preview
++ forever start index.js
++ sleep 5s
+
+starting forever for mutation
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 6
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/long.md snapshot_0_6
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 6
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/upload.md snapshot_1_6
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 6
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/survey.md snapshot_2_6
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 6
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/variations.md snapshot_3_6
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/stopapp.sh checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ echo 'stopping forever for mutation'
++ cd checkbox.io-micro-preview
++ forever stop index.js
++ cd ..
+
+stopping forever for mutation
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] f7-y /usr/bin/node index.js 73972   73980    /home/vagrant/.forever/f7-y.log 0:0:0:13.848
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/startapp.sh 7 checkbox.io-micro-preview marqdown.js
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ cp mutations/mutation7.js ../checkbox.io-micro-preview/marqdown.js
++ echo 'starting forever for mutation'
++ cd ../checkbox.io-micro-preview
++ forever start index.js
++ sleep 5s
+
+starting forever for mutation
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 7
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/long.md snapshot_0_7
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 7
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/upload.md snapshot_1_7
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 7
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/survey.md snapshot_2_7
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 7
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/variations.md snapshot_3_7
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/stopapp.sh checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ echo 'stopping forever for mutation'
++ cd checkbox.io-micro-preview
++ forever stop index.js
++ cd ..
+
+stopping forever for mutation
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] dWkH /usr/bin/node index.js 74727   74735    /home/vagrant/.forever/dWkH.log 0:0:0:13.873
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/startapp.sh 8 checkbox.io-micro-preview marqdown.js
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ cp mutations/mutation8.js ../checkbox.io-micro-preview/marqdown.js
++ echo 'starting forever for mutation'
++ cd ../checkbox.io-micro-preview
++ forever start index.js
++ sleep 5s
+
+starting forever for mutation
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 8
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/long.md snapshot_0_8
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 8
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/upload.md snapshot_1_8
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 8
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/survey.md snapshot_2_8
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 8
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/variations.md snapshot_3_8
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/stopapp.sh checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ echo 'stopping forever for mutation'
++ cd checkbox.io-micro-preview
++ forever stop index.js
++ cd ..
+
+stopping forever for mutation
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] cP1V /usr/bin/node index.js 75463   75473    /home/vagrant/.forever/cP1V.log 0:0:0:13.96
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/startapp.sh 9 checkbox.io-micro-preview marqdown.js
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ cp mutations/mutation9.js ../checkbox.io-micro-preview/marqdown.js
++ echo 'starting forever for mutation'
++ cd ../checkbox.io-micro-preview
++ forever start index.js
++ sleep 5s
+
+starting forever for mutation
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 9
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/long.md snapshot_0_9
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 9
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/upload.md snapshot_1_9
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 9
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/survey.md snapshot_2_9
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 9
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/variations.md snapshot_3_9
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/stopapp.sh checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ echo 'stopping forever for mutation'
++ cd checkbox.io-micro-preview
++ forever stop index.js
++ cd ..
+
+stopping forever for mutation
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] IMEP /usr/bin/node index.js 76202   76212    /home/vagrant/.forever/IMEP.log 0:0:0:13.958
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/startapp.sh 10 checkbox.io-micro-preview marqdown.js
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ cp mutations/mutation10.js ../checkbox.io-micro-preview/marqdown.js
++ echo 'starting forever for mutation'
++ cd ../checkbox.io-micro-preview
++ forever start index.js
++ sleep 5s
+
+starting forever for mutation
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: index.js
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/long.md 0 10
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/long.md snapshot_0_10
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/upload.md 1 10
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/upload.md snapshot_1_10
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/survey.md 2 10
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/survey.md snapshot_2_10
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/takeMySnapshot.sh http://localhost:3000/survey/variations.md 3 10
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ cd testing
++ node screenshot.js http://localhost:3000/survey/variations.md snapshot_3_10
++ echo 'taking snapshot for mutation'
+
+taking snapshot for mutation
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 bash testing/stopapp.sh checkbox.io-micro-preview
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
++ echo 'stopping forever for mutation'
++ cd checkbox.io-micro-preview
++ forever stop index.js
++ cd ..
+
+stopping forever for mutation
+info:    Forever stopped process:
+    uid  command       script   forever pid   id logfile                         uptime
+[0] D6qh /usr/bin/node index.js 76940   76948    /home/vagrant/.forever/D6qh.log 0:0:0:13.956
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 cp marqdown.js checkbox.io-micro-preview/marqdown.js
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+
+ssh -i "C:/Users/Athithya/.bakerx/insecure_private_key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vagrant@192.168.10.112 node testing/snapshotCompare.js 10 4 | tee logs\1650167798781\results.log
+Warning: Permanently added '192.168.10.112' (ED25519) to the list of known hosts.
+
+Iteration 1:
+ match = true
+Iteration 2:
+ match = true
+Iteration 3:
+ match = true
+file testing/html_snapshots/snapshot_0_4.html not found - runtime error! This case will NOT be considered in coverage
+Iteration 4:
+ match = false
+file testing/html_snapshots/snapshot_0_5.html not found - runtime error! This case will NOT be considered in coverage
+Iteration 5:
+ match = false
+Iteration 6:
+ match = false
+Iteration 7:
+ match = false
+Iteration 8:
+ match = false
+Iteration 9:
+ match = true
+Iteration 10:
+ match = true
+
+
+Mutation coverage:
+Total: 10
+Passed: 5(50%)
+Failed: 3(30%)
+Exceptions(killed mutant): 2(20%)

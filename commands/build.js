@@ -6,8 +6,13 @@ const M1Helper = require('../lib/m1Helper');
 const WinHelper = require('../lib/winHelper');
 const fs = require('fs');
 const { help } = require('yargs');
+const pathUtil = require("path");
+const oneTimeSetup = true;
+const outputDirPath = "~/output"
 
-exports.command = 'build';
+
+
+exports.command = 'build <job_name> <build_file>';
 exports.desc = 'Trigger a specified Build job';
 
 exports.builder = yargs => {
@@ -16,93 +21,88 @@ exports.builder = yargs => {
 };
 
 exports.handler = async argv => {
-    const { processor } = argv;
+    const { processor, job_name, build_file} = argv;
+
+    let jobName = pathUtil.basename( job_name );
+    let buildFile = pathUtil.basename( build_file );
 
     if (processor == 'Arm64') {
       helper = new M1Helper();
     } else {
       helper = new WinHelper();
     }
+    const logPrefix = helper.getLogPrefix();
 
     await helper.updateSSHConfig();
 
-    let jobName = "build";
 
     console.log(chalk.green("started running build job"));
 
     let setupAlreadyDone = false;
-    await sshExec("cat status.txt | grep setupCompleted=True > status.txt", helper.sshConfig);
+    let testingSetupCompleted = false;
 
-    // await sshExec("cat status.txt", helper.sshConfig).then(function(op) {
-    //   if(op === "setupCompleted=True") {
-    //     console.log("here");
-    //     setupAlreadyDone = true;
-    //   }
-    // }); 
+    await execCmd(`mkdir logs`);
+    await execCmd(`mkdir ` + logPrefix);
 
+    await sshExec("touch .status", helper.sshConfig, false, false);
+    await sshExec("cat .status > .status", helper.sshConfig, false, false);
 
-    fs.readFile('./status.txt', 'utf8' , (err, data) => {
+    fs.readFile('./.status', 'utf8' , (err, data) => {
       if (err) {
         console.error(err)
         return
       }
       if(data.includes('setupCompleted=True')) {
         setupAlreadyDone = true;
-        console.log("here");
+      }
+      if(data.includes('testingSetupCompleted=True')) {
+        testingSetupCompleted = true;
       }
       console.log(data);
-      console.log("here!");
     })
 
-    // await execCmd(`rm -r status.txt`);
-
-
-    let sshCmd = 'ssh -i "/Users/smayanapidugu/Library/Application Support/basicvm/key" -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=900 ubuntu@192.168.64.74';
     const aptInstallCmd = 'sudo apt-get install -y ';
     const aptUpdateCmd = 'sudo apt-get update';
-    let data = YamlParser.parse('./build.yml');
+    let data = YamlParser.parse('./' + buildFile);
 
     let setupCmd;
     let runCmd;
     let isAptUpdate = false;
-    // let a = '"'+'mvn -f /home/ubuntu/iTrust2-v10/iTrust2 clean test > /home/ubuntu/mvnOutput.txt'+'"';
-    // await execCmd(`${sshCmd} ${a}`);
-    //setup commands
 
-    // await sshExec("touch setup.sh", helper.sshConfig);
-    await execCmd(`echo > setup.sh`);
+    // await execCmd(`rm setup.sh`);
 
-    if(setupAlreadyDone == false) {
+    await execCmd(`echo '#!/bin/bash' > setup.sh`);
+    await execCmd(`echo 'set -e' >> setup.sh`);
+    await execCmd(`echo 'set -x' >> setup.sh`);
+
+    // // Remove if pkg is fixed
+    // const rmDamagedPkg1 = 'sudo apt remove flash-kernel -y';
+    // // const rmDamagedPkg2 = 'sudo apt remove u-boot-rpi:arm64 -y'
+    // await execCmd('echo "' + rmDamagedPkg1 + '" >> setup.sh');
+    // // await execCmd('echo "' + rmDamagedPkg2 + '" >> setup.sh');
+
+    // await execCmd('echo "' + aptInstallCmd + '" >> setup.sh');
+    if(oneTimeSetup && (!setupAlreadyDone)) {
       for (const task of data.setup) {
           setupCmd = '';
           if(task.hasOwnProperty("package")){
-              if(!isAptUpdate){
-                  // console.log(sshCmd+" "+aptUpdateCmd);
-                  // await sshExec("'echo " + aptUpdateCmd + " >> setup.sh'", helper.sshConfig);
-                  await execCmd('echo "' + aptUpdateCmd + '" >> setup.sh');
-                  //await execCmd(`${sshCmd} ${aptUpdateCmd}`);
-                  isAptUpdate = true;
-              }
+              // if(!isAptUpdate){
+              //     await execCmd('echo "' + aptUpdateCmd + '" >> setup.sh');
+              //     isAptUpdate = true;
+              // }
             setupCmd = aptInstallCmd + task.package;
           } else{
             setupCmd = task;
           }
-          // console.log(sshCmd +" "+setupCmd);
-          // await sshExec("'echo " + setupCmd + " >> setup.sh'", helper.sshConfig);
           await execCmd('echo "' + setupCmd + '" >> setup.sh');
-        //await execCmd(`${sshCmd} ${setupCmd}`);
       }
-
+      // await new Promise(r => setTimeout(r, 10000));
       await helper.moveToBuildEnv();
+      await sshExec("bash setup.sh | tee " + logPrefix + "setup.log", helper.sshConfig).then(function () {
+        console.log("=====================================================================")
+        sshExec("'echo setupCompleted=True >> .status'", helper.sshConfig);
+      });
 
-      // await execCmd("sed -i 's/\"//g' setup.sh");
-      // await sshExec("cp /bakerx/setup.sh ~/setup.sh", helper.sshConfig);
-      // await sshExec("./setup.sh", helper.sshConfig);
-
-      console.log("=====================================================================")
-      await sshExec("touch status.txt", helper.sshConfig);
-      await sshExec("'echo setupCompleted=True | tee status.txt'", helper.sshConfig);
-      await sshExec("echo setupCompleted=True", helper.sshConfig);
     }
 
     // job commands
@@ -111,16 +111,82 @@ exports.handler = async argv => {
             runCmd = '';
             console.log(chalk.green("Executing build job : "+ jobName));
 
-            for (const step of job.steps) {
-                let x = step.run.substring(0, 9);
-                if (x === 'git clone') {
-                  step.run = x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + step.run.substring(10);
-                }
-                runCmd = '"'+step.run+'"';
-                // console.log(sshCmd+" "+runCmd);
-                await sshExec(runCmd, helper.sshConfig);
-                // await execCmd(`${sshCmd} ${runCmd}`);
+            if (job.mutation) {
+              await mutation(job.mutation, helper, testingSetupCompleted, logPrefix);
+            }
+
+            if (job.steps) {
+              for (const step of job.steps) {
+                  if (step.shared) {
+                    await sshExec('"sudo mkdir -p '+ outputDirPath + '"', helper.sshConfig);
+                    await sshExec('"sudo cp -r ' + step.shared + " " + outputDirPath + '"', helper.sshConfig)
+                  } else if (step.run){
+                    let x = step.run.substring(0, 9);
+                    if (x === 'git clone') {
+                      step.run = 'git -C "'+ step.run.substring(step.run.lastIndexOf('/')+1, step.run.lastIndexOf('.')) + '" pull || ' + x + ' https://' + process.env.USER_NAME + ':' + process.env.TOKEN + '@' + step.run.substring(10);
+                    }
+                    runCmd = '"'+step.run+'"';
+                    await sshExec(runCmd, helper.sshConfig);
+                  }
+              }
             }
         }
     }
+};
+
+async function mutation(info, helper, testingSetupCompleted, logPrefix) {
+
+  await helper.moveTestingFilesToVM();
+
+  urlContent = info.url.split("/");
+  let mutateFile = info.mutationfile;
+  if (mutateFile === undefined) {
+    mutateFile = "marqdown.js";
+  }
+  let repoDir = urlContent[urlContent.length - 1];
+
+  await sshExec('rm -rf ' + repoDir, helper.sshConfig);
+
+  let secrets = process.env.USER_NAME + ':' + process.env.TOKEN;
+  let cloneCmd = 'git clone https://' + secrets + '@' + info.url.substring(8);
+  console.log(cloneCmd);
+  await sshExec(cloneCmd, helper.sshConfig);
+
+  if (oneTimeSetup && (!testingSetupCompleted)) {
+    await sshExec('bash testing/testingSetup.sh | tee ' + logPrefix + 'testingSetup.log', helper.sshConfig).then(function () {
+      sshExec("'echo testingSetupCompleted=True >> .status'", helper.sshConfig);
+    });
+  }
+
+ await sshExec('bash testing/testingPrep.sh | tee ' + logPrefix + 'testingPrep.log', helper.sshConfig)
+  await sshExec('npm install express --prefix ' + repoDir, helper.sshConfig);
+
+  let iterations = Number(info.iterations);
+  console.log(iterations + " " + typeof(iterations));
+
+  // let mutatecommand = "node testing/mutation.js " + iterations;
+  await sshExec('node testing/mutation.js ' + iterations + ' ' + repoDir + '/' + mutateFile + ' | tee ' + logPrefix + 'mutation.log', helper.sshConfig);
+
+
+  for(let i = 0; i < info.snapshots.length; i++) {
+    await sshExec("bash testing/prepareForSnapshot.sh " + repoDir + " " + info.snapshots[i] + " " + i, helper.sshConfig);
+  }
+
+  // for (let i = 0; i < info.snapshots.length; i++) {
+  //   let snapshotCommand = "bash testing/takeSnapshot.sh " + iterations  + " " + info.snapshots[i] + " " + repoDir + " " + i + " >> snapshot.log";
+  //   await sshExec("'" + snapshotCommand + "'", helper.sshConfig);
+  // }
+
+  for(let i = 1; i <= iterations; i++) {
+    await sshExec("bash testing/startapp.sh " + i + " " + repoDir + " " + mutateFile, helper.sshConfig);
+    for(let j = 0; j < info.snapshots.length; j++) {
+      await sshExec("bash testing/takeMySnapshot.sh " + info.snapshots[j] + " " + j + " " + i, helper.sshConfig);
+    }
+    await sshExec("bash testing/stopapp.sh " + repoDir, helper.sshConfig);
+  }
+
+  await sshExec("cp " + mutateFile + " " + repoDir + "/" + mutateFile, helper.sshConfig);
+
+  await sshExec("node testing/snapshotCompare.js " + info.iterations + " " + info.snapshots.length + " | tee " + logPrefix + "results.log", helper.sshConfig);
+
 };
