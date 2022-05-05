@@ -1,9 +1,17 @@
-# Pipeline Tool - F0-spidugu
+# Pipeline Tool 
 
 ### A pipeline tool to automate builds.
-### F0 - Static Analysis feature and 2 jobs
-*Developed and tested in **M1 Mac Environment**
-Student Name: *Smayana Pidugu*
+### Final Exam
+
+| | |
+|-|-|
+| **Name** | Smayana Pidugu |
+| **Unity ID** | spidugu |
+| **Email** | spidugu@ncsu.edu |
+| **Development Env** | M1 MAC |
+
+Note: The new features are not tested on Windows or Intel Mac.
+
 
 ## Contents
 
