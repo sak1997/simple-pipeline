@@ -149,7 +149,7 @@ jobs:
 
 ## Deployment Job #2 - petclinicBuild.yml
 
-Please see the petclinicBuild.yml file in the project main directory or below. This sets up a web application written in java using openJDK in a droplet, that can be accessed by going to the < new droplet IP>:8080/
+Please see the petclinicBuild.yml file in the project main directory or below. This sets up a web application written in java using openJDK in a droplet, that can be accessed by going to the < localVM IP>:8080/
 
 Commands to run (Please run in the order here):
 
