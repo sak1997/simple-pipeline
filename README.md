@@ -1,11 +1,9 @@
 # Pipeline Tool - F0-spidugu
 
-Student Name: *Smayana Pidugu* Unity ID: *_**spidugu**_*
-
-
 ### A pipeline tool to automate builds.
 ### F0 - Static Analysis feature and 2 jobs
 *Developed and tested in **M1 Mac Environment**
+Student Name: *Smayana Pidugu*
 
 ## Contents
 
@@ -28,7 +26,6 @@ Student Name: *Smayana Pidugu* Unity ID: *_**spidugu**_*
 | New Feature | Done - Implemented Static Analysis|
 | Screencast and Milestone Report | Please see below for the screencast
 
-Please see below for more about the challenges and experiences in the corresponding sections.
 ## Setup Instructions
 
   1) Create an account in [Digital Ocean](https://www.digitalocean.com).
