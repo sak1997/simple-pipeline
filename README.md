@@ -163,12 +163,6 @@ pipeline deploy instance deploy petclinicBuild.yml
 ###Job 2 - petclinicBuild.yml
 ```
 setup:
-  - sudo systemctl disable apt-daily-upgrade.timer
-  - sudo systemctl mask apt-daily-upgrade.service
-  - sudo systemctl disable apt-daily.timer
-  - sudo systemctl mask apt-daily.service
-  - sudo timedatectl set-ntp off
-  - sudo timedatectl set-ntp on
   - sleep 1
   - sudo apt-get update
   - sleep 50
