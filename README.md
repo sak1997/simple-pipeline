@@ -78,7 +78,7 @@ Student Name: *Smayana Pidugu*
     * Executes the scripts in setup and the spcified job from the build yml file in the new droplet.
   
   - ```pipeline analyze <job-name> <path to build yml file>```
-    * Performs static analysis on files mentioned in analyze job name
+    * Performs static analysis on Javascript file whose path is mentioned in yml file.
           
 ## Deployment Job #1 - leonBuild.yml
 
@@ -139,21 +139,20 @@ jobs:
 ```
 
 
-## Deployment Job #2 - blog.yml
+## Deployment Job #2 - petclinicBuild.yml
 
-Please see the calc.yml file in the project main directory or below. This sets up a blog web application written in python using django in a droplet, that can be accessed by going to the < new droplet IP>:8080/admin or http://localhost:3090/admin [load balancer proxy]
+Please see the petclinicBuild.yml file in the project main directory or below. This sets up a web application written in java using openJDK in a droplet, that can be accessed by going to the < new droplet IP>:8080/
 
 Commands to run (Please run in the order here):
 
 ```
 pipeline init
-pipeline build build blog.yml
-pipeline build test blog.yml
+pipeline build build petclinicBuild.yml
+pipeline build test petclinicBuild.yml
 pipeline prod up
-pipeline deploy instance deploy blog.yml
-pipeline monitor
+pipeline deploy instance deploy petclinicBuild.yml
 ```
-###Depolyment Job 2 - petclinicBuild.yml
+###Job 2 - petclinicBuild.yml
 ```
 setup:
   - sudo systemctl disable apt-daily-upgrade.timer
