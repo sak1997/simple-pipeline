@@ -90,7 +90,7 @@ Note: The new features are not tested on Windows or Intel Mac.
           
 ## Deployment Job #1 - leonBuild.yml
 
-Please see the leonBuild.yml file in the project main directory or below. Leon is an open-source personal assistant developed in NodeJS. This pipeline deployes in localVM  at port 1337 i.e https://<localVM>:1337
+Please see the leonBuild.yml file in the project main directory or below. Leon is an open-source personal assistant developed in NodeJS. This pipeline deployes in localVM  and can be accessed at < new droplet IP>:1337/
 
 Commands to run (Please run in the order here):
 
