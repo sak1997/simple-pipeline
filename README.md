@@ -1,13 +1,11 @@
-# Pipeline Tool - F0
+# Pipeline Tool - F0-spidugu
 
-Student Name: *Smayana Pidugu*
+Student Name: *Smayana Pidugu* Unity ID: *_**spidugu**_*
 
-Unity ID: *_**spidugu**_*
-
-*Developed and tested in **M1 Mac Environment**
 
 ### A pipeline tool to automate builds.
 ### F0 - Static Analysis feature and 2 jobs
+*Developed and tested in **M1 Mac Environment**
 
 ## Contents
 
@@ -17,7 +15,7 @@ Unity ID: *_**spidugu**_*
 |Commands| [Click here](#commands)|
 |Deployment Job #1 | [Click here](#deployment-job-1---calcyml)|
 |Deployment Job #2 | [Click here](#deployment-job-2---blogyml)|
-|New Feature - Monitoring|[Click here](#new-feature-monitoring-for-blue-green)|
+|New Feature - Static Analysis|[Click here](#new-feature-monitoring-for-blue-green)|
 |Experiences | [click here](#experiences)|
 |Challenges | [click here](#challenges)|
 |Screencast | [click here](#screencasts)|
