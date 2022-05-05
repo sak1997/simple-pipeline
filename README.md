@@ -16,8 +16,6 @@ Student Name: *Smayana Pidugu* Unity ID: *_**spidugu**_*
 |Deployment Job #1 | [Click here](#deployment-job-1---calcyml)|
 |Deployment Job #2 | [Click here](#deployment-job-2---blogyml)|
 |New Feature - Static Analysis|[Click here](#new-feature-monitoring-for-blue-green)|
-|Experiences | [click here](#experiences)|
-|Challenges | [click here](#challenges)|
 |Screencast | [click here](#screencasts)|
 
 
