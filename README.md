@@ -33,6 +33,38 @@ Unity ID: *_**sbabu**_*
 | Screencast and Milestone Report | Please see below for the screencast
 
 Please see below for more about the challenges and experiences in the corresponding sections.
+## Setup Instructions
+
+  1) Create an account in [Digital Ocean](https://www.digitalocean.com).
+  2) Create a public key/private key pair in the host machine.
+  3) Add the public key in the Digital Ocean account.
+  4) Create a .env in the repo home based on the sample given below.
+
+     <details>
+      <summary>Windows</summary>
+        <p>
+
+          IP=192.168.10.112
+          VM_NAME=pipeline-vm
+          USER_NAME=<your username for GitHub>
+          TOKEN=<your personal access token for GitHub>
+          DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
+          PUB_KEY_PATH=<path to public key>
+          PVT_KEY_PATH=<path to private key>  
+
+     </details>
+
+     <details>
+      <summary>M1 Mac</summary>
+        <p>
+
+          VM_NAME='vm1'
+          USER_NAME=<your username for GitHub>
+          TOKEN=<your personal access token for GitHub>
+          DIGITAL_OCEAN_TOKEN=<your personal access token for Digital Ocean>
+          PUB_KEY_PATH=<path to public key>
+          PVT_KEY_PATH=<path to private key>
+     </details>
 
 #### Notes
 
