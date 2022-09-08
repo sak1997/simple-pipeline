@@ -4,8 +4,6 @@ Student Name: *Sri Athithya Kruth Babu*
 
 Unity ID: *_**sbabu**_*
 
-*Developed and tested in **Windows environment** - not tested in Mac or M1 environments.*
-
 ### A pipeline tool to automate builds.
 ### F0 - monitoring feature and 2 jobs
 
